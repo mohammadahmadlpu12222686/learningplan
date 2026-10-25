@@ -14,7 +14,7 @@
     --bg:#f6f7fb; --surface:#ffffff; --ink:#0f172a; --ink-2:#475569; --ink-3:#94a3b8;
     --line:#e6e9f0; --line-2:#eef1f6; --accent:#4f46e5; --accent-soft:#eef2ff; --accent-2:#7c3aed;
     --cls:#0369a1; --cls-soft:#e0f2fe; --reg:#b45309; --reg-soft:#fef3c7;
-    --ok:#059669; --ok-soft:#ecfdf5; --bad:#dc2626; --bad-soft:#fef2f2;
+    --ok:#059669; --ok-soft:#ecfdf5; --bad:#dc2626; --bad-soft:#fef2f2; --why:#7c2d12; --why-soft:#fff7ed;
     --code-bg:#0f172a; --code-ink:#e2e8f0;
     --shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.06);
     --radius:16px;
@@ -23,14 +23,14 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0}
-  body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.55}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.6}
   a{color:inherit;text-decoration:none}
   button{font:inherit;cursor:pointer;color:inherit}
   .wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
   h1,h2,h3{text-wrap:balance}
 
   body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:11;background:#fff}
-  .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:rgba(255,255,255,.88);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+  .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
   .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
   .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;min-width:0}
   .brand span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -45,13 +45,12 @@
   section{margin:40px 0}
   .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
   h2{font-size:21px;letter-spacing:-.015em;margin:0;font-weight:700}
-  .sub{color:var(--ink-2);font-size:14.5px;margin:4px 0 0;max-width:680px}
+  .sub{color:var(--ink-2);font-size:14.5px;margin:4px 0 0;max-width:700px}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
 
-  /* classification vs regression */
   .vs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   .vs .card{padding:22px;display:flex;flex-direction:column;gap:10px}
-  .vs h3{margin:0;font-size:17px;display:flex;align-items:center;gap:10px}
+  .vs h3{margin:0;font-size:17px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .vs p{margin:0;color:var(--ink-2);font-size:14.5px}
   .vs ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:14px;display:grid;gap:4px}
   .q{font-weight:600;color:var(--ink);background:var(--line-2);border-radius:10px;padding:10px 12px;font-size:14px}
@@ -60,13 +59,25 @@
   .type.c{background:var(--cls-soft);color:var(--cls)}
   .type.r{background:var(--reg-soft);color:var(--reg)}
 
-  /* filters */
+  /* pipeline */
+  .pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .pstep{padding:16px;display:flex;flex-direction:column;gap:6px}
+  .pstep .n{width:26px;height:26px;border-radius:8px;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:13px;display:grid;place-items:center}
+  .pstep b{font-size:14.5px}
+  .pstep span{font-size:13.5px;color:var(--ink-2)}
+  .pstep i{font-style:normal;font-size:13px;color:var(--why);background:var(--why-soft);border-radius:8px;padding:6px 8px}
+
+  /* glossary */
+  .gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+  .term{padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+  .term b{font-size:14.5px}
+  .term span{font-size:13.5px;color:var(--ink-2)}
+
   .filters{display:flex;gap:8px;flex-wrap:wrap}
   .f{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:600;font-size:13.5px;color:var(--ink-2)}
   .f[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
-  .f:focus-visible,.mod:focus-visible,.back:focus-visible,.navbtn:focus-visible,.understood:focus-visible{outline:3px solid #c7d2fe;outline-offset:2px}
+  .f:focus-visible,.mod:focus-visible,.back:focus-visible,.navbtn:focus-visible,.understood:focus-visible,summary:focus-visible{outline:3px solid #c7d2fe;outline-offset:2px}
 
-  /* model grid */
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
   .mod{padding:20px;display:flex;flex-direction:column;gap:10px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);transition:transform .15s ease,box-shadow .15s ease,border-color .15s}
   .mod:hover{transform:translateY(-2px);border-color:#c7d2fe;box-shadow:0 1px 2px rgba(15,23,42,.04),0 14px 32px rgba(79,70,229,.10)}
@@ -79,16 +90,16 @@
   .mod-foot{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-2);font-weight:600;margin-top:auto;padding-top:4px}
   .done-badge{color:var(--ok);background:var(--ok-soft);padding:3px 9px;border-radius:99px;font-size:12px}
 
-  /* chooser */
-  .chooser{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+  .chooser{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
   .rule{padding:16px 18px;display:flex;flex-direction:column;gap:6px}
   .rule .if{font-size:12px;font-weight:700;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase}
   .rule .cond{font-weight:600;font-size:14.5px}
   .rule .then{font-size:14px;color:var(--accent);font-weight:600}
+  .rule .why{font-size:13.5px;color:var(--ink-2)}
+  .rule .why b{color:var(--why)}
 
-  /* tables */
   .table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--line);background:#fff;box-shadow:var(--shadow)}
-  table{border-collapse:collapse;width:100%;min-width:720px;font-size:14px}
+  table{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
   th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line-2);vertical-align:top}
   th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);background:#fafbfd;font-weight:700}
   tr:last-child td{border-bottom:0}
@@ -99,39 +110,60 @@
   /* detail */
   .back{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font-weight:600;font-size:14px;color:var(--ink-2)}
   .back:hover{color:var(--ink);border-color:#cbd5e1}
-  .dhead{padding:26px;margin:20px 0 18px;display:flex;flex-direction:column;gap:10px}
+  .toc{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+  .toc a{font-size:12.5px;font-weight:600;color:var(--ink-2);border:1px solid var(--line);border-radius:99px;padding:4px 10px;background:#fff}
+  .toc a:hover{color:var(--accent);border-color:#c7d2fe}
+  .dhead{padding:26px;margin:20px 0 18px;display:flex;flex-direction:column;gap:12px}
   .dhead h1{font-size:clamp(26px,4vw,34px);margin:2px 0 0}
-  .dhead .aka{color:var(--ink-3);font-weight:500;font-size:14px}
+  .dhead .aka{color:var(--ink-3);font-weight:500;font-size:14px;margin-top:-6px}
+  .bigidea{background:var(--line-2);border-radius:12px;padding:14px 16px;font-size:16px}
+  .bigidea small{display:block;font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);margin-bottom:2px}
   .dgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .block{padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
+  .block{padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0;scroll-margin-top:80px}
   .block h3{margin:0;font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);font-weight:700;display:flex;align-items:center;gap:8px}
   .block p{margin:0;font-size:15px}
   .full{grid-column:1/-1}
   .analogy{background:linear-gradient(135deg,#eef2ff,#f5f3ff);border-color:#e0e7ff}
   .analogy .big{font-size:18px;font-weight:700;color:#312e81;letter-spacing:-.01em}
   .analogy p{color:#3730a3}
+  .whyworks{background:var(--why-soft);border-color:#fed7aa}
+  .whyworks p{color:#7c2d12}
   ol.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:10px}
   ol.steps li{counter-increment:s;display:flex;gap:12px;font-size:15px}
   ol.steps li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:8px;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:13px;display:grid;place-items:center;margin-top:1px}
-  ul.ticks{margin:0;padding:0;list-style:none;display:grid;gap:8px}
-  ul.ticks li{display:flex;gap:10px;font-size:14.5px}
-  ul.ticks li::before{flex:none;font-weight:800;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-size:12px;margin-top:2px}
+  ul.ticks{margin:0;padding:0;list-style:none;display:grid;gap:14px}
+  ul.ticks li{display:flex;gap:10px;font-size:15px}
+  ul.ticks li::before{flex:none;font-weight:800;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-size:12px;margin-top:3px}
+  ul.ticks li > div{display:flex;flex-direction:column;gap:3px;min-width:0}
+  ul.ticks li b{font-weight:600}
+  .whyline{font-size:14px;color:var(--ink-2)}
+  .whyline em{font-style:normal;font-weight:700;color:var(--why)}
   .good li::before{content:"✓";background:var(--ok-soft);color:var(--ok)}
   .bad li::before{content:"✕";background:var(--bad-soft);color:var(--bad)}
-  .projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+  .projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
   .proj{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;background:#fcfcfe}
-  .proj b{font-size:14.5px}
+  .proj b{font-size:15px}
   .proj span{font-size:13.5px;color:var(--ink-2)}
+  .proj .pwhy{font-size:13.5px;color:#7c2d12;background:var(--why-soft);border-radius:8px;padding:8px 10px;margin-top:2px}
+  .proj .pwhy em{font-style:normal;font-weight:700}
   .example{display:grid;gap:10px}
-  .ex-row{display:flex;gap:12px;align-items:baseline;font-size:14.5px}
+  .ex-row{display:flex;gap:12px;align-items:baseline;font-size:15px}
   .ex-row .k{flex:none;width:86px;font-size:12px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
   .ex-row .v{min-width:0}
+  .walk{margin:0;padding:12px 14px 12px 32px;background:#fafbfd;border:1px dashed var(--line);border-radius:10px;display:grid;gap:6px;font-size:14.5px;font-variant-numeric:tabular-nums}
   .ex-out{background:var(--ok-soft);border:1px solid #d1fae5;border-radius:10px;padding:10px 12px;color:#065f46;font-weight:600}
+  .faq{display:grid;gap:10px}
+  details{border:1px solid var(--line);border-radius:12px;background:#fff}
+  summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:600;font-size:15px;display:flex;gap:10px;align-items:flex-start}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"?";flex:none;width:22px;height:22px;border-radius:7px;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:13px;display:grid;place-items:center;margin-top:1px}
+  details[open] summary{border-bottom:1px solid var(--line-2)}
+  details p{padding:12px 16px 14px 48px;font-size:14.5px;color:var(--ink-2)}
+  .words{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+  .word{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;color:var(--ink-2)}
+  .word b{display:block;color:var(--ink);font-size:14.5px}
   pre{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:16px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.6}
   .cm{color:#94a3b8}
-  .kv{display:flex;flex-wrap:wrap;gap:8px}
-  .kv span{font-size:13px;background:var(--line-2);border-radius:8px;padding:5px 10px;color:var(--ink-2)}
-  .kv span b{color:var(--ink)}
   .dfoot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:22px 0 10px}
   .navbtn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 16px;text-align:left;display:flex;flex-direction:column;gap:2px;min-width:0;max-width:48%}
   .navbtn small{font-size:12px;color:var(--ink-3);font-weight:600}
@@ -143,7 +175,9 @@
   footer{padding:30px 0 50px;color:var(--ink-3);font-size:13px;text-align:center}
   .hidden{display:none!important}
 
+  @media (max-width:900px){.pipe{grid-template-columns:1fr 1fr}}
   @media (max-width:760px){.vs,.dgrid{grid-template-columns:1fr}.navbtn{max-width:100%;flex:1}}
+  @media (max-width:480px){.pipe{grid-template-columns:1fr}details p{padding-left:16px}}
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -160,32 +194,48 @@
 <div id="home">
   <div class="hero">
     <div class="eyebrow">Supervised Learning · No Maths</div>
-    <h1>Every supervised model, explained like a story</h1>
-    <p class="lead">Each model gets a real-life analogy, a plain-language walkthrough of how it works, when to use it (and when not to), and the kinds of projects where it shines. Open any model card to read it in full.</p>
+    <h1>Every supervised model, explained simply</h1>
+    <p class="lead">For every model you get the big idea, a real-life analogy, how it works step by step, <b>why</b> it works, when to use it and <b>why</b>, when to avoid it and <b>why</b>, which projects it suits and <b>why</b>, a worked example with real numbers, and answers to the questions people usually ask.</p>
   </div>
 
   <section>
-    <div class="sec-head"><div><h2>First, what is supervised learning?</h2>
-      <p class="sub">We show the model many examples <b>with the right answer</b> (like a teacher with an answer key). It learns the pattern, then predicts answers for new examples it has never seen. There are two kinds of question it can answer.</p></div></div>
+    <div class="sec-head"><div><h2>What is supervised learning?</h2>
+      <p class="sub">Think of a student learning with a teacher who has the answer key. We show the computer lots of examples <b>together with the correct answers</b>. It looks for the pattern that connects the examples to the answers. Later, when it sees a new example without an answer, it uses that pattern to guess. It's called “supervised” because the correct answers supervise (guide) the learning.</p></div></div>
     <div class="vs">
       <div class="card">
-        <h3><span class="type c">CLASSIFICATION</span> Pick a category</h3>
-        <p>The answer is a <b>label</b> from a fixed list. Like a post-office sorter putting each letter in the right box.</p>
-        <div class="q">“Will this customer leave? Yes / No”</div>
-        <ul><li>Spam or not spam</li><li>Loan default: yes / no</li><li>Disease: positive / negative</li><li>Review sentiment: positive / neutral / negative</li></ul>
+        <h3><span class="type c">CLASSIFICATION</span> Pick a group</h3>
+        <p>The answer is a <b>label</b> from a fixed list, like sorting letters into the right post-box. There is no “in between” answer.</p>
+        <div class="q">“Will this customer leave? Yes or No”</div>
+        <ul><li>Is this email spam or not?</li><li>Will this person repay the loan: yes or no?</li><li>Is this review positive, neutral or negative?</li><li>Which animal is in this photo?</li></ul>
       </div>
       <div class="card">
         <h3><span class="type r">REGRESSION</span> Predict a number</h3>
-        <p>The answer is a <b>quantity</b> on a scale. Like a property valuer quoting a price after looking at a house.</p>
-        <div class="q">“How many units will we sell next week? 1,240”</div>
-        <ul><li>House price in ₹</li><li>Product demand (units)</li><li>Delivery time (minutes)</li><li>Student exam marks</li></ul>
+        <p>The answer is a <b>quantity</b> that can be any value on a scale, like a shopkeeper estimating how many packets will sell tomorrow.</p>
+        <div class="q">“How many units will we sell next week? About 1,240”</div>
+        <ul><li>What price will this house sell for?</li><li>How many minutes until the food arrives?</li><li>What marks will this student score?</li><li>How much rain will fall tomorrow (mm)?</li></ul>
       </div>
     </div>
   </section>
 
   <section>
+    <div class="sec-head"><div><h2>How every supervised project works</h2><p class="sub">No matter which model you use, the journey is the same five steps.</p></div></div>
+    <div class="pipe">
+      <div class="card pstep"><span class="n">1</span><b>Collect examples with answers</b><span>Rows of data where you already know the right answer.</span><i>Why: the model can only learn from answers it has seen.</i></div>
+      <div class="card pstep"><span class="n">2</span><b>Split into training and test</b><span>Keep about 20% aside and hide it from the model.</span><i>Why: like a real exam, we must test on questions it hasn't practised.</i></div>
+      <div class="card pstep"><span class="n">3</span><b>Train the model</b><span>The model studies the training examples and finds the pattern.</span><i>Why: this is the “learning” part.</i></div>
+      <div class="card pstep"><span class="n">4</span><b>Test it</b><span>Ask it the hidden test questions and check its score.</span><i>Why: a good score on unseen data means it truly learned, not memorised.</i></div>
+      <div class="card pstep"><span class="n">5</span><b>Use it on new data</b><span>Make predictions where nobody knows the answer yet.</span><i>Why: this is what the model was built for.</i></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><div><h2>Words you'll see on every page</h2><p class="sub">Learn these once and every model below becomes easier.</p></div></div>
+    <div class="gloss" id="gloss"></div>
+  </section>
+
+  <section>
     <div class="sec-head">
-      <div><h2>The models</h2><p class="sub">Ordered from simplest to most powerful. Filter by the kind of problem you're solving.</p></div>
+      <div><h2>The models</h2><p class="sub">Ordered from simplest to most powerful. Open any model to read its full explanation.</p></div>
       <div class="filters" role="group" aria-label="Filter models">
         <button class="f" data-f="all" aria-pressed="true">All</button>
         <button class="f" data-f="c" aria-pressed="false">Classification</button>
@@ -196,12 +246,12 @@
   </section>
 
   <section>
-    <div class="sec-head"><div><h2>Which model should I pick?</h2><p class="sub">A quick rule of thumb. In real projects, always start with a simple baseline and then try a stronger model to see if it is worth the extra complexity.</p></div></div>
+    <div class="sec-head"><div><h2>Which model should I pick, and why?</h2><p class="sub">Quick rules of thumb. In a real project, always start with a simple model first, then try a stronger one and keep it only if it's clearly better.</p></div></div>
     <div class="chooser" id="chooser"></div>
   </section>
 
   <section>
-    <div class="sec-head"><div><h2>Project → model map</h2><p class="sub">Common student and industry projects, the type of problem, a good first model, and the model that usually wins.</p></div></div>
+    <div class="sec-head"><div><h2>Project → model map</h2><p class="sub">Common projects, the type of problem, a good first model, the model that usually does best, and the reason.</p></div></div>
     <div class="table-wrap"><table>
       <thead><tr><th>Project</th><th>Type</th><th>Start with</th><th>Usually best</th><th>Why</th></tr></thead>
       <tbody id="projmap"></tbody>
@@ -223,31 +273,83 @@
 <footer>Supervised Models Made Simple · Your “understood” ticks are saved in this browser</footer>
 
 <script>
+const GLOSS = [
+  ["Feature (input)","A piece of information we give the model, like house size or age. A column in a table."],
+  ["Label (target / answer)","The thing we want to predict, like the price or “spam / not spam”."],
+  ["Training data","The examples (with answers) the model learns from."],
+  ["Test data","Examples kept hidden during learning, used later to check the model fairly."],
+  ["Prediction","The model's guess for a new example."],
+  ["Overfitting","Memorising the training examples, including their mistakes, instead of learning the real pattern. Scores high in practice, fails the real exam."],
+  ["Underfitting","The model is too simple to catch the pattern. Scores low everywhere."],
+  ["Baseline","A simple first model. Any fancier model must beat it to be worth using."],
+  ["Scaling","Putting all inputs on a similar range (e.g. 0 to 1) so big numbers don't unfairly dominate small ones."],
+  ["Accuracy / error","How often the model is right (classification) or how far off it is on average (regression)."],
+];
+
 const M = [
   {
     id:"linear-regression", name:"Linear Regression", aka:"The straight-line predictor", types:["r"],
-    one:"Finds the single best straight line through your data and reads predictions off that line.",
-    analogy:{ big:"A ruler laid across a scatter of dots", text:"Plot house size against price and you see a cloud of dots going up. Linear regression places a ruler through the middle of that cloud so it is as close as possible to all the dots. To price a new house, find its size on the ruler and read the price. Each feature gets a simple “rate”: every extra 100 sq ft adds about ₹4 lakh." },
-    how:["Look at all past examples (size, location score → price).","Give each input a weight that says how much it pushes the answer up or down.","Adjust the weights until the line's predictions are as close as possible to the real answers.","For a new example: multiply each input by its weight, add them up, and that's the prediction."],
-    use:["The relationship is roughly “more of X means more (or less) of Y” in a steady way","You must explain the result to a manager: “each ad rupee brings ₹3 in sales”","You need a quick baseline before trying fancy models","Small datasets where complex models would overfit"],
-    avoid:["The pattern is curved or has sudden jumps (e.g. price shoots up near a metro)","There are strong outliers (one ₹50 crore mansion can tilt the whole line)","Inputs interact in complex ways (rain helps crops, but only up to a point)"],
-    projects:[["House price prediction","Size, rooms, age → price. The classic first project."],["Sales vs advertising spend","How much revenue each channel's spend brings."],["Salary from experience","Years of experience, degree → salary."],["Electricity bill estimate","Units used, AC hours → monthly bill."]],
-    example:{ s:"A real-estate site wants an instant price estimate.", i:"1,200 sq ft, 2 BHK, 5 years old, location score 7/10", o:"Predicted price ≈ ₹68 lakh" },
+    idea:"Find the straight line that is closest to all the known points, then use that line to guess new answers.",
+    analogy:{ big:"A ruler laid across a cloud of dots", text:"Draw a graph with house size on one side and price on the other. Each house you know about is a dot. The dots go upwards: bigger houses cost more. Now lay a ruler across the dots so it passes as close as possible to all of them. To guess the price of a new house, find its size along the ruler and read off the price. That ruler is the model." },
+    how:["Collect examples where you know both the inputs (like house size) and the answer (the price).","Imagine them as dots on a graph.","Try a line. For every dot, measure the gap between the dot and the line. That gap is the error.","Keep moving and tilting the line until the total of all the gaps is as small as possible.","To predict, take the new example's inputs, find the spot on the line, and read the answer."],
+    why:"In real life, many things grow together in a steady way: a bigger house usually costs more, more study hours usually give more marks. When that is true, a straight line describes the pattern well. Because the line is chosen to be close to all the examples at once, the luck of any single example gets averaged out, and what remains is the general rule.",
+    example:{ s:"A property website wants to show an instant price estimate.", i:"1,200 sq ft, 2 extra rooms, 5 years old",
+      walk:["The model learned: start at ₹10 lakh","+ ₹4,500 for every sq ft → 1,200 × 4,500 = + ₹54 lakh","+ ₹3 lakh for every extra room → 2 × 3 = + ₹6 lakh","− ₹50,000 for every year of age → 5 × 0.5 = − ₹2.5 lakh","Total = 10 + 54 + 6 − 2.5"], o:"Predicted price ≈ ₹67.5 lakh" },
+    use:[
+      ["The answer goes up or down steadily as an input changes","That is exactly the shape a straight line can draw. If the pattern is already a straight-ish line, nothing fancier is needed."],
+      ["You need to explain the answer to someone","Each input gets one simple number, like “₹4,500 more per square foot”. Anyone can read it and check if it makes sense."],
+      ["You need a first model quickly (a baseline)","It trains in a blink and shows how good a simple answer can be. Every fancier model should be compared against it."],
+      ["You only have a small amount of data","A line has very few things to learn, so it doesn't need many examples and is unlikely to memorise random noise."]],
+    avoid:[
+      ["The pattern is curved, or has sudden jumps","A straight line cannot bend. If prices jump near a metro station, the line will be wrong in many places."],
+      ["There are a few extreme values (outliers)","The line tries to stay close to every dot, so one ₹50 crore mansion pulls the whole line towards it and spoils predictions for normal houses."],
+      ["Inputs affect each other","The line adds each effect separately. It can't understand “rain helps crops, but only when there is also sunlight” unless you build that combination yourself."]],
+    projects:[
+      ["House price prediction","Size, rooms, age → price.","Price usually rises steadily with size, and buyers like hearing “each extra room adds ₹X”."],
+      ["Sales vs advertising spend","Money spent on each channel → sales.","More ad money usually brings more sales in a steady way, and the business wants the exact return on each rupee."],
+      ["Salary from experience","Years of experience, degree → salary.","Salary tends to rise step by step with each year, a clean straight-line pattern."],
+      ["Electricity bill estimate","Units used, AC hours → monthly bill.","The bill is almost exactly units × rate, which is literally a straight line."]],
+    faq:[
+      ["Why is it called “regression”?","It is an old word from statistics. Today it simply means “predicting a number”."],
+      ["How does it know which line is the best?","It measures the gap between the line and every dot, squares each gap, and adds them all up. The best line is the one with the smallest total."],
+      ["Why square the gaps?","So that gaps above the line (positive) and below the line (negative) don't cancel each other out, and so one big mistake counts more than many tiny ones."],
+      ["Can it use more than one input?","Yes. With two inputs the line becomes a flat sheet, with more inputs it's the same idea in more directions. The method stays the same."],
+      ["Can it answer yes / no questions?","Not well. Its answer can be any number, like 1.7 or −3, which isn't a yes or no. For that, use Logistic Regression."],
+      ["What if my data isn't a straight line?","Try Polynomial Regression (a line that can bend) or a tree-based model."]],
+    words:[["Weight","How much one input pushes the answer up or down."],["Intercept","The starting value when all inputs are zero (the ₹10 lakh above)."],["Error / residual","The gap between the real answer and the line's guess."]],
     code:`from sklearn.linear_model import LinearRegression
 model = LinearRegression().fit(X_train, y_train)
 price = model.predict(X_new)        <span class="cm"># a number</span>
-print(model.coef_)                  <span class="cm"># effect of each feature</span>`,
+print(model.coef_)                  <span class="cm"># the weight of each input</span>`,
     rate:{exp:"h",acc:"l",speed:"h",data:"Small",scale:"Helpful"}
   },
   {
     id:"polynomial-regression", name:"Polynomial Regression", aka:"The bendable ruler", types:["r"],
-    one:"Linear regression that is allowed to bend, so it can follow curves.",
-    analogy:{ big:"A flexible wire instead of a stiff ruler", text:"Fertilizer helps crops grow, but too much burns them, so yield goes up and then comes down. A straight ruler can't follow that hill. Polynomial regression swaps the ruler for a flexible wire that can bend once or twice to follow the shape. Bend it too many times, though, and it wiggles through every dot, including the noise." },
-    how:["Create extra versions of each input: size, size², size³…","Feed these into ordinary linear regression.","The extra terms let the line curve.","Choose the amount of bending (the degree) by testing on unseen data."],
-    use:["You can see a clear curve when you plot the data","There is a “sweet spot” (too little and too much are both bad)","You have few features and want something still explainable"],
-    avoid:["Predicting far outside the data range (curves shoot off wildly)","Many features (the number of extra terms explodes)","High degrees: it memorises noise (overfitting)"],
-    projects:[["Crop yield vs fertilizer","Find the amount that gives maximum yield."],["Car mileage vs speed","Mileage is best at mid speeds, worse at low and high."],["Temperature through the day","Rises till afternoon, then falls."],["Drug dose response","Effect rises, then plateaus or turns harmful."]],
-    example:{ s:"An agri-startup advises farmers on fertilizer.", i:"Fertilizer: 120 kg/acre, rainfall: normal", o:"Predicted yield ≈ 2.8 tonnes/acre (peak is near 140 kg)" },
+    idea:"If the pattern is a curve, give the straight line permission to bend.",
+    analogy:{ big:"A flexible wire instead of a stiff ruler", text:"Fertilizer helps crops grow, but too much burns the roots, so the harvest goes up and then comes down. A stiff ruler can't follow that hill shape. So swap the ruler for a flexible wire that can bend once or twice to follow the dots. But if you let it bend too many times, it wiggles through every dot, including the ones that were just bad luck." },
+    how:["Start with your input, for example the amount of fertilizer.","Create extra inputs from it: the amount × the amount (squared), and maybe the amount × amount × amount (cubed).","Give all these to normal linear regression.","The squared part lets the line curve once; the cubed part lets it curve twice.","Choose how many bends (the “degree”) by testing which version predicts best on data it hasn't seen."],
+    why:"When you square a number, it grows faster and faster. Mixing a normal term with a squared term lets the line rise and then fall, or fall and then rise. That is exactly what a hill or a valley looks like, so the curved line can follow patterns a straight line misses.",
+    example:{ s:"An agriculture app advises farmers how much fertilizer to use.", i:"Fertilizer: 120 kg per acre",
+      walk:["The model learned a hill-shaped curve: yield rises with fertilizer, peaks near 140 kg, then falls.","At 60 kg → about 2.1 tonnes per acre","At 120 kg → about 2.8 tonnes per acre","At 200 kg → about 2.3 tonnes per acre (too much hurts)"], o:"Predicted yield at 120 kg ≈ 2.8 tonnes per acre. Best amount ≈ 140 kg." },
+    use:[
+      ["Your graph shows a clear curve","A curved pattern needs a curved line. A straight line would be wrong at both ends."],
+      ["There is a “sweet spot” where too little and too much are both bad","A hill shape (up, then down) is exactly what one bend makes, so the model finds the best amount automatically."],
+      ["You have only a few inputs and still want something easy to explain","It is still the same simple line method underneath, so you can plot it and read it."]],
+    avoid:[
+      ["You need predictions outside the range you trained on","Curves keep curving. Beyond your data they can shoot up or crash to silly values, like a negative harvest."],
+      ["You have many inputs","Every input gets squared and multiplied with every other input. With 20 inputs you get hundreds of new columns, far too many to learn well."],
+      ["You allow too many bends","With enough bends, the line wiggles through every dot, including mistakes. It looks perfect on old data and fails on new data. This is overfitting."]],
+    projects:[
+      ["Crop yield vs fertilizer","Fertilizer amount → harvest.","Yield rises, peaks, then drops when there is too much. One bend fits this perfectly."],
+      ["Car mileage vs speed","Speed → kilometres per litre.","Mileage is poor at very low and very high speeds and best in the middle: a valley-shaped curve."],
+      ["Temperature during the day","Hour of the day → temperature.","It rises until afternoon and then falls: a smooth hill."],
+      ["Medicine dose","Dose → effect on the patient.","The effect grows, then levels off or turns harmful, a bend a straight line can't show."]],
+    faq:[
+      ["Is this a different algorithm from Linear Regression?","No. It is the same Linear Regression. We just give it extra squared or cubed columns so the line can bend."],
+      ["What does “degree” mean?","The highest power used. Degree 2 means one bend, degree 3 means up to two bends."],
+      ["How do I choose the degree?","Try 1, 2, 3, 4 and keep the one that scores best on test data. Usually 2 or 3 is enough."],
+      ["Why not just use a very high degree to be safe?","Because the line starts memorising noise. It will match old data perfectly and be badly wrong on new data."]],
+    words:[["Degree","How many times the line is allowed to bend (highest power)."],["Overfitting","Memorising the examples instead of learning the real shape."],["Extrapolation","Predicting outside the range of data you've seen. Risky for curves."]],
     code:`from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import make_pipeline
@@ -256,45 +358,106 @@ model.fit(X_train, y_train)`,
     rate:{exp:"m",acc:"l",speed:"h",data:"Small",scale:"Yes"}
   },
   {
-    id:"ridge-lasso", name:"Ridge, Lasso & Elastic Net", aka:"Regularised linear models", types:["r","c"],
-    one:"Linear models with a rule that stops any one feature from getting too much importance.",
-    analogy:{ big:"A strict teacher with a marks budget", text:"Imagine 50 students (features) claiming credit for a group project. Plain linear regression might give huge credit to a few loud ones by luck. Ridge is a teacher who says “nobody gets extreme marks”, so credit is spread fairly. Lasso is stricter: students who didn't really contribute get exactly zero, so it also tells you which features to drop. Elastic Net mixes both." },
-    how:["Start from linear (or logistic) regression.","Add a penalty for large weights.","Ridge shrinks all weights a little; Lasso pushes useless ones to exactly zero.","Tune the penalty strength (alpha) using cross-validation."],
-    use:["Many features, maybe more than you have rows","Features are related to each other (e.g. height in cm and in inches)","You want automatic feature selection (Lasso)","Plain linear regression overfits"],
-    avoid:["The real pattern is strongly non-linear","You have only a handful of clean features (plain linear is fine)","You forgot to scale features (the penalty becomes unfair)"],
-    projects:[["Marketing mix modelling","Many ad channels, find which really drive sales."],["Gene expression studies","Thousands of genes, few patients."],["Student performance","Dozens of study-habit survey questions → marks."],["Credit scoring (logistic + L1)","Keep only the factors that matter, regulators can read it."]],
-    example:{ s:"A brand spends on 25 channels and wants to know which ones work.", i:"Weekly spend on TV, Instagram, YouTube, print, radio…", o:"Lasso keeps 6 channels with non-zero weight; the other 19 have ~no effect" },
+    id:"ridge-lasso", name:"Ridge, Lasso & Elastic Net", aka:"Linear models with a fine for over-confidence", types:["r","c"],
+    idea:"Stop the model from trusting any single input too much by charging a fine for every big weight.",
+    analogy:{ big:"A strict teacher handing out credit for a group project", text:"Imagine 50 students (the inputs) all claiming credit for a project. A careless teacher might give huge credit to a few loud students just by luck. Ridge is a teacher who says “nobody gets extreme marks”, so credit is spread more fairly. Lasso is stricter: students who didn't really help get exactly zero, so you also find out who to remove from the team. Elastic Net mixes both rules." },
+    how:["Start with Linear Regression (or Logistic Regression for yes / no questions).","Add a rule: the model pays a fine for every large weight it uses.","Now it must balance two goals: fit the data well AND keep weights small.","Ridge shrinks all weights a little. Lasso pushes useless weights all the way to zero. Elastic Net does a mix.","Choose how big the fine is (called alpha) by testing several values on unseen data."],
+    why:"When there are many inputs, some of them will look useful purely by luck. Plain regression would give these lucky inputs big weights and get fooled. With a fine for big weights, an input only gets a big weight if it truly earns it across many examples. Lucky noise can't pay the fine, so it gets ignored.",
+    example:{ s:"A brand advertises on 25 different channels and wants to know which ones really work.", i:"Weekly spend on TV, Instagram, YouTube, print, radio, billboards and 19 more",
+      walk:["Plain regression gives all 25 channels a weight, many of them random-looking.","Lasso adds the fine and retrains.","19 channels end up with weight exactly 0 (they didn't really change sales).","6 channels keep a weight, e.g. Instagram + ₹2.1 sales per ₹1, YouTube + ₹1.6 per ₹1."], o:"Keep spending on 6 channels; the other 19 show no real effect." },
+    use:[
+      ["You have many inputs, maybe more than rows","With lots of inputs, a model can easily find fake patterns. The fine keeps it honest."],
+      ["Several inputs say the same thing (height in cm and in inches)","Plain regression gets confused and gives wild weights like +500 and −499. Ridge shares the credit calmly between them."],
+      ["You want to know which inputs matter (use Lasso)","Lasso sets useless inputs to exactly zero, so what remains is your list of important inputs."],
+      ["Plain Linear Regression is overfitting","Smaller weights make the line less jumpy, so it does better on new data."]],
+    avoid:[
+      ["The pattern is strongly curved","It is still a straight-line model underneath. The fine doesn't help it bend."],
+      ["You have only a few clean inputs","If there is no overfitting problem, the fine just adds a setting to tune for no gain."],
+      ["You forgot to scale the inputs","The fine compares the size of weights. If one input is in rupees and another in lakhs, their weights aren't comparable and the fine becomes unfair."]],
+    projects:[
+      ["Marketing mix modelling","Spend on many channels → sales.","Many channels run at once and overlap. Lasso picks out the few that truly drive sales."],
+      ["Gene data in medicine","Thousands of gene readings → disease risk.","There are thousands of genes but only a few hundred patients, so plain regression would overfit badly."],
+      ["Student performance survey","Dozens of study-habit questions → marks.","Many questions measure similar habits. Ridge handles that overlap smoothly."],
+      ["Credit scoring","Many customer details → default yes / no.","Lenders need a short, clear list of reasons. Lasso trims the list for them."]],
+    faq:[
+      ["What's the difference between Ridge and Lasso?","Ridge makes every weight smaller but keeps them all. Lasso can make some weights exactly zero, which removes those inputs completely."],
+      ["What is alpha?","The size of the fine. Small alpha means almost normal regression. Big alpha means weights get pushed hard towards zero."],
+      ["Won't the fine make the model worse?","On the training data, slightly. On new data, usually better, and new data is what matters."],
+      ["Does this work for classification too?","Yes. Logistic Regression can use exactly the same Ridge or Lasso fines."]],
+    words:[["Regularisation","The general name for adding a fine to keep a model simple."],["Alpha","How strong the fine is."],["Feature selection","Choosing which inputs to keep. Lasso does it automatically."]],
     code:`from sklearn.linear_model import Ridge, Lasso, ElasticNet
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 model = make_pipeline(StandardScaler(), Lasso(alpha=0.1)).fit(X_train, y_train)
-<span class="cm"># for classification: LogisticRegression(penalty="l1", solver="liblinear")</span>`,
+<span class="cm"># for yes/no: LogisticRegression(penalty="l1", solver="liblinear")</span>`,
     rate:{exp:"h",acc:"l",speed:"h",data:"Small–Medium",scale:"Yes"}
   },
   {
     id:"logistic-regression", name:"Logistic Regression", aka:"The probability scorecard", types:["c"],
-    one:"Despite the name, it is for classification: it adds up evidence and turns it into a probability between 0% and 100%.",
-    analogy:{ big:"A bank's loan scorecard", text:"A loan officer has a sheet: +20 points for a stable job, +15 for good credit history, −30 for existing missed EMIs. Add up the points and a chart converts the total into “12% chance of default”. If the chance is above a cutoff (say 50%), reject. Logistic regression learns those points from past customers automatically." },
-    how:["Give every input a weight (its points, positive or negative).","Add up the weighted inputs to get a score.","Squash the score into a probability with an S-shaped curve.","Compare the probability with a cutoff to decide the class."],
-    use:["Yes/no problems where you need the probability, not just the label","You must explain decisions (banks, healthcare, insurance)","A fast, reliable baseline for any classification project","Text classification with many word features"],
-    avoid:["Classes are separated by complex, curvy boundaries","Strong interactions between features you haven't engineered","Very imbalanced data without adjusting class weights or the cutoff"],
-    projects:[["Customer churn","Will this subscriber cancel next month?"],["Loan default","Probability a borrower misses payments."],["Email spam filter","Spam / not spam from word counts."],["Disease screening","Diabetes risk from age, BMI, sugar levels."],["Ad click prediction","Will the user click this ad?"]],
-    example:{ s:"A telecom company wants to call customers before they leave.", i:"Tenure 4 months, 3 complaints, no family plan, high bill", o:"Churn probability 78% → flag for retention call" },
+    idea:"Add up the evidence for “yes”, turn that total into a chance between 0% and 100%, then decide.",
+    analogy:{ big:"A bank's loan scorecard", text:"A loan officer has a sheet: +20 points for a steady job, +15 for a good repayment history, −30 for missed payments. They add up the points, and a chart turns the total into “12% chance this person won't repay”. If the chance is above a cutoff, the loan is refused. Logistic Regression learns all those points by itself from past customers." },
+    how:["Give every input some points (a weight): positive if it points towards “yes”, negative if it points towards “no”.","For a new case, add up all the points to get a score.","Push the score through an S-shaped curve. A very negative score becomes almost 0%, a very positive score almost 100%, and a score of 0 becomes 50%.","If the chance is above a cutoff (usually 50%), answer “yes”; otherwise “no”.","During training, it keeps adjusting the points until its chances match what really happened in the past examples."],
+    why:"Each clue nudges the odds a little. Adding up the nudges and turning the total into a percentage is a simple and fair way to combine many clues. The S-curve makes sure the answer is always a real chance, never below 0% or above 100%, so you can trust it as a probability.",
+    example:{ s:"A mobile company wants to call customers before they cancel.", i:"4 months as a customer, 3 complaints, no family plan, slightly high bill",
+      walk:["Starting score: −1.5","3 complaints × +0.8 = +2.4","4 months × −0.1 = −0.4 (longer customers are more loyal)","No family plan: +0.6","Slightly high bill: +0.2","Total score = 1.3 → S-curve turns 1.3 into 79%"], o:"79% chance of leaving → above 50% → put on the retention call list" },
+    use:[
+      ["Yes / no questions where you also need the chance","It gives a percentage, so you can treat a 90% risk differently from a 55% risk."],
+      ["You must explain every decision","Each input has visible points, so you can tell a customer exactly why the loan was refused. Banks and hospitals often need this by law."],
+      ["You need a quick, reliable first model","It trains in seconds and is often surprisingly good. Fancier models must beat it to be worth it."],
+      ["Text with thousands of word features","It handles thousands of inputs easily, and works well when each word adds a little evidence."]],
+    avoid:[
+      ["The groups are separated by a complicated, curvy border","It separates groups with a straight line. If the “yes” cases form a ring around the “no” cases, a straight line can't split them."],
+      ["Inputs interact with each other","It adds points separately. It can't learn “young AND high income” as a special combination unless you create that column yourself."],
+      ["One group is very rare and you haven't adjusted for it","If only 1 in 100 cases is fraud, it can score 99% by always saying “not fraud”. You must balance the groups or lower the cutoff."]],
+    projects:[
+      ["Customer churn","Usage, complaints, plan → will they leave?","The company needs a percentage to decide who to call first, and wants to see which reasons push people to leave."],
+      ["Loan default","Income, history, loans → will they repay?","Rules require explainable decisions, and the bank needs a risk percentage to set interest rates."],
+      ["Email spam filter","Words in the email → spam or not?","Each word adds a little evidence, and it combines thousands of these very quickly."],
+      ["Disease screening","Age, BMI, sugar level → diabetes risk.","Doctors want a risk percentage and to see which factors raised it."],
+      ["Ad click prediction","User and ad details → will they click?","Billions of predictions a day need a fast model that outputs a probability."]],
+    faq:[
+      ["Why is it called “regression” if it answers yes / no?","Inside, it first predicts a number (the score), just like regression. The S-curve then turns that number into a chance. The name stayed for historical reasons."],
+      ["What is the S-curve?","It's called the sigmoid. It squeezes any number into the range 0 to 1, so the output can be read as a probability."],
+      ["Why use 50% as the cutoff?","It's only the default. A hospital might use 20% so it doesn't miss sick patients. You choose the cutoff based on which mistake is worse."],
+      ["Can it handle more than two groups?","Yes. It calculates one score per group and picks the highest. This is called multinomial (or softmax) logistic regression."],
+      ["How is it different from Linear Regression?","Linear Regression's answer can be any number. Logistic Regression's answer is always a chance between 0 and 1."]],
+    words:[["Probability","A chance between 0% and 100%."],["Sigmoid","The S-shaped curve that turns a score into a probability."],["Threshold / cutoff","The percentage above which we say “yes”."]],
     code:`from sklearn.linear_model import LogisticRegression
 model = LogisticRegression(max_iter=1000).fit(X_train, y_train)
-model.predict(X_new)          <span class="cm"># 0 / 1</span>
-model.predict_proba(X_new)    <span class="cm"># probability of each class</span>`,
+model.predict(X_new)          <span class="cm"># 0 or 1</span>
+model.predict_proba(X_new)    <span class="cm"># chance of each group</span>`,
     rate:{exp:"h",acc:"m",speed:"h",data:"Small–Large",scale:"Yes"}
   },
   {
-    id:"knn", name:"K-Nearest Neighbours (KNN)", aka:"Ask the neighbours", types:["c","r"],
-    one:"Finds the K most similar past examples and copies their answer (majority vote or average).",
-    analogy:{ big:"“Tell me who your friends are…”", text:"A new student joins class. To guess which sport they'll like, look at the 5 students most similar to them (age, height, hobbies) and go with what most of those 5 play. To guess a flat's rent, average the rent of the 5 most similar flats nearby. KNN doesn't “learn” anything up front; it just remembers everyone and compares at prediction time." },
-    how:["Store all training examples.","For a new example, measure its distance to every stored example.","Pick the K closest ones.","Classification: majority vote. Regression: average of their values."],
-    use:["Small to medium datasets with a few meaningful features","“Similar items” problems (similar products, similar patients)","You want something intuitive to explain with real examples","Quick prototype with no training time"],
-    avoid:["Large datasets (every prediction compares with everyone → slow)","Many features (distances stop being meaningful)","Features on different scales (income in lakhs drowns age in years) unless you scale","Irrelevant features, which confuse the distance"],
-    projects:[["Product recommendations","“Customers similar to you bought…”"],["Rent / price estimation","Price from the most similar listings."],["Handwritten digit recognition (small)","Match a digit to the closest known shapes."],["Patient similarity","Find past patients with the most similar profile."]],
-    example:{ s:"A rental app estimates fair rent.", i:"2 BHK, 950 sq ft, 1.2 km from metro, furnished", o:"5 most similar flats rent for ₹24k–28k → predicted ₹26k" },
+    id:"knn", name:"K-Nearest Neighbours (KNN)", aka:"Ask the most similar examples", types:["c","r"],
+    idea:"Similar things usually have similar answers. So find the most similar past examples and copy their answer.",
+    analogy:{ big:"“Tell me who your friends are, and I'll tell you who you are”", text:"A new student joins the class. To guess which sport they will like, find the 5 students most like them (similar age, height and hobbies) and go with what most of those 5 play. To guess the rent of a flat, look at the 5 most similar flats nearby and take their average rent. KNN doesn't study anything in advance. It simply remembers every example and compares when asked." },
+    how:["Keep all the training examples in memory. There's no real training step.","When a new example arrives, measure how far it is from every stored example (how different they are).","Pick the K closest ones. K is a number you choose, like 5.","For groups: take a vote among those K. For numbers: take their average.","That vote or average is the prediction."],
+    why:"In most real data, similar things behave alike: flats of the same size in the same area have similar rents, and customers with similar shopping histories like similar products. KNN uses this idea directly. Asking several neighbours instead of just one stops a single unusual example from deciding the answer.",
+    example:{ s:"A rental app wants to suggest a fair rent.", i:"2 BHK, 950 sq ft, 1.2 km from metro, furnished",
+      walk:["Compare with all 3,000 listed flats.","The 5 most similar flats rent for: ₹24k, ₹25k, ₹26k, ₹27k, ₹28k","Average = (24 + 25 + 26 + 27 + 28) ÷ 5 = 26"], o:"Suggested rent ≈ ₹26,000 per month" },
+    use:[
+      ["Small or medium data with a few meaningful inputs","It compares the new case with every example, which is quick when there aren't too many."],
+      ["“Find similar items” problems","Finding similar things is literally how it works, so results feel natural: “these 5 products are closest to what you bought”."],
+      ["You want to explain using real examples","You can show the actual neighbours: “we priced your flat like these five flats”."],
+      ["The data keeps changing","There's no training step. Just add new examples and they are used immediately."]],
+    avoid:[
+      ["You have a huge amount of data","Every prediction measures the distance to every stored example. With millions of rows, each prediction becomes slow."],
+      ["You have many inputs","With too many inputs, everything starts to look equally far apart, so “nearest” stops meaning much."],
+      ["Inputs are on very different scales and you didn't scale them","The distance gets dominated by the biggest numbers. Income (₹50,000) would drown out age (25). Always scale first."],
+      ["There are useless inputs","Every input counts in the distance, so useless ones (like a customer ID) make similar things look different."]],
+    projects:[
+      ["Product recommendations","What you bought → similar products.","People with similar histories tend to like similar products, and KNN finds those people directly."],
+      ["Rent or price estimation","Flat details → fair rent.","Agents already price this way (“similar flats nearby go for…”), so the logic is familiar and trusted."],
+      ["Handwritten digits (small dataset)","Image pixels → which digit.","A handwritten 7 looks most like other 7s, so comparing pixels finds the closest shapes."],
+      ["Similar patient finder","Patient details → similar past cases.","Doctors learn from similar past cases, and KNN finds and shows those cases."]],
+    faq:[
+      ["What is K?","How many neighbours to ask. K = 1 copies the single closest example; K = 5 asks five and takes a vote or average."],
+      ["How do I choose K?","Try several values (3, 5, 7, 9) and keep the one that predicts best on test data. Odd numbers avoid ties in yes / no votes."],
+      ["How does it measure “distance”?","Usually like a ruler on a map: the straight-line distance between two points, but using all the inputs at once."],
+      ["Why is it called a “lazy” learner?","Because it learns nothing ahead of time. It does all the work only when you ask for a prediction."],
+      ["What if K is too small or too big?","Too small: one strange neighbour can fool it. Too big: it starts including examples that aren't really similar."]],
+    words:[["Distance","A number saying how different two examples are."],["K","How many neighbours are asked."],["Scaling","Putting inputs on similar ranges so the distance is fair."]],
     code:`from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
@@ -304,13 +467,32 @@ model.fit(X_train, y_train)`,
   },
   {
     id:"naive-bayes", name:"Naive Bayes", aka:"The clue-counting detective", types:["c"],
-    one:"Counts how often each clue appeared in each class in the past and combines the clues to pick the most likely class.",
-    analogy:{ big:"A detective weighing each clue separately", text:"An email contains “FREE”, “winner” and “click now”. The detective remembers: “FREE” appeared in 80% of past spam but only 5% of normal mail; “winner” in 60% of spam… Combining these clues, spam is far more likely. It's called naive because it treats every clue as independent, as if “free” and “winner” never travel together. Surprisingly, it still works very well for text." },
-    how:["From training data, count how often each feature value appears in each class.","Turn the counts into probabilities.","For a new example, multiply the probabilities of its clues for each class.","Pick the class with the highest result."],
-    use:["Text classification: spam, sentiment, news topics, support tickets","You need something extremely fast to train and run","Small datasets, or many features (thousands of words)","A strong first baseline for any NLP classification"],
-    avoid:["Features strongly depend on each other and that matters","You need well-calibrated probabilities (it tends to be over-confident)","Numeric data with complex shapes"],
-    projects:[["Spam filter","Classic: word counts → spam / ham."],["Movie / product review sentiment","Positive vs negative from words used."],["News article tagging","Sports, politics, tech, business…"],["Support ticket routing","Send each ticket to billing, tech or sales."]],
-    example:{ s:"A helpdesk wants to auto-route incoming tickets.", i:"“I was charged twice for my subscription this month”", o:"Category: Billing (92% likely)" },
+    idea:"Count how often each clue appeared in each group in the past, then use those counts to judge which group a new case most likely belongs to.",
+    analogy:{ big:"A detective weighing each clue", text:"An email says “FREE”, “winner” and “click now”. The detective remembers: “FREE” appeared in 80% of past spam but only 5% of normal emails; “winner” in 60% of spam but 1% of normal emails. Putting these clues together, spam is much more likely. It's called naive because the detective treats every clue separately, as if the words never travel together. That's a simplification, but it still works very well for text." },
+    how:["Go through the training data and count: in spam emails, how often does “free” appear? In normal emails? Do this for every word.","Also count how common each group is overall (for example, 30% of emails are spam).","For a new email, look at the words it contains.","For each group, multiply together the chances of seeing those words in that group.","The group with the biggest result wins."],
+    why:"Clues that appear much more often in one group are strong evidence for that group. Multiplying the evidence from many clues builds a clear picture, just like a detective combining many small hints. Since learning is only counting, it is extremely fast and needs few examples.",
+    example:{ s:"A help desk wants to send each ticket to the right team.", i:"“I was charged twice for my subscription this month”",
+      walk:["“charged” appeared in 40% of billing tickets but 2% of technical tickets","“twice” appeared in 15% of billing tickets but 3% of technical tickets","“subscription” appeared in 30% of billing tickets but 10% of technical tickets","Multiply the clues for each team and compare: Billing comes out far ahead"], o:"Send to: Billing team (92% likely)" },
+    use:[
+      ["Text classification (spam, reviews, news, tickets)","Text has thousands of words. Naive Bayes just counts them, which is fast and works surprisingly well."],
+      ["You need something extremely fast","Learning is just counting in one pass over the data; predicting is a few multiplications."],
+      ["You have only a little data","Counting gives a rough but useful picture even from few examples, unlike models that must learn many weights."],
+      ["You need a first baseline for any text project","It's quick to build and tells you whether fancier models are worth the effort."]],
+    avoid:[
+      ["Clues strongly depend on each other","It assumes clues are independent. If “New” and “Delhi” always appear together, it counts the same evidence twice and becomes over-confident."],
+      ["You need accurate percentages","Because of that double counting, its percentages are often too extreme (99% when the truth is 70%). The ranking is fine; the exact number isn't."],
+      ["Number data with complicated shapes","It assumes simple shapes for numbers, so it misses complex patterns."]],
+    projects:[
+      ["Spam filter","Words in email → spam or not.","Spam emails reuse certain words a lot, and counting words is exactly what catches them."],
+      ["Review sentiment","Review text → positive or negative.","Words like “excellent” or “waste” are strong clues for one side."],
+      ["News topic tagging","Article text → sports, politics, tech…","Each topic has its own vocabulary: “wicket” means sports, “election” means politics."],
+      ["Support ticket routing","Ticket text → billing, technical, sales.","Words like “refund” and “charged” point to billing, and it learns these in seconds."]],
+    faq:[
+      ["Why is it called “naive”?","Because it naively assumes every clue is independent, as if words never come in pairs. It's a simplification, but it works well in practice."],
+      ["Who is Bayes?","Thomas Bayes, a mathematician from the 1700s. His rule explains how to update what you believe when you see new evidence."],
+      ["What if a word never appeared during training?","Its chance would be zero, which would ruin the multiplication. So we add a tiny count to every word. This is called smoothing."],
+      ["Can it work with numbers instead of words?","Yes. Gaussian Naive Bayes assumes number inputs follow a bell-shaped curve."]],
+    words:[["Prior","How common a group is overall, before looking at clues."],["Independence","Assuming one clue tells you nothing about another."],["Smoothing","Adding a tiny count so unseen words don't give zero."]],
     code:`from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import make_pipeline
@@ -319,14 +501,35 @@ model.predict(["Win a FREE iPhone now"])`,
     rate:{exp:"m",acc:"m",speed:"h",data:"Small–Large",scale:"No"}
   },
   {
-    id:"decision-tree", name:"Decision Tree", aka:"The flowchart of questions", types:["c","r"],
-    one:"Learns a flowchart of yes/no questions that leads to an answer.",
-    analogy:{ big:"The game of 20 Questions", text:"To guess an animal you ask the most useful question first (“Does it live in water?”), then the next most useful, and so on. A decision tree does the same with data: “Is income > ₹50k? → Yes → Has existing loans? → No → Approve.” You can print the tree and anyone can follow it with a finger." },
-    how:["Look at all features and find the question that best splits the data into pure groups.","Split the data on that question.","Repeat inside each group, asking the next best question.","Stop when groups are pure enough or the tree is deep enough; each leaf gives the answer (a class or an average number)."],
-    use:["You need rules a non-technical person can read and audit","Mixed data: numbers and categories together","Non-linear patterns and feature interactions","As a teaching tool or to discover business rules"],
-    avoid:["Used alone on noisy data: deep trees memorise (overfit)","Small changes in data can produce a totally different tree","Smooth numeric predictions (it gives step-like answers)","When accuracy matters most (use Random Forest / Boosting instead)"],
-    projects:[["Loan approval rules","Transparent approve / reject logic."],["Insurance eligibility","Which plan a customer qualifies for."],["Medical triage flowchart","Urgent / non-urgent from symptoms."],["Delivery time estimate","Distance, traffic, weather → minutes (regression tree)."]],
-    example:{ s:"A bank wants approval rules its staff can follow.", i:"Income ₹62k/month, 1 existing loan, credit score 742", o:"Path: income > 50k → score > 700 → loans ≤ 1 → Approve" },
+    id:"decision-tree", name:"Decision Tree", aka:"A flowchart of questions", types:["c","r"],
+    idea:"Ask the most useful yes / no question, split the data, and keep asking until each group has a clear answer.",
+    analogy:{ big:"The game of 20 Questions", text:"To guess an animal, you ask the most useful question first: “Does it live in water?” Then the next most useful: “Does it have legs?” Each answer cuts down the possibilities. A decision tree plays this game with data: “Is income above ₹50k? → Yes → Any missed payments? → No → Approve.” You can print the tree and anyone can follow it with a finger." },
+    how:["Look at every input and every possible question (for example “income > ₹50k?”).","Pick the question that separates the answers most cleanly, so the resulting groups are as pure as possible.","Split the data into two branches using that question.","Repeat inside each branch with the next best question.","Stop when a group is pure enough or the tree is deep enough. The final box (a leaf) gives the answer: the most common group, or the average number."],
+    why:"Good questions quickly separate different cases, the same way “does it live in water?” quickly narrows down animals. By always choosing the most useful question next, the tree reaches a confident answer in just a few steps, and each step is easy for a person to understand.",
+    example:{ s:"A bank wants approval rules its staff can follow.", i:"Income ₹62k per month, credit score 742, 1 existing loan",
+      walk:["Question 1: Income above ₹50k? → Yes","Question 2: Credit score above 700? → Yes","Question 3: Existing loans 1 or fewer? → Yes","Reached leaf: in the past, 94% of customers in this box repaid"], o:"Decision: Approve" },
+    use:[
+      ["You need rules a non-technical person can read","The result is a flowchart. You can print it and anyone can follow it."],
+      ["Your data mixes numbers and categories","Questions work on numbers (“age > 30?”) and categories (“city = Delhi?”) alike, so little preparation is needed."],
+      ["Inputs combine in interesting ways","Each branch asks different follow-up questions, so it naturally learns combinations like “young AND renting”."],
+      ["You don't want to scale data","A question like “income > 50k?” works the same whether income is in rupees or lakhs."]],
+    avoid:[
+      ["Using a single deep tree on noisy data","A deep tree keeps splitting until it memorises every example, including mistakes. Great on old data, bad on new."],
+      ["You need a stable model","A few changed rows can change the very first question, and then the whole tree changes."],
+      ["You need smooth number predictions","Each leaf gives one fixed value, so predictions come in steps, not a smooth line."],
+      ["Accuracy matters most","One tree is usually beaten by many trees working together (Random Forest or Gradient Boosting)."]],
+    projects:[
+      ["Loan approval rules","Customer details → approve or reject.","Staff and auditors can read and check every rule."],
+      ["Insurance eligibility","Customer details → which plan they qualify for.","Eligibility is naturally a set of if-then rules."],
+      ["Medical triage","Symptoms → urgent or not urgent.","Triage already works like a flowchart of questions, and the tree learns the best order to ask them."],
+      ["Delivery time estimate","Distance, traffic, rain → minutes.","Effects combine (rain matters more on long routes), and branches capture that."]],
+    faq:[
+      ["How does it choose the best question?","It tries every possible question and measures how mixed the groups would be afterwards, using a score called Gini or entropy. The question that makes the groups least mixed wins."],
+      ["What does “pure” mean?","A group where almost everyone has the same answer, like 100% “approved”."],
+      ["When does the tree stop growing?","When groups are pure, too small to split, or the tree reaches a maximum depth you set."],
+      ["What is pruning?","Cutting off branches that don't help on new data, like trimming a real tree, so it doesn't memorise noise."],
+      ["Can it predict numbers?","Yes. Each leaf gives the average of the examples that land in it."]],
+    words:[["Node","A question in the tree."],["Leaf","An end box that gives the answer."],["Depth","How many questions deep the tree goes."],["Gini / entropy","Scores that measure how mixed a group is."]],
     code:`from sklearn.tree import DecisionTreeClassifier, export_text
 model = DecisionTreeClassifier(max_depth=4).fit(X_train, y_train)
 print(export_text(model, feature_names=list(X_train.columns)))  <span class="cm"># readable rules</span>`,
@@ -334,27 +537,71 @@ print(export_text(model, feature_names=list(X_train.columns)))  <span class="cm"
   },
   {
     id:"random-forest", name:"Random Forest", aka:"The wisdom of the crowd", types:["c","r"],
-    one:"Builds hundreds of different decision trees and combines their answers by voting or averaging.",
-    analogy:{ big:"Asking 300 experts instead of one", text:"One doctor might be biased by the patients they happened to see. Ask 300 doctors, each trained on a slightly different set of cases and each looking at a different subset of test results, then take the majority opinion. Individual mistakes cancel out and the crowd is much more reliable. That's a random forest." },
-    how:["Make many random samples of the training data (with repeats).","Train one decision tree on each sample, letting each split look at only a random subset of features.","Each tree makes its own prediction.","Classification: majority vote. Regression: average of all trees."],
-    use:["Almost any tabular (rows & columns) project: a great default","You want strong accuracy with very little tuning","You need feature importance (“which factors matter most?”)","Data has missing patterns, outliers or mixed types"],
-    avoid:["You need a tiny, very fast model (e.g. on a phone)","You must explain each single decision line by line","Regression that must predict beyond the range seen in training (trees can't extrapolate trends)","Very high-dimensional sparse data like raw text"],
-    projects:[["Credit card fraud detection","Flag suspicious transactions."],["Customer churn","Robust, with feature importance for the business."],["Crop yield prediction","Soil, rainfall, temperature → yield."],["House price prediction","Usually beats linear regression easily."],["Disease prediction","Heart disease from medical records."]],
-    example:{ s:"A hospital predicts heart-disease risk.", i:"Age 54, cholesterol 260, BP 145, smoker, chest pain type 2", o:"231 of 300 trees say “at risk” → 77% risk → refer for tests" },
+    idea:"Grow many different trees, each a little bit different, and let them vote. Their individual mistakes cancel out.",
+    analogy:{ big:"Asking 300 doctors instead of one", text:"One doctor might be influenced by the particular patients they happened to see. Now ask 300 doctors, each trained on a slightly different set of cases and each looking at different test results, and take the majority opinion. Individual mistakes cancel out and the crowd is far more reliable than any single doctor. That is a Random Forest." },
+    how:["Make many random copies of the training data. Each copy picks rows at random, and some rows repeat.","Grow one decision tree on each copy.","At every question, each tree is only allowed to look at a random handful of inputs.","To predict, ask every tree.","For groups: majority vote. For numbers: average of all the trees."],
+    why:"One tree makes mistakes because of the specific examples it saw. Different trees see different examples and different inputs, so they make different mistakes. When you combine them, the random mistakes cancel out, but the real pattern, which they all see, stays strong.",
+    example:{ s:"A hospital estimates heart-disease risk.", i:"Age 54, cholesterol 260, blood pressure 145, smoker, chest pain type 2",
+      walk:["Ask all 300 trees.","231 trees say “at risk”, 69 say “not at risk”.","231 ÷ 300 = 77%"], o:"77% at risk → refer for further tests" },
+    use:[
+      ["Almost any table-shaped (rows and columns) project","It handles numbers and categories, curves and combinations, with almost no setup."],
+      ["You want strong results without much tuning","Default settings usually work well, so you get a good model quickly."],
+      ["You want to know which inputs matter most","It measures how much each input helped the trees, so you can tell people which factors matter."],
+      ["Your data is a bit messy","Outliers and odd values only affect some trees, and the vote dilutes them."]],
+    avoid:[
+      ["You need a tiny, super-fast model","Hundreds of trees use memory and time. Not ideal for phones or real-time systems."],
+      ["You must explain every single decision","No one can follow 300 trees by hand."],
+      ["You need to predict beyond the range you've seen","Each tree's answer is an average of training values, so it can never predict higher than the highest value it has seen. Bad for growing trends."],
+      ["Raw text with thousands of words","Most word columns are empty; linear models handle that kind of data better."]],
+    projects:[
+      ["Credit card fraud detection","Transaction details → fraud or not.","Fraud is often a combination (new device AND another country AND late night), and many trees catch many such combinations."],
+      ["Customer churn","Usage details → will they leave?","Strong accuracy plus a clear list of the top reasons people leave."],
+      ["Crop yield prediction","Soil, rain, temperature → harvest.","These inputs interact in complicated ways, and trees capture that without manual work."],
+      ["House price prediction","House details → price.","Location × size combinations beat a straight line easily."],
+      ["Heart disease prediction","Medical records → risk.","Medical data is mixed and noisy; the forest stays stable and shows the top risk factors."]],
+    faq:[
+      ["Why is it called “random”?","Two kinds of randomness: each tree sees random rows, and each question sees random inputs. This makes the trees different from each other, which is the whole point."],
+      ["Why “forest”?","Because it's made of many trees!"],
+      ["How many trees should I use?","Usually 100 to 500. More trees rarely hurt accuracy; they just take longer."],
+      ["Isn't it the same as one big tree?","No. One big tree memorises. Many different trees voting together is much more stable and accurate."],
+      ["What is “bagging”?","Training each model on a random sample of rows, then combining them. Random Forest is bagging plus random inputs at each question."]],
+    words:[["Ensemble","A team of models combined together."],["Bagging","Training each model on a random sample, then combining."],["Feature importance","How much each input helped the predictions."]],
     code:`from sklearn.ensemble import RandomForestClassifier
 model = RandomForestClassifier(n_estimators=300, random_state=42).fit(X_train, y_train)
-model.feature_importances_   <span class="cm"># which features matter most</span>`,
+model.feature_importances_   <span class="cm"># which inputs matter most</span>`,
     rate:{exp:"m",acc:"h",speed:"m",data:"Medium–Large",scale:"No"}
   },
   {
     id:"gradient-boosting", name:"Gradient Boosting (XGBoost, LightGBM, CatBoost)", aka:"Learning from mistakes, one tree at a time", types:["c","r"],
-    one:"Builds small trees one after another, each new tree focusing on fixing the errors of the trees before it.",
-    analogy:{ big:"A student practising only the questions they got wrong", text:"After a mock test, a smart student doesn't re-study everything. They look at the questions they got wrong and practise those. Next mock, they look at the new mistakes, and so on. After 500 rounds of “fix what's still wrong”, they score very high. Gradient boosting does this with trees: each new small tree is trained on the leftover errors." },
-    how:["Start with a simple guess (e.g. the average).","Measure the error for every example.","Train a small tree to predict those errors, and add it (a little) to the model.","Repeat hundreds of times; stop when the score on validation data stops improving."],
-    use:["You want the best accuracy on tabular data: it wins most Kaggle competitions","Large datasets with many features and complex interactions","Demand forecasting with lag/calendar features (LightGBM is an industry favourite)","Categorical-heavy data (CatBoost handles categories natively)"],
-    avoid:["Very small datasets (it overfits easily)","You can't spend time tuning (learning rate, depth, number of trees)","Images, audio or raw text (use neural networks)","You need a fully transparent model for regulators"],
-    projects:[["Product demand forecasting","Sales history + price + holidays → units next week."],["Fraud detection","Highly accurate on transaction data."],["Insurance claim cost","Predict claim amount per policy."],["Delivery ETA","Food/parcel arrival time from route, traffic, weather."],["Click-through rate","Will a user click this product?"]],
-    example:{ s:"A retail chain forecasts demand to plan stock.", i:"Item: 1L milk, store #12, last 4 weeks' sales, Diwali next week, 10% discount", o:"Predicted demand: 1,840 units next week" },
+    idea:"Build small trees one after another. Each new tree only tries to fix what the earlier trees still get wrong.",
+    analogy:{ big:"A student who practises only the questions they got wrong", text:"After a mock test, a smart student doesn't re-study everything. They look at the questions they got wrong and practise those. After the next mock, they look at the new mistakes, and so on. After hundreds of rounds of “fix what's still wrong”, they score very high. Gradient Boosting does this with trees: each new small tree is trained on the leftover mistakes." },
+    how:["Start with a very simple guess for everyone, such as the average.","Check how wrong that guess is for each example. These leftovers are called errors (or residuals).","Train a small tree to predict those errors.","Add a small part of that tree's answer to the model. The learning rate controls how small.","Repeat hundreds of times. Stop when the score on test data stops improving."],
+    why:"Every round focuses on exactly the cases that are still wrong, so effort goes where it's needed most. Adding only a small correction each time is like careful steering instead of sharp turns, which keeps the model from overreacting. Together, hundreds of small corrections capture very fine patterns.",
+    example:{ s:"A supermarket chain plans how much milk to stock.", i:"1-litre milk, store #12, last 4 weeks' sales, Diwali next week, 10% discount",
+      walk:["Starting guess (average weekly sales): 1,500 units","Tree 1 notices the festival week: + 200","Tree 2 notices the discount: + 90","Tree 3 notices this store sells more on weekends: + 35","…hundreds more small corrections…","Final total after all trees"], o:"Predicted demand ≈ 1,840 units next week" },
+    use:[
+      ["You want the best accuracy on table-shaped data","Fixing errors step by step captures very fine patterns. It wins most data competitions on tables."],
+      ["Large data with many inputs","Modern versions like LightGBM and XGBoost are built to be fast even on millions of rows."],
+      ["Demand forecasting with many signals","It mixes past sales, prices, holidays and weather, and learns how they combine."],
+      ["Lots of category inputs (city, product type)","CatBoost handles categories directly, without manual conversion."]],
+    avoid:[
+      ["You have very little data","With few examples, it keeps “fixing” random noise and ends up memorising."],
+      ["You have no time to tune it","Results depend on settings like learning rate, tree depth and the number of trees."],
+      ["Images, audio or raw text","These need models that understand pixels and word order; neural networks do that better."],
+      ["You need a fully transparent model","Hundreds of trees added together are hard to explain line by line (tools like SHAP help, but it's still harder)."]],
+    projects:[
+      ["Product demand forecasting","Sales history, price, holidays → units next week.","Sales depend on many signals mixed together, and boosting is the industry's first choice for this."],
+      ["Fraud detection","Transaction details → fraud or not.","Fraud is rare and subtle; boosting keeps focusing on the cases it got wrong, which are often the tricky frauds."],
+      ["Insurance claim cost","Policy and customer details → claim amount.","Costs depend on many interacting factors and vary hugely, and boosting handles both."],
+      ["Delivery time (ETA)","Route, traffic, weather, time → minutes.","Many factors interact, and delivery apps commonly use boosting for this."],
+      ["Click-through rate","User and product details → will they click?","Huge datasets where tiny accuracy gains are worth a lot of money."]],
+    faq:[
+      ["How is this different from Random Forest?","A forest builds trees separately and averages them (like a team working side by side). Boosting builds trees one after another, each fixing the previous mistakes (like a relay race)."],
+      ["What is the learning rate?","How big a step each new tree is allowed to take. Small steps (like 0.05) need more trees but usually give a better final model."],
+      ["Why is it called “gradient”?","It's the maths word for “the direction that reduces the error fastest”. Each new tree moves the model in that direction."],
+      ["XGBoost, LightGBM or CatBoost: which one?","All three are gradient boosting. LightGBM is very fast, XGBoost is the classic, CatBoost is best with many category inputs. Results are usually close."],
+      ["How do I stop it from overfitting?","Use early stopping: keep checking the score on test data and stop adding trees when it stops improving."]],
+    words:[["Residual","What's left over: the real answer minus the current guess."],["Learning rate","How much each new tree is allowed to change the answer."],["Early stopping","Stopping training when test scores stop improving."]],
     code:`import lightgbm as lgb    <span class="cm"># or: from xgboost import XGBRegressor</span>
 model = lgb.LGBMRegressor(n_estimators=500, learning_rate=0.05)
 model.fit(X_train, y_train, eval_set=[(X_val, y_val)])
@@ -363,13 +610,33 @@ units = model.predict(X_next_week)`,
   },
   {
     id:"svm", name:"Support Vector Machine (SVM / SVR)", aka:"The widest road", types:["c","r"],
-    one:"Draws the boundary between classes that stays as far as possible from both sides.",
-    analogy:{ big:"Building the widest possible road between two villages", text:"Two villages sit on a map and you must build a straight road between them. Many roads would separate them, but the safest is the one with the widest gap on both sides, so a new house built near the edge is still clearly on the right side. The houses touching the road's edges are the “support vectors”. When villages are mixed up, the “kernel trick” is like lifting the map into 3D so a flat sheet can separate them." },
-    how:["Find the boundary that leaves the widest margin between classes.","Only the closest points (support vectors) decide where it goes.","Allow a few points on the wrong side if needed (controlled by C).","Use a kernel (e.g. RBF) to get curved boundaries. SVR applies the same idea to predict numbers."],
-    use:["Small to medium datasets with many features","Text classification and other high-dimensional data","Clear separation between classes","When you need strong accuracy without a huge dataset"],
-    avoid:["Very large datasets (training gets slow beyond ~100k rows)","You need probabilities or easy explanations","Lots of noise and overlapping classes","Unscaled features (always scale for SVM)"],
-    projects:[["Cancer cell classification","Benign vs malignant from cell measurements."],["Face / no-face detection","Classic computer-vision use with HOG features."],["Text categorisation","News or document classification."],["Handwriting recognition","Small digit / character datasets."]],
-    example:{ s:"A lab classifies tumour samples.", i:"30 measurements of cell size, shape and texture", o:"Malignant (sample lies clearly on the malignant side of the margin)" },
+    idea:"Draw the dividing line that stays as far away as possible from both groups.",
+    analogy:{ big:"Building the widest road between two villages", text:"Two villages sit on a map, and you must build a straight road between them. Many roads could separate them, but the safest is the one with the widest empty space on both sides, so a new house built near the edge is still clearly on the correct side. The houses touching the edges of the road are called support vectors. If the villages are mixed together, the “kernel trick” is like lifting the map into 3D, where a flat sheet can separate them." },
+    how:["Look at the examples of both groups.","Find a line (or flat sheet) that separates them.","Among all such lines, choose the one with the widest empty gap (the margin) to the nearest points on each side.","The nearest points touching the edge of the gap are the support vectors. Only they decide where the line goes.","If the groups can't be split by a straight line, use a kernel to look at the data in a new way where they can. For numbers (SVR), it fits a tube around the data instead."],
+    why:"A line squeezed right next to some points will misjudge new points that land slightly off. The widest gap leaves the most room for small differences, so new examples are more likely to fall on the correct side. Because only the boundary points matter, the rest of the data can't distract it.",
+    example:{ s:"A lab sorts tumour samples.", i:"30 measurements of cell size, shape and texture",
+      walk:["During training, SVM found the widest gap between harmless and harmful samples.","12 boundary samples became the support vectors.","The new sample is measured and placed.","It lands well inside the harmful side, far from the gap."], o:"Prediction: harmful (malignant), sent for doctor review" },
+    use:[
+      ["Small or medium data with many inputs","It only depends on the boundary points, so it does well even when there are more inputs than examples."],
+      ["Text classification","Word data has thousands of inputs, and groups are often separable by a flat boundary, which is SVM's strength."],
+      ["The groups are clearly separated","When there's a gap between groups, finding the widest gap is exactly what it does."],
+      ["You want strong accuracy without a huge dataset","The kernel trick lets it learn curved borders without millions of examples."]],
+    avoid:[
+      ["Very large data","Training compares examples with each other, which gets very slow beyond about 100,000 rows."],
+      ["You need percentages or explanations","It tells you which side of the line a point is on, not a natural percentage, and curved kernel borders are hard to explain."],
+      ["Groups heavily overlap","When groups are mixed, there's no clean gap to find, and it struggles."],
+      ["You didn't scale the inputs","The gap is measured as a distance, so unscaled inputs make some directions count far more than others."]],
+    projects:[
+      ["Cancer cell classification","Cell measurements → harmful or harmless.","A medium-sized dataset with many measurements and a fairly clear separation."],
+      ["Face detection","Image features → face or not.","Before deep learning, SVMs with image features were the standard method for this."],
+      ["Text categorisation","Document words → category.","Thousands of word inputs with clean boundaries between categories."],
+      ["Handwriting recognition (small)","Pixel features → which letter or digit.","Kernel SVMs learn curved borders between shapes using a modest amount of data."]],
+    faq:[
+      ["What is a support vector?","One of the examples closest to the border. They “support” (hold up) the line: move them and the line moves; move other points and nothing changes."],
+      ["What is the kernel trick?","A way to look at the data from a new angle. Imagine red and blue marbles mixed on a table. Throw them in the air so the red ones fly higher. Now a flat sheet in the air separates them. The kernel does this with maths."],
+      ["What is C?","How strict the model is. High C: tries hard to put every point on the right side (risk of memorising). Low C: allows a few mistakes for a wider, safer gap."],
+      ["Can it predict numbers?","Yes, that version is called SVR. It fits a tube around the data and ignores small errors inside the tube."]],
+    words:[["Margin","The empty gap between the border and the nearest points."],["Support vector","A point touching the edge of the margin."],["Kernel","A trick to separate data that isn't separable by a straight line."]],
     code:`from sklearn.svm import SVC, SVR
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
@@ -378,14 +645,36 @@ model = make_pipeline(StandardScaler(), SVC(kernel="rbf", C=1.0)).fit(X_train, y
   },
   {
     id:"neural-network", name:"Neural Networks (MLP & Deep Learning)", aka:"Layers of tiny decision makers", types:["c","r"],
-    one:"Many small units arranged in layers; each layer turns the input into a more useful representation until the last layer gives the answer.",
-    analogy:{ big:"A factory assembly line", text:"Raw material (a photo) enters the line. The first station spots edges, the next combines edges into shapes like eyes and ears, the next recognises a face, and the last station stamps “cat”. Nobody tells each station what to do; during training, every station adjusts itself a little each time the final answer is wrong, until the whole line works together." },
-    how:["Inputs go into the first layer of units.","Each unit combines its inputs and passes a signal forward.","The last layer outputs a class probability or a number.","Compare with the right answer and nudge every connection slightly to reduce the error (backpropagation). Repeat over many passes."],
-    use:["Images, audio, video and raw text (deep learning: CNNs, RNNs, Transformers)","Very large datasets with complex patterns","Many inputs combined, such as recommendations or multi-signal demand","When you can afford GPU time and tuning"],
-    avoid:["Small tabular datasets: Random Forest / Boosting usually win","You must explain each decision clearly","Limited data, time or compute","As a first model: start with simpler baselines"],
-    projects:[["Image classification","Plant disease, defect detection, X-ray screening."],["Speech & voice","Speech-to-text, wake-word detection."],["Text understanding","Sentiment, intent detection for chatbots."],["Recommendation systems","Learn user and item preferences from huge logs."]],
-    example:{ s:"A farming app detects leaf disease from a photo.", i:"Phone photo of a tomato leaf", o:"Early blight (94% confidence) → suggest treatment" },
-    code:`from sklearn.neural_network import MLPClassifier   <span class="cm"># simple tabular version</span>
+    idea:"Many tiny calculators connected in layers. Each layer builds on the one before, until the network can spot very complicated patterns.",
+    analogy:{ big:"A factory assembly line", text:"A photo enters the line. The first station spots edges and colours. The next combines edges into shapes like eyes and ears. The next recognises a face. The last station stamps the label “cat”. Nobody tells each station what to do. During training, every station adjusts itself slightly whenever the final answer is wrong, until the whole line works well together." },
+    how:["Inputs (like the colours of each pixel) go into the first layer.","Each unit (neuron) multiplies its inputs by weights, adds them up, and passes a signal forward if it's strong enough.","Layer by layer, signals turn into more meaningful ideas: edges → shapes → objects.","The last layer gives the answer: a chance for each group, or a number.","Compare with the correct answer, then adjust every weight a tiny bit to reduce the error (this is backpropagation). Repeat over all the data many times."],
+    why:"Simple pieces stacked together can represent very complicated ideas, the same way simple LEGO bricks can build a castle. With enough examples, the tiny adjustments slowly shape every layer into a useful pattern detector, without anyone having to tell it what to look for.",
+    example:{ s:"A farming app identifies leaf disease from a photo.", i:"A phone photo of a tomato leaf",
+      walk:["Early layers detect edges, spots and colour patches.","Middle layers recognise leaf shape and spot patterns.","The final layer gives: Early blight 94%, Healthy 4%, Leaf mould 2%"], o:"Diagnosis: Early blight (94%) → suggest treatment" },
+    use:[
+      ["Images, audio, video or raw text","These have patterns inside patterns (letters → words → meaning). Layers are built to learn exactly that."],
+      ["You have a very large amount of data","Unlike simple models, neural networks keep getting better as you add more data."],
+      ["You need to combine many different signals","They can mix hundreds of inputs in flexible ways, like user history + product details + time of day."],
+      ["You have a GPU available","Training needs millions of small calculations, and GPUs do them in parallel."]],
+    avoid:[
+      ["Small table-shaped data","With little data they overfit easily, and tree models usually win on spreadsheets."],
+      ["You must explain every decision","Millions of weights don't translate into human-readable reasons."],
+      ["Limited data, time or computing power","They need lots of examples and powerful hardware to train well."],
+      ["As your very first model","Start simple. If a simple model is almost as good, it's cheaper and easier to maintain."]],
+    projects:[
+      ["Image classification","Photo → what's in it.","Only deep networks (CNNs) can learn directly from raw pixels."],
+      ["Speech recognition","Audio → text.","Sound is a long signal with patterns over time, which neural networks are built for."],
+      ["Text understanding","Sentence → meaning, intent or sentiment.","Meaning depends on word order and context, and Transformers (the technology behind modern AI chatbots) handle this."],
+      ["Recommendation systems","User history → what they'll like next.","Huge data with complex tastes; neural networks learn hidden preferences."]],
+    faq:[
+      ["Is it really like a human brain?","Only loosely. It was inspired by brain cells, but it's really just lots of multiplying and adding."],
+      ["What is a layer?","A row of neurons. The input layer receives the data, hidden layers find patterns, the output layer gives the answer."],
+      ["What does “deep” learning mean?","A neural network with many hidden layers. More layers can learn more complex ideas."],
+      ["What is backpropagation?","After a wrong answer, it works backwards from the output to the input, telling each weight how much it was to blame and nudging it."],
+      ["What is an epoch?","One full pass through all the training data. Training usually takes many epochs."],
+      ["Why do they need so much data?","They have millions of weights to set, and each example only nudges them slightly, so they need many examples to get it right."]],
+    words:[["Neuron","One tiny calculator in the network."],["Layer","A row of neurons working at the same stage."],["Epoch","One full pass through the training data."],["Backpropagation","Sending the error backwards to adjust every weight."]],
+    code:`from sklearn.neural_network import MLPClassifier   <span class="cm"># simple version for tables</span>
 model = MLPClassifier(hidden_layer_sizes=(64, 32), max_iter=500).fit(X_train, y_train)
 <span class="cm"># images / text / audio → PyTorch or TensorFlow (CNNs, Transformers)</span>`,
     rate:{exp:"l",acc:"m",speed:"l",data:"Large",scale:"Yes (must)"}
@@ -393,30 +682,30 @@ model = MLPClassifier(hidden_layer_sizes=(64, 32), max_iter=500).fit(X_train, y_
 ];
 
 const RULES = [
-  ["You need a quick baseline","Linear Regression (numbers) or Logistic Regression (categories)"],
-  ["You must explain every decision","Decision Tree, Logistic or Linear Regression"],
-  ["Rows-and-columns data, want strong accuracy fast","Random Forest"],
-  ["Rows-and-columns data, want the best possible accuracy","Gradient Boosting (LightGBM / XGBoost / CatBoost)"],
-  ["Text classification (spam, tickets, reviews)","Naive Bayes → Logistic Regression / SVM"],
-  ["Many features, possibly related to each other","Ridge / Lasso / Elastic Net"],
-  ["Small data where “similar cases” matter","K-Nearest Neighbours"],
-  ["Clear curve / sweet-spot pattern with few features","Polynomial Regression"],
-  ["Images, audio, video or huge datasets","Neural Networks (deep learning)"],
+  ["You need a quick first model","Linear Regression (numbers) or Logistic Regression (groups)","They train in seconds and show how good a simple answer is, so you know if fancier models are worth it."],
+  ["You must explain every decision","Decision Tree, Logistic or Linear Regression","Their reasoning can be read directly: a flowchart, or points per input."],
+  ["Table data, you want strong accuracy fast","Random Forest","Many trees voting give strong results with almost no tuning."],
+  ["Table data, you want the best possible accuracy","Gradient Boosting (LightGBM / XGBoost / CatBoost)","Fixing mistakes step by step captures the finest patterns."],
+  ["Text classification (spam, tickets, reviews)","Naive Bayes → Logistic Regression / SVM","Text has thousands of word inputs, and these models handle that easily and quickly."],
+  ["Many inputs, possibly overlapping","Ridge / Lasso / Elastic Net","The fine on big weights stops the model being fooled by lucky inputs."],
+  ["Small data where “similar cases” matter","K-Nearest Neighbours","It answers by copying the most similar examples, which needs no training."],
+  ["A clear curve or “sweet spot”, few inputs","Polynomial Regression","A bendable line can follow a hill or valley that a straight line can't."],
+  ["Images, audio, video or huge datasets","Neural Networks (deep learning)","Only layered networks can learn directly from raw pixels, sound or text."],
 ];
 
 const PROJ = [
-  ["House price prediction","r","Linear Regression","Gradient Boosting","Tabular data with interactions (location × size)."],
-  ["Product demand forecasting","r","Linear Regression","LightGBM","Handles lags, holidays, promotions and many stores/items."],
-  ["Delivery time (ETA)","r","Decision Tree","Gradient Boosting","Traffic, distance and weather interact non-linearly."],
-  ["Student marks prediction","r","Linear Regression","Random Forest","Small data; forest is robust and shows key factors."],
-  ["Crop yield","r","Polynomial Regression","Random Forest","Sweet-spot effects of rain and fertilizer."],
-  ["Customer churn","c","Logistic Regression","Random Forest / XGBoost","Needs probabilities plus feature importance."],
-  ["Loan default / credit risk","c","Logistic Regression","XGBoost (+ explanations)","Regulated: start explainable, boost for accuracy."],
-  ["Fraud detection","c","Logistic Regression","XGBoost / LightGBM","Imbalanced, complex patterns, large data."],
-  ["Spam / ticket classification","c","Naive Bayes","Logistic Regression / SVM","Text with thousands of word features."],
-  ["Disease diagnosis (tabular)","c","Logistic Regression","Random Forest","Doctors need probabilities and key factors."],
-  ["Product recommendations","c","KNN","Neural Networks","Similarity first; deep models at scale."],
-  ["Image classification","c","—","Neural Networks (CNN)","Raw pixels need deep learning."],
+  ["House price prediction","r","Linear Regression","Gradient Boosting","Price depends on combinations like location × size, which boosting captures."],
+  ["Product demand forecasting","r","Linear Regression","LightGBM","Handles past sales, holidays and promotions across many stores and items."],
+  ["Delivery time (ETA)","r","Decision Tree","Gradient Boosting","Traffic, distance and weather affect each other, so a straight line isn't enough."],
+  ["Student marks prediction","r","Linear Regression","Random Forest","Small data; the forest is stable and shows which habits matter most."],
+  ["Crop yield","r","Polynomial Regression","Random Forest","Rain and fertilizer have sweet spots and interact with soil type."],
+  ["Customer churn","c","Logistic Regression","Random Forest / XGBoost","Needs a risk percentage plus a list of the main reasons."],
+  ["Loan default / credit risk","c","Logistic Regression","XGBoost (+ explanations)","Rules demand explainability first; boosting adds accuracy."],
+  ["Fraud detection","c","Logistic Regression","XGBoost / LightGBM","Fraud is rare and hides in combinations of many signals."],
+  ["Spam / ticket classification","c","Naive Bayes","Logistic Regression / SVM","Text has thousands of word inputs, which these models handle well."],
+  ["Disease diagnosis (table data)","c","Logistic Regression","Random Forest","Doctors need probabilities and the key risk factors."],
+  ["Product recommendations","c","KNN","Neural Networks","Start with “similar items”; deep models win at very large scale."],
+  ["Image classification","c","—","Neural Networks (CNN)","Raw pixels need deep learning to find shapes and objects."],
 ];
 
 const KEY = "sl-models-understood-v1";
@@ -430,8 +719,7 @@ const lvl = k => `<span class="lvl ${LV[k][0]}">${LV[k][1]}</span>`;
 let filter = "all";
 
 function counts() {
-  const n = M.filter(m => understood[m.id]).length;
-  document.getElementById("topCount").textContent = n;
+  document.getElementById("topCount").textContent = M.filter(m => understood[m.id]).length;
   document.getElementById("topTotal").textContent = M.length;
 }
 
@@ -441,15 +729,16 @@ function renderGrid() {
       <div class="mod-top"><div class="types">${m.types.map(typeTag).join("")}</div>${understood[m.id] ? '<span class="done-badge">✓ Understood</span>' : ""}</div>
       <h3>${esc(m.name)}</h3>
       <div class="aka">${esc(m.aka)}</div>
-      <p>${esc(m.one)}</p>
+      <p>${esc(m.idea)}</p>
       <div class="analogy-mini"><b>Analogy:</b> ${esc(m.analogy.big)}</div>
-      <div class="mod-foot"><span>${m.projects.length} project ideas</span><span style="color:var(--accent)">Read →</span></div>
+      <div class="mod-foot"><span>${m.projects.length} projects · ${m.faq.length} questions answered</span><span style="color:var(--accent)">Read →</span></div>
     </a>`).join("");
 }
 
 function renderStatic() {
-  document.getElementById("chooser").innerHTML = RULES.map(([c, t]) =>
-    `<div class="card rule"><span class="if">If</span><span class="cond">${esc(c)}</span><span class="then">→ ${esc(t)}</span></div>`).join("");
+  document.getElementById("gloss").innerHTML = GLOSS.map(([t, d]) => `<div class="card term"><b>${esc(t)}</b><span>${esc(d)}</span></div>`).join("");
+  document.getElementById("chooser").innerHTML = RULES.map(([c, t, w]) =>
+    `<div class="card rule"><span class="if">If</span><span class="cond">${esc(c)}</span><span class="then">→ ${esc(t)}</span><span class="why"><b>Why:</b> ${esc(w)}</span></div>`).join("");
   document.getElementById("projmap").innerHTML = PROJ.map(([p, t, a, b, w]) =>
     `<tr><td><b>${esc(p)}</b></td><td>${typeTag(t)}</td><td>${esc(a)}</td><td><b>${esc(b)}</b></td><td style="color:var(--ink-2)">${esc(w)}</td></tr>`).join("");
   document.getElementById("compare").innerHTML = M.map(m =>
@@ -457,29 +746,42 @@ function renderStatic() {
       <td>${lvl(m.rate.exp)}</td><td>${lvl(m.rate.acc)}</td><td>${lvl(m.rate.speed)}</td><td>${m.rate.data}</td><td>${m.rate.scale}</td></tr>`).join("");
 }
 
+const whyList = (items, cls) => `<ul class="ticks ${cls}">${items.map(([p, w]) =>
+  `<li><div><b>${esc(p)}</b><span class="whyline"><em>Why:</em> ${esc(w)}</span></div></li>`).join("")}</ul>`;
+
 function renderDetail(i) {
-  const m = M[i], prev = M[i - 1], next = M[i + 1];
+  const m = M[i], prev = M[i - 1], next = M[i + 1], sec = s => `${m.id}-${s}`;
   document.getElementById("detail").innerHTML = `
     <div style="margin-top:24px"><button class="back" data-home>← All models</button></div>
     <div class="card dhead">
       <div class="types">${m.types.map(typeTag).join("")}</div>
       <h1>${esc(m.name)}</h1>
       <div class="aka">${esc(m.aka)}</div>
-      <p class="lead" style="font-size:16px">${esc(m.one)}</p>
+      <div class="bigidea"><small>The big idea</small>${esc(m.idea)}</div>
+      <nav class="toc" aria-label="On this page">
+        <a href="#" data-jump="analogy">Analogy</a><a href="#" data-jump="how">How it works</a><a href="#" data-jump="why">Why it works</a>
+        <a href="#" data-jump="example">Example</a><a href="#" data-jump="use">When to use</a><a href="#" data-jump="avoid">When to avoid</a>
+        <a href="#" data-jump="projects">Projects</a><a href="#" data-jump="faq">Questions</a><a href="#" data-jump="code">Python</a>
+      </nav>
       <button class="understood" id="und" aria-pressed="${!!understood[m.id]}">${understood[m.id] ? "✓ Understood" : "Mark as understood"}</button>
     </div>
     <div class="dgrid">
-      <div class="card block analogy full"><h3>💡 The analogy</h3><div class="big">${esc(m.analogy.big)}</div><p>${esc(m.analogy.text)}</p></div>
-      <div class="card block full"><h3>⚙️ How it works, step by step</h3><ol class="steps">${m.how.map(s => `<li>${esc(s)}</li>`).join("")}</ol></div>
-      <div class="card block"><h3>✅ Use it when</h3><ul class="ticks good">${m.use.map(s => `<li>${esc(s)}</li>`).join("")}</ul></div>
-      <div class="card block"><h3>⛔ Avoid it when</h3><ul class="ticks bad">${m.avoid.map(s => `<li>${esc(s)}</li>`).join("")}</ul></div>
-      <div class="card block full"><h3>🚀 Projects where it's a good choice</h3><div class="projects">${m.projects.map(([t, d]) => `<div class="proj"><b>${esc(t)}</b><span>${esc(d)}</span></div>`).join("")}</div></div>
-      <div class="card block"><h3>🧪 Worked example</h3><div class="example">
+      <div class="card block analogy full" id="${sec("analogy")}"><h3>💡 The analogy</h3><div class="big">${esc(m.analogy.big)}</div><p>${esc(m.analogy.text)}</p></div>
+      <div class="card block full" id="${sec("how")}"><h3>⚙️ How it works, step by step</h3><ol class="steps">${m.how.map(s => `<li>${esc(s)}</li>`).join("")}</ol></div>
+      <div class="card block whyworks full" id="${sec("why")}"><h3>🧠 Why does this work?</h3><p>${esc(m.why)}</p></div>
+      <div class="card block full" id="${sec("example")}"><h3>🧪 Worked example</h3><div class="example">
         <div class="ex-row"><span class="k">Scenario</span><span class="v">${esc(m.example.s)}</span></div>
         <div class="ex-row"><span class="k">Input</span><span class="v">${esc(m.example.i)}</span></div>
+        <ol class="walk">${m.example.walk.map(s => `<li>${esc(s)}</li>`).join("")}</ol>
         <div class="ex-out">${esc(m.example.o)}</div></div></div>
-      <div class="card block"><h3>🐍 In Python (scikit-learn)</h3><pre>${m.code}</pre>
-        <div class="kv"><span>Explainable: <b>${LV[m.rate.exp][1]}</b></span><span>Data: <b>${m.rate.data}</b></span><span>Scaling: <b>${m.rate.scale}</b></span></div></div>
+      <div class="card block" id="${sec("use")}"><h3>✅ Use it when</h3>${whyList(m.use, "good")}</div>
+      <div class="card block" id="${sec("avoid")}"><h3>⛔ Avoid it when</h3>${whyList(m.avoid, "bad")}</div>
+      <div class="card block full" id="${sec("projects")}"><h3>🚀 Projects where it's a good choice</h3><div class="projects">${m.projects.map(([t, d, w]) =>
+        `<div class="proj"><b>${esc(t)}</b><span>${esc(d)}</span><div class="pwhy"><em>Why this model:</em> ${esc(w)}</div></div>`).join("")}</div></div>
+      <div class="card block full" id="${sec("faq")}"><h3>🙋 Questions you might have</h3><div class="faq">${m.faq.map(([q, a]) =>
+        `<details open><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("")}</div></div>
+      <div class="card block" id="${sec("words")}"><h3>📘 Key words</h3><div class="words">${m.words.map(([t, d]) => `<div class="word"><b>${esc(t)}</b>${esc(d)}</div>`).join("")}</div></div>
+      <div class="card block" id="${sec("code")}"><h3>🐍 In Python (scikit-learn)</h3><pre>${m.code}</pre></div>
     </div>
     <div class="dfoot">
       ${prev ? `<a class="navbtn" href="#${prev.id}"><small>← Previous</small><b>${esc(prev.name)}</b></a>` : "<span></span>"}
@@ -512,6 +814,13 @@ document.querySelectorAll(".f").forEach(b => b.addEventListener("click", () => {
   renderGrid();
 }));
 document.addEventListener("click", e => {
+  const j = e.target.closest("[data-jump]");
+  if (j) {
+    e.preventDefault();
+    const id = location.hash.slice(1) + "-" + j.dataset.jump;
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
   if (e.target.closest("[data-home]")) {
     e.preventDefault();
     history.pushState("", document.title, location.pathname + location.search);
