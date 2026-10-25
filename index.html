@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Applied AI Learning Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f7fb; --surface:#ffffff; --ink:#0f172a; --ink-2:#475569; --ink-3:#94a3b8;
+    --line:#e6e9f0; --line-2:#eef1f6; --accent:#4f46e5; --accent-soft:#eef2ff; --accent-2:#7c3aed;
+    --ok:#059669; --ok-soft:#ecfdf5; --warn:#d97706; --shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.06);
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+
+  /* top bar */
+  .topbar{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.85);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em}
+  .logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;color:#fff;font-size:14px;font-weight:800}
+  .pill-score{display:flex;align-items:center;gap:8px;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:14px;padding:6px 12px;border-radius:999px;white-space:nowrap}
+
+  /* hero */
+  .hero{padding:40px 0 8px}
+  .eyebrow{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+  h1{font-size:clamp(28px,4.4vw,40px);line-height:1.15;letter-spacing:-.025em;margin:8px 0 10px;font-weight:800}
+  .lead{color:var(--ink-2);max-width:680px;margin:0;font-size:16px}
+
+  /* stat grid */
+  .stats{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:16px;margin:28px 0}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .stat{padding:20px}
+  .stat .label{font-size:13px;color:var(--ink-2);font-weight:500}
+  .stat .value{font-size:30px;font-weight:800;letter-spacing:-.02em;margin-top:4px}
+  .stat .value small{font-size:15px;color:var(--ink-3);font-weight:600}
+  .score-card{display:flex;align-items:center;gap:18px}
+  .ring{--p:0;width:92px;height:92px;flex:none;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--p)*1%),var(--line-2) 0);display:grid;place-items:center;transition:--p .4s}
+  .ring::before{content:"";width:72px;height:72px;border-radius:50%;background:#fff;grid-area:1/1}
+  .ring span{grid-area:1/1;font-weight:800;font-size:18px;z-index:1}
+  .bar{height:8px;background:var(--line-2);border-radius:99px;overflow:hidden;margin-top:12px}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:99px;transition:width .4s ease}
+
+  /* sections */
+  section{margin:36px 0}
+  .sec-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:16px}
+  h2{font-size:20px;letter-spacing:-.015em;margin:0;font-weight:700}
+  .sub{color:var(--ink-2);font-size:14px;margin:4px 0 0}
+
+  .learned{padding:22px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:500;padding:7px 12px;border-radius:999px;background:var(--ok-soft);color:#065f46;border:1px solid #d1fae5}
+  .chip::before{content:"✓";font-weight:800;font-size:12px}
+
+  /* module grid */
+  .modules{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .mod{padding:20px;display:flex;flex-direction:column;gap:12px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);transition:transform .15s ease,box-shadow .15s ease,border-color .15s}
+  .mod:hover{transform:translateY(-2px);border-color:#c7d2fe;box-shadow:0 1px 2px rgba(15,23,42,.04),0 14px 32px rgba(79,70,229,.10)}
+  .mod-top{display:flex;align-items:center;justify-content:space-between}
+  .mod-num{width:38px;height:38px;border-radius:11px;background:var(--accent-soft);color:var(--accent);font-weight:800;display:grid;place-items:center;font-size:15px}
+  .mod.done .mod-num{background:var(--ok-soft);color:var(--ok)}
+  .tag{font-size:12px;font-weight:600;color:var(--ink-2);background:var(--line-2);padding:4px 10px;border-radius:99px}
+  .mod h3{margin:0;font-size:17px;letter-spacing:-.01em;line-height:1.3;color:var(--ink)}
+  .mod p{margin:0;color:var(--ink-2);font-size:14px}
+  .mod-foot{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-weight:500;margin-top:auto}
+  .mod-foot b{color:var(--ink)}
+
+  /* module view */
+  .back{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font-weight:600;font-size:14px;color:var(--ink-2)}
+  .back:hover{color:var(--ink);border-color:#cbd5e1}
+  .mhead{padding:26px;margin:20px 0}
+  .mhead .row{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .mhead h1{font-size:clamp(24px,3.6vw,32px);margin:4px 0 6px}
+  .mhead .meta{margin-left:auto;text-align:right}
+  .topic{margin-bottom:14px;overflow:hidden}
+  .topic-h{width:100%;display:flex;align-items:center;gap:12px;padding:18px 20px;background:none;border:0;text-align:left;color:var(--ink)}
+  .topic-h h3{margin:0;font-size:16px;font-weight:700;flex:1}
+  .topic-h .count{font-size:13px;color:var(--ink-2);font-weight:600;white-space:nowrap}
+  .chev{transition:transform .2s;color:var(--ink-3)}
+  .topic.open .chev{transform:rotate(90deg)}
+  .topic-b{display:none;border-top:1px solid var(--line-2)}
+  .topic.open .topic-b{display:block}
+  .st{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--line-2)}
+  .st:last-child{border-bottom:0}
+  .st.checked{background:#fbfcff}
+  .st.checked .st-title{color:var(--ink-3);text-decoration:line-through}
+  .cb{appearance:none;width:22px;height:22px;flex:none;border:2px solid #cbd5e1;border-radius:7px;display:grid;place-items:center;transition:all .15s;margin:0;cursor:pointer}
+  .cb:checked{background:var(--ok);border-color:var(--ok)}
+  .cb:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+  .cb:focus-visible{outline:3px solid #c7d2fe;outline-offset:2px}
+  .st-title{flex:1;font-size:14.5px;font-weight:500;min-width:0}
+  .pts{font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:99px;white-space:nowrap}
+  .st.checked .pts{color:var(--ok);background:var(--ok-soft)}
+  .links{display:flex;gap:8px;flex:none}
+  .lnk{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:7px 11px;border-radius:9px;border:1px solid var(--line);color:var(--ink-2);background:#fff;transition:all .15s}
+  .lnk:hover{border-color:#c7d2fe;color:var(--accent);background:var(--accent-soft)}
+  .lnk.vid:hover{border-color:#fecaca;color:#dc2626;background:#fef2f2}
+  .lnk svg{width:15px;height:15px}
+  .outcome{padding:18px 20px;display:flex;gap:12px;align-items:flex-start;background:linear-gradient(135deg,#eef2ff,#f5f3ff);border:1px solid #e0e7ff;border-radius:var(--radius);margin-bottom:18px;color:#3730a3;font-size:14.5px}
+  .outcome b{display:block;color:#312e81;margin-bottom:2px}
+
+  .ghost{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font-weight:600;font-size:13px;color:var(--ink-2)}
+  .ghost:hover{color:#dc2626;border-color:#fecaca}
+  footer{padding:30px 0 50px;color:var(--ink-3);font-size:13px;text-align:center}
+  .hidden{display:none!important}
+
+  @media (max-width:860px){.stats{grid-template-columns:1fr 1fr}.stats .score-card{grid-column:1/-1}}
+  @media (max-width:560px){
+    .st{flex-wrap:wrap;gap:10px 12px}
+    .st-title{flex:1 1 calc(100% - 90px)}
+    .links{width:100%;padding-left:36px}
+    .lnk{flex:1;justify-content:center}
+    .mhead .meta{margin-left:0;text-align:left}
+    .lnk-label-long{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a href="#" class="brand" data-home><span class="logo">AI</span>Applied AI Learning Plan</a>
+    <div class="pill-score" title="Total score">★ <span id="topScore">0</span> / <span id="topMax">0</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+    <div class="hero">
+      <div class="eyebrow">Learning Roadmap</div>
+      <h1>Hello Sandeep Sir 👋</h1>
+      <p class="lead">Here's our applied learning plan, from revision through time series, computer vision, agentic AI with machine learning, knowledge management, and avatars. Every subtopic is worth <b>5 marks</b>. Tick it off once it's done and the score updates.</p>
+    </div>
+
+    <div class="stats">
+      <div class="card stat score-card">
+        <div class="ring" id="ring"><span id="pct">0%</span></div>
+        <div style="flex:1">
+          <div class="label">Total Score</div>
+          <div class="value"><span id="score">0</span> <small>/ <span id="max">0</span></small></div>
+          <div class="bar"><i id="bar"></i></div>
+        </div>
+      </div>
+      <div class="card stat"><div class="label">Subtopics Completed</div><div class="value"><span id="doneCount">0</span> <small>/ <span id="totalCount">0</span></small></div></div>
+      <div class="card stat"><div class="label">Modules Completed</div><div class="value"><span id="modDone">0</span> <small>/ <span id="modTotal">0</span></small></div></div>
+      <div class="card stat"><div class="label">Projects</div><div class="value">3 <small>applied</small></div></div>
+    </div>
+
+    <section>
+      <div class="sec-head">
+        <div><h2>What we've learned so far</h2><p class="sub">Already completed before this plan.</p></div>
+      </div>
+      <div class="card learned"><div class="chips" id="learned"></div></div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div><h2>Modules</h2><p class="sub">Open a module to see its topics, subtopics, reading material and videos.</p></div>
+        <button class="ghost" id="reset">Reset progress</button>
+      </div>
+      <div class="modules" id="modules"></div>
+    </section>
+  </div>
+
+  <!-- MODULE VIEW -->
+  <div id="moduleView" class="hidden">
+    <div style="margin-top:24px"><button class="back" data-home>← All modules</button></div>
+    <div class="card mhead">
+      <div class="row">
+        <div class="mod-num" id="mvNum" style="width:52px;height:52px;font-size:20px;border-radius:14px">1</div>
+        <div style="flex:1;min-width:220px">
+          <div class="eyebrow" id="mvTag">Module</div>
+          <h1 id="mvTitle"></h1>
+          <p class="lead" id="mvDesc" style="font-size:15px"></p>
+        </div>
+        <div class="meta">
+          <div class="label" style="font-size:13px;color:var(--ink-2)">Module score</div>
+          <div class="value" style="font-size:26px;font-weight:800"><span id="mvScore">0</span> <small style="font-size:14px;color:var(--ink-3)">/ <span id="mvMax">0</span></small></div>
+        </div>
+      </div>
+      <div class="bar"><i id="mvBar"></i></div>
+    </div>
+    <div id="mvOutcome"></div>
+    <div id="mvTopics"></div>
+  </div>
+</main>
+
+<footer>Applied AI Learning Plan · Progress is saved in this browser</footer>
+
+<script>
+const YT = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+
+const LEARNED = [
+  "Python", "Supervised Learning", "Classification", "Regression",
+  "Unsupervised Learning", "Clustering", "Segmentation",
+  "In-depth EDA for Machine Learning", "Voice AI Agents", "RAG (Retrieval-Augmented Generation)",
+  "OKF", "LangChain", "MCP (Model Context Protocol)", "MCP Servers", "Lovable", "Vibe Coding with Claude Code",
+  "Agentic AI: Plan → Fetch → Act → Decide", "Knowledge Management System"
+];
+
+// Each subtopic: [title, reading URL, video search query]
+const MODULES = [
+  {
+    title: "Python Revision",
+    tag: "Revision",
+    desc: "Only the essentials we use every day in ML and agent work.",
+    outcome: "Write clean, idiomatic Python for data pipelines, ML scripts and agent tools without looking things up.",
+    topics: [
+      { title: "Core Python Essentials", subs: [
+        ["Data structures: list, dict, set, tuple", "https://docs.python.org/3/tutorial/datastructures.html", "python data structures list dict set tuple tutorial"],
+        ["Loops: for, while, range, break / continue", "https://docs.python.org/3/tutorial/controlflow.html", "python for while loops break continue tutorial"],
+        ["Loop patterns: enumerate, zip, nested loops, looping over dicts", "https://realpython.com/python-for-loop/", "python enumerate zip nested loops dictionary iteration"],
+        ["Functions, *args, **kwargs", "https://docs.python.org/3/tutorial/controlflow.html#defining-functions", "python functions args kwargs explained"],
+        ["Comprehensions (list / dict / set, with if-else and nesting)", "https://realpython.com/list-comprehension-python/", "python list dict comprehension if else nested tutorial"],
+        ["Error handling & exceptions", "https://docs.python.org/3/tutorial/errors.html", "python try except exception handling tutorial"],
+      ]},
+      { title: "Intermediate Python", subs: [
+        ["Classes & OOP basics", "https://docs.python.org/3/tutorial/classes.html", "python OOP classes objects tutorial"],
+        ["Decorators", "https://realpython.com/primer-on-python-decorators/", "python decorators explained"],
+        ["Generators & iterators", "https://realpython.com/introduction-to-python-generators/", "python generators yield explained"],
+        ["Type hints & Pydantic models", "https://docs.pydantic.dev/latest/", "python type hints pydantic tutorial"],
+        ["Async / await basics (for agents & APIs)", "https://realpython.com/async-io-python/", "python asyncio async await tutorial"],
+      ]},
+      { title: "Writing Code Short: Pythonic & Vectorized", subs: [
+        ["Lambda functions, map, filter, sorted with key", "https://realpython.com/python-lambda/", "python lambda map filter sorted key tutorial"],
+        ["Loop to one-liner: rewriting loops as comprehensions", "https://realpython.com/list-comprehension-python/", "convert for loop to list comprehension python one liner"],
+        ["NumPy vectorization: replace loops with array operations", "https://numpy.org/doc/stable/user/basics.broadcasting.html", "numpy vectorization vs loops broadcasting"],
+        ["NumPy boolean masks & np.where", "https://numpy.org/doc/stable/user/basics.indexing.html", "numpy boolean indexing np.where tutorial"],
+        ["Pandas apply, map & lambda on columns", "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html", "pandas apply map lambda tutorial"],
+        ["Pandas one-liners: loc conditions, query, assign, method chaining", "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html", "pandas method chaining query assign loc one liners"],
+      ]},
+      { title: "Python for Data", subs: [
+        ["NumPy essentials", "https://numpy.org/doc/stable/user/absolute_beginners.html", "numpy tutorial for data science"],
+        ["Pandas: select, filter, transform", "https://pandas.pydata.org/docs/user_guide/10min.html", "pandas tutorial data analysis"],
+        ["Pandas: groupby & aggregation", "https://pandas.pydata.org/docs/user_guide/groupby.html", "pandas groupby aggregation tutorial"],
+        ["Pandas: merge, join, concat", "https://pandas.pydata.org/docs/user_guide/merging.html", "pandas merge join concat tutorial"],
+        ["Virtual envs, files & JSON I/O", "https://docs.python.org/3/library/venv.html", "python virtual environment venv json file handling"],
+      ]},
+    ]
+  },
+  {
+    title: "EDA Revision & Time Series EDA",
+    tag: "Revision + New",
+    desc: "Revise exploratory data analysis, then learn how EDA changes for time-ordered data.",
+    outcome: "Look at any dataset (tabular or time series) and quickly find trend, seasonality, outliers, missing data and useful features.",
+    topics: [
+      { title: "EDA Revision", subs: [
+        ["Missing values & data cleaning", "https://pandas.pydata.org/docs/user_guide/missing_data.html", "handling missing values pandas EDA"],
+        ["Univariate & bivariate analysis", "https://seaborn.pydata.org/tutorial.html", "univariate bivariate analysis EDA python seaborn"],
+        ["Outlier detection (IQR, Z-score)", "https://www.kaggle.com/learn/data-cleaning", "outlier detection IQR z-score python"],
+        ["Correlation & visual storytelling", "https://matplotlib.org/stable/users/explain/quick_start.html", "correlation heatmap EDA python matplotlib seaborn"],
+        ["Feature engineering & scaling", "https://scikit-learn.org/stable/modules/preprocessing.html", "feature engineering scaling encoding scikit-learn"],
+      ]},
+      { title: "Time Series Fundamentals", subs: [
+        ["Datetime index, resampling & rolling windows", "https://pandas.pydata.org/docs/user_guide/timeseries.html", "pandas time series resample rolling tutorial"],
+        ["Trend, seasonality & cycles", "https://otexts.com/fpp3/tspatterns.html", "time series trend seasonality cycle explained"],
+        ["Time series visualisation", "https://otexts.com/fpp3/graphics.html", "time series plots visualization python"],
+      ]},
+      { title: "Time Series EDA (Deep Dive)", subs: [
+        ["Decomposition (classical & STL)", "https://otexts.com/fpp3/decomposition.html", "STL decomposition time series python statsmodels"],
+        ["Stationarity & ADF test", "https://otexts.com/fpp3/stationarity.html", "stationarity ADF test time series python"],
+        ["Autocorrelation: ACF & PACF", "https://otexts.com/fpp3/acf.html", "ACF PACF plots explained time series"],
+        ["Lag, rolling & calendar features", "https://www.kaggle.com/learn/time-series", "lag features time series feature engineering python"],
+        ["Handling gaps, holidays & promotions", "https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.STL.html", "time series missing dates holidays promotions EDA"],
+      ]},
+    ]
+  },
+  {
+    title: "Time Series Prediction",
+    tag: "Project: Product Demand",
+    desc: "Fully applied: which algorithm to use where, how each works, and one end-to-end demand forecasting project.",
+    outcome: "Train, evaluate and serve a product demand forecasting model, and justify the algorithm choice for a given business problem.",
+    topics: [
+      { title: "Use Cases: Which Algorithm, Where & Why", subs: [
+        ["Real-world use cases (demand, sales, energy, finance, inventory)", "https://otexts.com/fpp3/intro.html", "time series forecasting real world use cases"],
+        ["Choosing an algorithm: statistical vs ML vs deep learning", "https://unit8co.github.io/darts/", "how to choose time series forecasting model"],
+        ["Evaluation metrics: MAE, RMSE, MAPE, sMAPE", "https://otexts.com/fpp3/accuracy.html", "forecast accuracy metrics MAE RMSE MAPE"],
+        ["Time series cross-validation & backtesting", "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html", "time series cross validation backtesting python"],
+      ]},
+      { title: "Algorithms & How They Work", subs: [
+        ["Baselines: naive, seasonal naive, moving average", "https://otexts.com/fpp3/simple-methods.html", "naive seasonal naive forecasting baseline"],
+        ["Exponential smoothing & Holt-Winters", "https://otexts.com/fpp3/expsmooth.html", "Holt Winters exponential smoothing python"],
+        ["ARIMA & SARIMA", "https://otexts.com/fpp3/arima.html", "ARIMA SARIMA explained python statsmodels"],
+        ["Prophet", "https://facebook.github.io/prophet/docs/quick_start.html", "facebook prophet forecasting tutorial python"],
+        ["ML models: XGBoost / LightGBM with lag features", "https://lightgbm.readthedocs.io/en/latest/", "LightGBM XGBoost time series forecasting python"],
+        ["Deep learning: LSTM & modern models (N-BEATS, TFT)", "https://github.com/Nixtla/neuralforecast", "LSTM N-BEATS temporal fusion transformer forecasting"],
+      ]},
+      { title: "Project: Product Demand Prediction", subs: [
+        ["Dataset & problem framing (store / item sales)", "https://www.kaggle.com/competitions/store-sales-time-series-forecasting", "product demand forecasting project python"],
+        ["EDA & feature pipeline for demand data", "https://www.kaggle.com/competitions/m5-forecasting-accuracy", "M5 forecasting EDA feature engineering"],
+        ["Train, tune & compare models", "https://github.com/Nixtla/statsforecast", "demand forecasting model comparison python"],
+        ["Experiment tracking with MLflow", "https://mlflow.org/docs/latest/index.html", "MLflow tutorial experiment tracking"],
+        ["Serve the model (FastAPI) + dashboard (Streamlit)", "https://fastapi.tiangolo.com/", "deploy ML model fastapi streamlit tutorial"],
+      ]},
+    ]
+  },
+  {
+    title: "Applied Computer Vision",
+    tag: "Project: Computer Vision",
+    desc: "Hands-on CV with OpenCV and modern detection models, ending in one applied project.",
+    outcome: "Build a working computer vision app (e.g. product counting, shelf monitoring or quality inspection) on images and live video.",
+    topics: [
+      { title: "OpenCV Fundamentals", subs: [
+        ["Reading images & video, colour spaces", "https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html", "OpenCV python tutorial basics images video"],
+        ["Image processing: thresholding, blur, morphology", "https://docs.opencv.org/4.x/d2/d96/tutorial_py_table_of_contents_imgproc.html", "OpenCV thresholding blurring morphology tutorial"],
+        ["Edges, contours & shape detection", "https://docs.opencv.org/4.x/d3/d05/tutorial_py_table_of_contents_contours.html", "OpenCV contours edge detection python"],
+        ["Webcam / real-time video processing", "https://docs.opencv.org/4.x/dd/d43/tutorial_py_video_display.html", "OpenCV webcam real time python"],
+      ]},
+      { title: "Deep Learning for Vision", subs: [
+        ["Image classification with transfer learning", "https://pytorch.org/vision/stable/index.html", "transfer learning image classification pytorch"],
+        ["Object detection with YOLO", "https://docs.ultralytics.com/", "YOLO object detection ultralytics tutorial"],
+        ["Training YOLO on a custom dataset", "https://docs.ultralytics.com/modes/train/", "train YOLO custom dataset roboflow"],
+        ["Object tracking & counting", "https://docs.ultralytics.com/modes/track/", "YOLO object tracking counting tutorial"],
+        ["OCR & pose / face with MediaPipe", "https://ai.google.dev/edge/mediapipe/solutions/guide", "mediapipe python tutorial pose face hands"],
+      ]},
+      { title: "Project: Applied Computer Vision", subs: [
+        ["Pick use case & collect / label data", "https://docs.roboflow.com/", "roboflow annotate dataset tutorial"],
+        ["Build the detection + counting pipeline", "https://supervision.roboflow.com/", "supervision roboflow object counting zone"],
+        ["Wrap it in a simple app (Streamlit)", "https://docs.streamlit.io/", "streamlit computer vision app YOLO"],
+      ]},
+    ]
+  },
+  {
+    title: "Agentic AI + Machine Learning",
+    tag: "Core Concept",
+    desc: "How agents call ML models as tools, read predictions, and turn them into decisions.",
+    outcome: "Build an agent that calls a trained forecasting model as a tool and makes a justified business decision from the prediction.",
+    topics: [
+      { title: "Agent Foundations (Refresh)", subs: [
+        ["Agent patterns & workflows", "https://www.anthropic.com/research/building-effective-agents", "building effective AI agents patterns"],
+        ["Tool / function calling", "https://docs.anthropic.com/en/docs/build-with-claude/tool-use", "LLM tool calling function calling tutorial"],
+        ["Model Context Protocol (MCP)", "https://modelcontextprotocol.io/", "model context protocol MCP tutorial"],
+      ]},
+      { title: "ML Models as Agent Tools", subs: [
+        ["Saving & loading models (joblib / pickle)", "https://scikit-learn.org/stable/model_persistence.html", "save load scikit-learn model joblib"],
+        ["Exposing a model as an API / tool", "https://fastapi.tiangolo.com/", "serve ML model as API fastapi"],
+        ["Structured outputs: prediction + confidence", "https://docs.pydantic.dev/latest/", "LLM structured output pydantic"],
+        ["Agent calls the forecast tool", "https://github.com/langchain-ai/langgraph", "langgraph agent custom tool ML model"],
+      ]},
+      { title: "Prediction → Decision", subs: [
+        ["Decision rules & thresholds on predictions", "https://en.wikipedia.org/wiki/Reorder_point", "AI agent decision making from predictions"],
+        ["Handling uncertainty & prediction intervals", "https://otexts.com/fpp3/prediction-intervals.html", "forecast prediction intervals uncertainty"],
+        ["Human-in-the-loop approvals", "https://github.com/langchain-ai/langgraph", "langgraph human in the loop tutorial"],
+        ["Multi-agent: forecaster, planner, reviewer", "https://github.com/crewAIInc/crewAI", "multi agent system crewai tutorial"],
+      ]},
+    ]
+  },
+  {
+    title: "Agentic AI + ML in the Knowledge Management System",
+    tag: "Integration",
+    desc: "Add predictions to our knowledge intelligence platform so agents decide using both company knowledge and forecasts.",
+    outcome: "Our KMS answers questions and also predicts and recommends actions, e.g. reorder stock for supply chain or flag expiring medicines for a pharmacy.",
+    topics: [
+      { title: "Architecture", subs: [
+        ["RAG + ML hybrid architecture", "https://www.pinecone.io/learn/retrieval-augmented-generation/", "RAG with machine learning predictions architecture"],
+        ["Connecting structured data (SQL / pgvector)", "https://github.com/pgvector/pgvector", "pgvector postgres RAG tutorial"],
+        ["Knowledge graphs for business entities", "https://github.com/microsoft/graphrag", "GraphRAG knowledge graph tutorial"],
+        ["Routing: knowledge question vs prediction question", "https://docs.llamaindex.ai/", "LLM query router agent tutorial"],
+      ]},
+      { title: "Domain Use Cases", subs: [
+        ["Supply chain: demand forecast → reorder decision", "https://en.wikipedia.org/wiki/Safety_stock", "AI supply chain demand forecasting inventory agent"],
+        ["Pharmacy: stock, expiry & demand alerts", "https://en.wikipedia.org/wiki/Economic_order_quantity", "pharmacy inventory management AI forecasting"],
+        ["Hierarchical forecasts (product / store / region)", "https://otexts.com/fpp3/hierarchical.html", "hierarchical forecasting explained"],
+        ["Explaining predictions to business users", "https://shap.readthedocs.io/en/latest/", "SHAP explainable AI tutorial"],
+      ]},
+      { title: "Build & Ship", subs: [
+        ["Implement prediction tools inside the KMS agent", "https://github.com/langchain-ai/langgraph", "langgraph agent RAG and tools project"],
+        ["Observability & evaluation of agent decisions", "https://langfuse.com/docs", "langfuse LLM observability tutorial"],
+        ["Scheduled retraining & monitoring drift", "https://mlflow.org/docs/latest/index.html", "ML model monitoring drift retraining"],
+      ]},
+    ]
+  },
+  {
+    title: "Avatar Implementation for Agents",
+    tag: "Interface",
+    desc: "Put a talking avatar on any agent so the interface feels natural and easy to use.",
+    outcome: "Any of our agents (including the KMS agent) can speak through a real-time talking avatar in the browser.",
+    topics: [
+      { title: "Avatar Foundations", subs: [
+        ["How talking avatars work (TTS, lip-sync, rendering)", "https://github.com/met4citizen/TalkingHead", "how AI talking avatars work lip sync"],
+        ["Voice: speech-to-text & text-to-speech", "https://elevenlabs.io/docs", "speech to text text to speech AI agent tutorial"],
+        ["Browser speech APIs", "https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API", "web speech api javascript tutorial"],
+      ]},
+      { title: "Avatar Platforms", subs: [
+        ["HeyGen interactive / streaming avatar", "https://docs.heygen.com/", "HeyGen streaming avatar API tutorial"],
+        ["D-ID agents & streaming", "https://docs.d-id.com/", "D-ID streaming avatar API tutorial"],
+        ["Tavus conversational video", "https://docs.tavus.io/", "Tavus conversational video interface tutorial"],
+        ["Open-source: 3D avatar with Three.js", "https://threejs.org/docs/", "threejs 3D avatar lip sync talking head"],
+      ]},
+      { title: "Integration", subs: [
+        ["Real-time voice pipeline (LiveKit / Pipecat)", "https://docs.livekit.io/agents/", "livekit agents avatar tutorial"],
+        ["Connect avatar to our agent backend", "https://docs.pipecat.ai/", "pipecat AI avatar voice agent"],
+        ["Latency, UX & interruption handling", "https://docs.livekit.io/agents/", "low latency voice AI agent interruption handling"],
+      ]},
+    ]
+  },
+];
+
+const POINTS = 5;
+const KEY = "applied-ai-plan-progress-v1";
+let done = {};
+try { done = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { done = {}; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} };
+const id = (m, t, s) => `${m}-${t}-${s}`;
+
+const ICON_READ = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2z"/><path d="M22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/></svg>';
+const ICON_VID = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>';
+const ICON_CHEV = '<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>';
+
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+
+function modStats(mi) {
+  let total = 0, n = 0;
+  MODULES[mi].topics.forEach((t, ti) => t.subs.forEach((_, si) => { total++; if (done[id(mi, ti, si)]) n++; }));
+  return { total, n };
+}
+
+function renderDashboard() {
+  let total = 0, n = 0, modsDone = 0;
+  const grid = document.getElementById("modules");
+  grid.innerHTML = MODULES.map((m, mi) => {
+    const s = modStats(mi);
+    total += s.total; n += s.n;
+    const complete = s.n === s.total;
+    if (complete) modsDone++;
+    const pct = Math.round(s.n / s.total * 100);
+    return `<a href="#module-${mi + 1}" class="mod${complete ? " done" : ""}">
+      <div class="mod-top"><span class="mod-num">${complete ? "✓" : mi + 1}</span><span class="tag">${esc(m.tag)}</span></div>
+      <h3>${esc(m.title)}</h3>
+      <p>${esc(m.desc)}</p>
+      <div>
+        <div class="mod-foot"><span>${m.topics.length} topics · ${s.total} subtopics</span><span><b>${s.n * POINTS}</b> / ${s.total * POINTS}</span></div>
+        <div class="bar"><i style="width:${pct}%"></i></div>
+      </div>
+    </a>`;
+  }).join("");
+
+  const score = n * POINTS, max = total * POINTS, pct = max ? Math.round(score / max * 100) : 0;
+  const set = (k, v) => document.getElementById(k).textContent = v;
+  set("score", score); set("max", max); set("topScore", score); set("topMax", max);
+  set("doneCount", n); set("totalCount", total); set("modDone", modsDone); set("modTotal", MODULES.length);
+  set("pct", pct + "%");
+  document.getElementById("ring").style.setProperty("--p", pct);
+  document.getElementById("bar").style.width = pct + "%";
+}
+
+const openTopics = {};
+function renderModule(mi) {
+  const m = MODULES[mi], s = modStats(mi);
+  document.getElementById("mvNum").textContent = mi + 1;
+  document.getElementById("mvTag").textContent = `Module ${mi + 1} · ${m.tag}`;
+  document.getElementById("mvTitle").textContent = m.title;
+  document.getElementById("mvDesc").textContent = m.desc;
+  document.getElementById("mvScore").textContent = s.n * POINTS;
+  document.getElementById("mvMax").textContent = s.total * POINTS;
+  document.getElementById("mvBar").style.width = Math.round(s.n / s.total * 100) + "%";
+  document.getElementById("mvOutcome").innerHTML =
+    `<div class="outcome"><span style="font-size:20px">🎯</span><div><b>Outcome</b>${esc(m.outcome)}</div></div>`;
+
+  document.getElementById("mvTopics").innerHTML = m.topics.map((t, ti) => {
+    const key = `${mi}-${ti}`;
+    if (openTopics[key] === undefined) openTopics[key] = true;
+    const tn = t.subs.filter((_, si) => done[id(mi, ti, si)]).length;
+    const rows = t.subs.map(([title, read, vid], si) => {
+      const k = id(mi, ti, si), c = !!done[k];
+      return `<div class="st${c ? " checked" : ""}">
+        <input type="checkbox" class="cb" data-k="${k}" ${c ? "checked" : ""} aria-label="Mark ${esc(title)} done">
+        <span class="st-title">${esc(title)}</span>
+        <span class="pts">${c ? "✓ " : "+"}${POINTS}</span>
+        <span class="links">
+          <a class="lnk" href="${read}" target="_blank" rel="noopener">${ICON_READ}Read</a>
+          <a class="lnk vid" href="${YT(vid)}" target="_blank" rel="noopener">${ICON_VID}Videos</a>
+        </span>
+      </div>`;
+    }).join("");
+    return `<div class="card topic${openTopics[key] ? " open" : ""}" data-t="${key}">
+      <button class="topic-h" aria-expanded="${openTopics[key]}">${ICON_CHEV}<h3>${ti + 1}. ${esc(t.title)}</h3><span class="count">${tn}/${t.subs.length} · ${tn * POINTS}/${t.subs.length * POINTS} marks</span></button>
+      <div class="topic-b">${rows}</div>
+    </div>`;
+  }).join("");
+}
+
+function route() {
+  const mt = location.hash.match(/^#module-(\d+)$/);
+  const mi = mt ? +mt[1] - 1 : -1;
+  renderDashboard();
+  if (mi >= 0 && mi < MODULES.length) {
+    renderModule(mi);
+    document.getElementById("dashboard").classList.add("hidden");
+    document.getElementById("moduleView").classList.remove("hidden");
+  } else {
+    document.getElementById("moduleView").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+  }
+  window.scrollTo(0, 0);
+}
+
+document.getElementById("learned").innerHTML = LEARNED.map(x => `<span class="chip">${esc(x)}</span>`).join("");
+
+document.addEventListener("change", e => {
+  if (!e.target.matches(".cb")) return;
+  const k = e.target.dataset.k;
+  if (e.target.checked) done[k] = true; else delete done[k];
+  save();
+  renderDashboard();
+  renderModule(+k.split("-")[0]);
+});
+
+document.addEventListener("click", e => {
+  const h = e.target.closest(".topic-h");
+  if (h) {
+    const card = h.parentElement, key = card.dataset.t;
+    openTopics[key] = !openTopics[key];
+    card.classList.toggle("open", openTopics[key]);
+    h.setAttribute("aria-expanded", openTopics[key]);
+    return;
+  }
+  if (e.target.closest("[data-home]")) {
+    e.preventDefault();
+    history.pushState("", document.title, location.pathname + location.search);
+    route();
+  }
+});
+
+document.getElementById("reset").addEventListener("click", () => {
+  if (confirm("Reset all progress? This clears every completed subtopic.")) { done = {}; save(); route(); }
+});
+
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>
