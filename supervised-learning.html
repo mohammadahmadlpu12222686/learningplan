@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Supervised Models Made Simple</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Light-only by request: indigo accent on cool white, card grid → detail view */
+  :root{
+    color-scheme:light;
+    --bg:#f6f7fb; --surface:#ffffff; --ink:#0f172a; --ink-2:#475569; --ink-3:#94a3b8;
+    --line:#e6e9f0; --line-2:#eef1f6; --accent:#4f46e5; --accent-soft:#eef2ff; --accent-2:#7c3aed;
+    --cls:#0369a1; --cls-soft:#e0f2fe; --reg:#b45309; --reg-soft:#fef3c7;
+    --ok:#059669; --ok-soft:#ecfdf5; --bad:#dc2626; --bad-soft:#fef2f2;
+    --code-bg:#0f172a; --code-ink:#e2e8f0;
+    --shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.06);
+    --radius:16px;
+    --sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.55}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer;color:inherit}
+  .wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  h1,h2,h3{text-wrap:balance}
+
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:11;background:#fff}
+  .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:rgba(255,255,255,.88);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;min-width:0}
+  .brand span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .logo{width:30px;height:30px;flex:none;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800}
+  .pill{display:flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:13.5px;padding:6px 12px;border-radius:999px;white-space:nowrap}
+
+  .hero{padding:40px 0 4px}
+  .eyebrow{font-size:12.5px;font-weight:700;color:var(--accent);letter-spacing:.07em;text-transform:uppercase}
+  h1{font-size:clamp(28px,4.4vw,40px);line-height:1.15;letter-spacing:-.025em;margin:8px 0 10px;font-weight:800}
+  .lead{color:var(--ink-2);max-width:720px;margin:0;font-size:16px}
+
+  section{margin:40px 0}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  h2{font-size:21px;letter-spacing:-.015em;margin:0;font-weight:700}
+  .sub{color:var(--ink-2);font-size:14.5px;margin:4px 0 0;max-width:680px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+
+  /* classification vs regression */
+  .vs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .vs .card{padding:22px;display:flex;flex-direction:column;gap:10px}
+  .vs h3{margin:0;font-size:17px;display:flex;align-items:center;gap:10px}
+  .vs p{margin:0;color:var(--ink-2);font-size:14.5px}
+  .vs ul{margin:0;padding-left:18px;color:var(--ink-2);font-size:14px;display:grid;gap:4px}
+  .q{font-weight:600;color:var(--ink);background:var(--line-2);border-radius:10px;padding:10px 12px;font-size:14px}
+
+  .type{display:inline-flex;align-items:center;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:99px;letter-spacing:.02em;white-space:nowrap}
+  .type.c{background:var(--cls-soft);color:var(--cls)}
+  .type.r{background:var(--reg-soft);color:var(--reg)}
+
+  /* filters */
+  .filters{display:flex;gap:8px;flex-wrap:wrap}
+  .f{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:600;font-size:13.5px;color:var(--ink-2)}
+  .f[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .f:focus-visible,.mod:focus-visible,.back:focus-visible,.navbtn:focus-visible,.understood:focus-visible{outline:3px solid #c7d2fe;outline-offset:2px}
+
+  /* model grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .mod{padding:20px;display:flex;flex-direction:column;gap:10px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);transition:transform .15s ease,box-shadow .15s ease,border-color .15s}
+  .mod:hover{transform:translateY(-2px);border-color:#c7d2fe;box-shadow:0 1px 2px rgba(15,23,42,.04),0 14px 32px rgba(79,70,229,.10)}
+  .mod-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .types{display:flex;gap:6px;flex-wrap:wrap}
+  .mod h3{margin:0;font-size:17.5px;letter-spacing:-.01em;line-height:1.3}
+  .mod .aka{font-size:12.5px;color:var(--ink-3);font-weight:500;margin-top:-6px}
+  .mod p{margin:0;color:var(--ink-2);font-size:14px}
+  .mod .analogy-mini{font-size:13.5px;color:#3730a3;background:var(--accent-soft);border-radius:10px;padding:9px 11px}
+  .mod-foot{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-2);font-weight:600;margin-top:auto;padding-top:4px}
+  .done-badge{color:var(--ok);background:var(--ok-soft);padding:3px 9px;border-radius:99px;font-size:12px}
+
+  /* chooser */
+  .chooser{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+  .rule{padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+  .rule .if{font-size:12px;font-weight:700;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase}
+  .rule .cond{font-weight:600;font-size:14.5px}
+  .rule .then{font-size:14px;color:var(--accent);font-weight:600}
+
+  /* tables */
+  .table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--line);background:#fff;box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;min-width:720px;font-size:14px}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line-2);vertical-align:top}
+  th{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);background:#fafbfd;font-weight:700}
+  tr:last-child td{border-bottom:0}
+  td b{font-weight:600}
+  .lvl{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px}
+  .lvl.h{background:var(--ok-soft);color:var(--ok)} .lvl.m{background:#fef9c3;color:#a16207} .lvl.l{background:var(--bad-soft);color:var(--bad)}
+
+  /* detail */
+  .back{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font-weight:600;font-size:14px;color:var(--ink-2)}
+  .back:hover{color:var(--ink);border-color:#cbd5e1}
+  .dhead{padding:26px;margin:20px 0 18px;display:flex;flex-direction:column;gap:10px}
+  .dhead h1{font-size:clamp(26px,4vw,34px);margin:2px 0 0}
+  .dhead .aka{color:var(--ink-3);font-weight:500;font-size:14px}
+  .dgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .block{padding:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
+  .block h3{margin:0;font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);font-weight:700;display:flex;align-items:center;gap:8px}
+  .block p{margin:0;font-size:15px}
+  .full{grid-column:1/-1}
+  .analogy{background:linear-gradient(135deg,#eef2ff,#f5f3ff);border-color:#e0e7ff}
+  .analogy .big{font-size:18px;font-weight:700;color:#312e81;letter-spacing:-.01em}
+  .analogy p{color:#3730a3}
+  ol.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:10px}
+  ol.steps li{counter-increment:s;display:flex;gap:12px;font-size:15px}
+  ol.steps li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:8px;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:13px;display:grid;place-items:center;margin-top:1px}
+  ul.ticks{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+  ul.ticks li{display:flex;gap:10px;font-size:14.5px}
+  ul.ticks li::before{flex:none;font-weight:800;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-size:12px;margin-top:2px}
+  .good li::before{content:"✓";background:var(--ok-soft);color:var(--ok)}
+  .bad li::before{content:"✕";background:var(--bad-soft);color:var(--bad)}
+  .projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+  .proj{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;background:#fcfcfe}
+  .proj b{font-size:14.5px}
+  .proj span{font-size:13.5px;color:var(--ink-2)}
+  .example{display:grid;gap:10px}
+  .ex-row{display:flex;gap:12px;align-items:baseline;font-size:14.5px}
+  .ex-row .k{flex:none;width:86px;font-size:12px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em}
+  .ex-row .v{min-width:0}
+  .ex-out{background:var(--ok-soft);border:1px solid #d1fae5;border-radius:10px;padding:10px 12px;color:#065f46;font-weight:600}
+  pre{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:16px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.6}
+  .cm{color:#94a3b8}
+  .kv{display:flex;flex-wrap:wrap;gap:8px}
+  .kv span{font-size:13px;background:var(--line-2);border-radius:8px;padding:5px 10px;color:var(--ink-2)}
+  .kv span b{color:var(--ink)}
+  .dfoot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:22px 0 10px}
+  .navbtn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 16px;text-align:left;display:flex;flex-direction:column;gap:2px;min-width:0;max-width:48%}
+  .navbtn small{font-size:12px;color:var(--ink-3);font-weight:600}
+  .navbtn b{font-size:14.5px}
+  .navbtn:hover{border-color:#c7d2fe}
+  .understood{border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;font-weight:600;font-size:14px;color:var(--ink-2);align-self:flex-start}
+  .understood[aria-pressed="true"]{background:var(--ok);border-color:var(--ok);color:#fff}
+
+  footer{padding:30px 0 50px;color:var(--ink-3);font-size:13px;text-align:center}
+  .hidden{display:none!important}
+
+  @media (max-width:760px){.vs,.dgrid{grid-template-columns:1fr}.navbtn{max-width:100%;flex:1}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a href="#" class="brand" data-home><span class="logo">SL</span><span>Supervised Models Made Simple</span></a>
+    <div class="pill" title="Models marked as understood">✓ <span id="topCount">0</span> / <span id="topTotal">0</span> understood</div>
+  </div>
+</header>
+
+<main class="wrap">
+<div id="home">
+  <div class="hero">
+    <div class="eyebrow">Supervised Learning · No Maths</div>
+    <h1>Every supervised model, explained like a story</h1>
+    <p class="lead">Each model gets a real-life analogy, a plain-language walkthrough of how it works, when to use it (and when not to), and the kinds of projects where it shines. Open any model card to read it in full.</p>
+  </div>
+
+  <section>
+    <div class="sec-head"><div><h2>First, what is supervised learning?</h2>
+      <p class="sub">We show the model many examples <b>with the right answer</b> (like a teacher with an answer key). It learns the pattern, then predicts answers for new examples it has never seen. There are two kinds of question it can answer.</p></div></div>
+    <div class="vs">
+      <div class="card">
+        <h3><span class="type c">CLASSIFICATION</span> Pick a category</h3>
+        <p>The answer is a <b>label</b> from a fixed list. Like a post-office sorter putting each letter in the right box.</p>
+        <div class="q">“Will this customer leave? Yes / No”</div>
+        <ul><li>Spam or not spam</li><li>Loan default: yes / no</li><li>Disease: positive / negative</li><li>Review sentiment: positive / neutral / negative</li></ul>
+      </div>
+      <div class="card">
+        <h3><span class="type r">REGRESSION</span> Predict a number</h3>
+        <p>The answer is a <b>quantity</b> on a scale. Like a property valuer quoting a price after looking at a house.</p>
+        <div class="q">“How many units will we sell next week? 1,240”</div>
+        <ul><li>House price in ₹</li><li>Product demand (units)</li><li>Delivery time (minutes)</li><li>Student exam marks</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <div><h2>The models</h2><p class="sub">Ordered from simplest to most powerful. Filter by the kind of problem you're solving.</p></div>
+      <div class="filters" role="group" aria-label="Filter models">
+        <button class="f" data-f="all" aria-pressed="true">All</button>
+        <button class="f" data-f="c" aria-pressed="false">Classification</button>
+        <button class="f" data-f="r" aria-pressed="false">Regression</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><div><h2>Which model should I pick?</h2><p class="sub">A quick rule of thumb. In real projects, always start with a simple baseline and then try a stronger model to see if it is worth the extra complexity.</p></div></div>
+    <div class="chooser" id="chooser"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><div><h2>Project → model map</h2><p class="sub">Common student and industry projects, the type of problem, a good first model, and the model that usually wins.</p></div></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Project</th><th>Type</th><th>Start with</th><th>Usually best</th><th>Why</th></tr></thead>
+      <tbody id="projmap"></tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><div><h2>Side-by-side comparison</h2><p class="sub">How the models compare on what matters in a project.</p></div></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Model</th><th>Type</th><th>Easy to explain</th><th>Accuracy on tables</th><th>Training speed</th><th>Data needed</th><th>Needs scaling</th></tr></thead>
+      <tbody id="compare"></tbody>
+    </table></div>
+  </section>
+</div>
+
+<div id="detail" class="hidden"></div>
+</main>
+
+<footer>Supervised Models Made Simple · Your “understood” ticks are saved in this browser</footer>
+
+<script>
+const M = [
+  {
+    id:"linear-regression", name:"Linear Regression", aka:"The straight-line predictor", types:["r"],
+    one:"Finds the single best straight line through your data and reads predictions off that line.",
+    analogy:{ big:"A ruler laid across a scatter of dots", text:"Plot house size against price and you see a cloud of dots going up. Linear regression places a ruler through the middle of that cloud so it is as close as possible to all the dots. To price a new house, find its size on the ruler and read the price. Each feature gets a simple “rate”: every extra 100 sq ft adds about ₹4 lakh." },
+    how:["Look at all past examples (size, location score → price).","Give each input a weight that says how much it pushes the answer up or down.","Adjust the weights until the line's predictions are as close as possible to the real answers.","For a new example: multiply each input by its weight, add them up, and that's the prediction."],
+    use:["The relationship is roughly “more of X means more (or less) of Y” in a steady way","You must explain the result to a manager: “each ad rupee brings ₹3 in sales”","You need a quick baseline before trying fancy models","Small datasets where complex models would overfit"],
+    avoid:["The pattern is curved or has sudden jumps (e.g. price shoots up near a metro)","There are strong outliers (one ₹50 crore mansion can tilt the whole line)","Inputs interact in complex ways (rain helps crops, but only up to a point)"],
+    projects:[["House price prediction","Size, rooms, age → price. The classic first project."],["Sales vs advertising spend","How much revenue each channel's spend brings."],["Salary from experience","Years of experience, degree → salary."],["Electricity bill estimate","Units used, AC hours → monthly bill."]],
+    example:{ s:"A real-estate site wants an instant price estimate.", i:"1,200 sq ft, 2 BHK, 5 years old, location score 7/10", o:"Predicted price ≈ ₹68 lakh" },
+    code:`from sklearn.linear_model import LinearRegression
+model = LinearRegression().fit(X_train, y_train)
+price = model.predict(X_new)        <span class="cm"># a number</span>
+print(model.coef_)                  <span class="cm"># effect of each feature</span>`,
+    rate:{exp:"h",acc:"l",speed:"h",data:"Small",scale:"Helpful"}
+  },
+  {
+    id:"polynomial-regression", name:"Polynomial Regression", aka:"The bendable ruler", types:["r"],
+    one:"Linear regression that is allowed to bend, so it can follow curves.",
+    analogy:{ big:"A flexible wire instead of a stiff ruler", text:"Fertilizer helps crops grow, but too much burns them, so yield goes up and then comes down. A straight ruler can't follow that hill. Polynomial regression swaps the ruler for a flexible wire that can bend once or twice to follow the shape. Bend it too many times, though, and it wiggles through every dot, including the noise." },
+    how:["Create extra versions of each input: size, size², size³…","Feed these into ordinary linear regression.","The extra terms let the line curve.","Choose the amount of bending (the degree) by testing on unseen data."],
+    use:["You can see a clear curve when you plot the data","There is a “sweet spot” (too little and too much are both bad)","You have few features and want something still explainable"],
+    avoid:["Predicting far outside the data range (curves shoot off wildly)","Many features (the number of extra terms explodes)","High degrees: it memorises noise (overfitting)"],
+    projects:[["Crop yield vs fertilizer","Find the amount that gives maximum yield."],["Car mileage vs speed","Mileage is best at mid speeds, worse at low and high."],["Temperature through the day","Rises till afternoon, then falls."],["Drug dose response","Effect rises, then plateaus or turns harmful."]],
+    example:{ s:"An agri-startup advises farmers on fertilizer.", i:"Fertilizer: 120 kg/acre, rainfall: normal", o:"Predicted yield ≈ 2.8 tonnes/acre (peak is near 140 kg)" },
+    code:`from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import make_pipeline
+model = make_pipeline(PolynomialFeatures(degree=2), LinearRegression())
+model.fit(X_train, y_train)`,
+    rate:{exp:"m",acc:"l",speed:"h",data:"Small",scale:"Yes"}
+  },
+  {
+    id:"ridge-lasso", name:"Ridge, Lasso & Elastic Net", aka:"Regularised linear models", types:["r","c"],
+    one:"Linear models with a rule that stops any one feature from getting too much importance.",
+    analogy:{ big:"A strict teacher with a marks budget", text:"Imagine 50 students (features) claiming credit for a group project. Plain linear regression might give huge credit to a few loud ones by luck. Ridge is a teacher who says “nobody gets extreme marks”, so credit is spread fairly. Lasso is stricter: students who didn't really contribute get exactly zero, so it also tells you which features to drop. Elastic Net mixes both." },
+    how:["Start from linear (or logistic) regression.","Add a penalty for large weights.","Ridge shrinks all weights a little; Lasso pushes useless ones to exactly zero.","Tune the penalty strength (alpha) using cross-validation."],
+    use:["Many features, maybe more than you have rows","Features are related to each other (e.g. height in cm and in inches)","You want automatic feature selection (Lasso)","Plain linear regression overfits"],
+    avoid:["The real pattern is strongly non-linear","You have only a handful of clean features (plain linear is fine)","You forgot to scale features (the penalty becomes unfair)"],
+    projects:[["Marketing mix modelling","Many ad channels, find which really drive sales."],["Gene expression studies","Thousands of genes, few patients."],["Student performance","Dozens of study-habit survey questions → marks."],["Credit scoring (logistic + L1)","Keep only the factors that matter, regulators can read it."]],
+    example:{ s:"A brand spends on 25 channels and wants to know which ones work.", i:"Weekly spend on TV, Instagram, YouTube, print, radio…", o:"Lasso keeps 6 channels with non-zero weight; the other 19 have ~no effect" },
+    code:`from sklearn.linear_model import Ridge, Lasso, ElasticNet
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+model = make_pipeline(StandardScaler(), Lasso(alpha=0.1)).fit(X_train, y_train)
+<span class="cm"># for classification: LogisticRegression(penalty="l1", solver="liblinear")</span>`,
+    rate:{exp:"h",acc:"l",speed:"h",data:"Small–Medium",scale:"Yes"}
+  },
+  {
+    id:"logistic-regression", name:"Logistic Regression", aka:"The probability scorecard", types:["c"],
+    one:"Despite the name, it is for classification: it adds up evidence and turns it into a probability between 0% and 100%.",
+    analogy:{ big:"A bank's loan scorecard", text:"A loan officer has a sheet: +20 points for a stable job, +15 for good credit history, −30 for existing missed EMIs. Add up the points and a chart converts the total into “12% chance of default”. If the chance is above a cutoff (say 50%), reject. Logistic regression learns those points from past customers automatically." },
+    how:["Give every input a weight (its points, positive or negative).","Add up the weighted inputs to get a score.","Squash the score into a probability with an S-shaped curve.","Compare the probability with a cutoff to decide the class."],
+    use:["Yes/no problems where you need the probability, not just the label","You must explain decisions (banks, healthcare, insurance)","A fast, reliable baseline for any classification project","Text classification with many word features"],
+    avoid:["Classes are separated by complex, curvy boundaries","Strong interactions between features you haven't engineered","Very imbalanced data without adjusting class weights or the cutoff"],
+    projects:[["Customer churn","Will this subscriber cancel next month?"],["Loan default","Probability a borrower misses payments."],["Email spam filter","Spam / not spam from word counts."],["Disease screening","Diabetes risk from age, BMI, sugar levels."],["Ad click prediction","Will the user click this ad?"]],
+    example:{ s:"A telecom company wants to call customers before they leave.", i:"Tenure 4 months, 3 complaints, no family plan, high bill", o:"Churn probability 78% → flag for retention call" },
+    code:`from sklearn.linear_model import LogisticRegression
+model = LogisticRegression(max_iter=1000).fit(X_train, y_train)
+model.predict(X_new)          <span class="cm"># 0 / 1</span>
+model.predict_proba(X_new)    <span class="cm"># probability of each class</span>`,
+    rate:{exp:"h",acc:"m",speed:"h",data:"Small–Large",scale:"Yes"}
+  },
+  {
+    id:"knn", name:"K-Nearest Neighbours (KNN)", aka:"Ask the neighbours", types:["c","r"],
+    one:"Finds the K most similar past examples and copies their answer (majority vote or average).",
+    analogy:{ big:"“Tell me who your friends are…”", text:"A new student joins class. To guess which sport they'll like, look at the 5 students most similar to them (age, height, hobbies) and go with what most of those 5 play. To guess a flat's rent, average the rent of the 5 most similar flats nearby. KNN doesn't “learn” anything up front; it just remembers everyone and compares at prediction time." },
+    how:["Store all training examples.","For a new example, measure its distance to every stored example.","Pick the K closest ones.","Classification: majority vote. Regression: average of their values."],
+    use:["Small to medium datasets with a few meaningful features","“Similar items” problems (similar products, similar patients)","You want something intuitive to explain with real examples","Quick prototype with no training time"],
+    avoid:["Large datasets (every prediction compares with everyone → slow)","Many features (distances stop being meaningful)","Features on different scales (income in lakhs drowns age in years) unless you scale","Irrelevant features, which confuse the distance"],
+    projects:[["Product recommendations","“Customers similar to you bought…”"],["Rent / price estimation","Price from the most similar listings."],["Handwritten digit recognition (small)","Match a digit to the closest known shapes."],["Patient similarity","Find past patients with the most similar profile."]],
+    example:{ s:"A rental app estimates fair rent.", i:"2 BHK, 950 sq ft, 1.2 km from metro, furnished", o:"5 most similar flats rent for ₹24k–28k → predicted ₹26k" },
+    code:`from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+model = make_pipeline(StandardScaler(), KNeighborsRegressor(n_neighbors=5))
+model.fit(X_train, y_train)`,
+    rate:{exp:"h",acc:"m",speed:"h",data:"Small–Medium",scale:"Yes (must)"}
+  },
+  {
+    id:"naive-bayes", name:"Naive Bayes", aka:"The clue-counting detective", types:["c"],
+    one:"Counts how often each clue appeared in each class in the past and combines the clues to pick the most likely class.",
+    analogy:{ big:"A detective weighing each clue separately", text:"An email contains “FREE”, “winner” and “click now”. The detective remembers: “FREE” appeared in 80% of past spam but only 5% of normal mail; “winner” in 60% of spam… Combining these clues, spam is far more likely. It's called naive because it treats every clue as independent, as if “free” and “winner” never travel together. Surprisingly, it still works very well for text." },
+    how:["From training data, count how often each feature value appears in each class.","Turn the counts into probabilities.","For a new example, multiply the probabilities of its clues for each class.","Pick the class with the highest result."],
+    use:["Text classification: spam, sentiment, news topics, support tickets","You need something extremely fast to train and run","Small datasets, or many features (thousands of words)","A strong first baseline for any NLP classification"],
+    avoid:["Features strongly depend on each other and that matters","You need well-calibrated probabilities (it tends to be over-confident)","Numeric data with complex shapes"],
+    projects:[["Spam filter","Classic: word counts → spam / ham."],["Movie / product review sentiment","Positive vs negative from words used."],["News article tagging","Sports, politics, tech, business…"],["Support ticket routing","Send each ticket to billing, tech or sales."]],
+    example:{ s:"A helpdesk wants to auto-route incoming tickets.", i:"“I was charged twice for my subscription this month”", o:"Category: Billing (92% likely)" },
+    code:`from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import make_pipeline
+model = make_pipeline(TfidfVectorizer(), MultinomialNB()).fit(texts, labels)
+model.predict(["Win a FREE iPhone now"])`,
+    rate:{exp:"m",acc:"m",speed:"h",data:"Small–Large",scale:"No"}
+  },
+  {
+    id:"decision-tree", name:"Decision Tree", aka:"The flowchart of questions", types:["c","r"],
+    one:"Learns a flowchart of yes/no questions that leads to an answer.",
+    analogy:{ big:"The game of 20 Questions", text:"To guess an animal you ask the most useful question first (“Does it live in water?”), then the next most useful, and so on. A decision tree does the same with data: “Is income > ₹50k? → Yes → Has existing loans? → No → Approve.” You can print the tree and anyone can follow it with a finger." },
+    how:["Look at all features and find the question that best splits the data into pure groups.","Split the data on that question.","Repeat inside each group, asking the next best question.","Stop when groups are pure enough or the tree is deep enough; each leaf gives the answer (a class or an average number)."],
+    use:["You need rules a non-technical person can read and audit","Mixed data: numbers and categories together","Non-linear patterns and feature interactions","As a teaching tool or to discover business rules"],
+    avoid:["Used alone on noisy data: deep trees memorise (overfit)","Small changes in data can produce a totally different tree","Smooth numeric predictions (it gives step-like answers)","When accuracy matters most (use Random Forest / Boosting instead)"],
+    projects:[["Loan approval rules","Transparent approve / reject logic."],["Insurance eligibility","Which plan a customer qualifies for."],["Medical triage flowchart","Urgent / non-urgent from symptoms."],["Delivery time estimate","Distance, traffic, weather → minutes (regression tree)."]],
+    example:{ s:"A bank wants approval rules its staff can follow.", i:"Income ₹62k/month, 1 existing loan, credit score 742", o:"Path: income > 50k → score > 700 → loans ≤ 1 → Approve" },
+    code:`from sklearn.tree import DecisionTreeClassifier, export_text
+model = DecisionTreeClassifier(max_depth=4).fit(X_train, y_train)
+print(export_text(model, feature_names=list(X_train.columns)))  <span class="cm"># readable rules</span>`,
+    rate:{exp:"h",acc:"m",speed:"h",data:"Small–Medium",scale:"No"}
+  },
+  {
+    id:"random-forest", name:"Random Forest", aka:"The wisdom of the crowd", types:["c","r"],
+    one:"Builds hundreds of different decision trees and combines their answers by voting or averaging.",
+    analogy:{ big:"Asking 300 experts instead of one", text:"One doctor might be biased by the patients they happened to see. Ask 300 doctors, each trained on a slightly different set of cases and each looking at a different subset of test results, then take the majority opinion. Individual mistakes cancel out and the crowd is much more reliable. That's a random forest." },
+    how:["Make many random samples of the training data (with repeats).","Train one decision tree on each sample, letting each split look at only a random subset of features.","Each tree makes its own prediction.","Classification: majority vote. Regression: average of all trees."],
+    use:["Almost any tabular (rows & columns) project: a great default","You want strong accuracy with very little tuning","You need feature importance (“which factors matter most?”)","Data has missing patterns, outliers or mixed types"],
+    avoid:["You need a tiny, very fast model (e.g. on a phone)","You must explain each single decision line by line","Regression that must predict beyond the range seen in training (trees can't extrapolate trends)","Very high-dimensional sparse data like raw text"],
+    projects:[["Credit card fraud detection","Flag suspicious transactions."],["Customer churn","Robust, with feature importance for the business."],["Crop yield prediction","Soil, rainfall, temperature → yield."],["House price prediction","Usually beats linear regression easily."],["Disease prediction","Heart disease from medical records."]],
+    example:{ s:"A hospital predicts heart-disease risk.", i:"Age 54, cholesterol 260, BP 145, smoker, chest pain type 2", o:"231 of 300 trees say “at risk” → 77% risk → refer for tests" },
+    code:`from sklearn.ensemble import RandomForestClassifier
+model = RandomForestClassifier(n_estimators=300, random_state=42).fit(X_train, y_train)
+model.feature_importances_   <span class="cm"># which features matter most</span>`,
+    rate:{exp:"m",acc:"h",speed:"m",data:"Medium–Large",scale:"No"}
+  },
+  {
+    id:"gradient-boosting", name:"Gradient Boosting (XGBoost, LightGBM, CatBoost)", aka:"Learning from mistakes, one tree at a time", types:["c","r"],
+    one:"Builds small trees one after another, each new tree focusing on fixing the errors of the trees before it.",
+    analogy:{ big:"A student practising only the questions they got wrong", text:"After a mock test, a smart student doesn't re-study everything. They look at the questions they got wrong and practise those. Next mock, they look at the new mistakes, and so on. After 500 rounds of “fix what's still wrong”, they score very high. Gradient boosting does this with trees: each new small tree is trained on the leftover errors." },
+    how:["Start with a simple guess (e.g. the average).","Measure the error for every example.","Train a small tree to predict those errors, and add it (a little) to the model.","Repeat hundreds of times; stop when the score on validation data stops improving."],
+    use:["You want the best accuracy on tabular data: it wins most Kaggle competitions","Large datasets with many features and complex interactions","Demand forecasting with lag/calendar features (LightGBM is an industry favourite)","Categorical-heavy data (CatBoost handles categories natively)"],
+    avoid:["Very small datasets (it overfits easily)","You can't spend time tuning (learning rate, depth, number of trees)","Images, audio or raw text (use neural networks)","You need a fully transparent model for regulators"],
+    projects:[["Product demand forecasting","Sales history + price + holidays → units next week."],["Fraud detection","Highly accurate on transaction data."],["Insurance claim cost","Predict claim amount per policy."],["Delivery ETA","Food/parcel arrival time from route, traffic, weather."],["Click-through rate","Will a user click this product?"]],
+    example:{ s:"A retail chain forecasts demand to plan stock.", i:"Item: 1L milk, store #12, last 4 weeks' sales, Diwali next week, 10% discount", o:"Predicted demand: 1,840 units next week" },
+    code:`import lightgbm as lgb    <span class="cm"># or: from xgboost import XGBRegressor</span>
+model = lgb.LGBMRegressor(n_estimators=500, learning_rate=0.05)
+model.fit(X_train, y_train, eval_set=[(X_val, y_val)])
+units = model.predict(X_next_week)`,
+    rate:{exp:"m",acc:"h",speed:"m",data:"Medium–Large",scale:"No"}
+  },
+  {
+    id:"svm", name:"Support Vector Machine (SVM / SVR)", aka:"The widest road", types:["c","r"],
+    one:"Draws the boundary between classes that stays as far as possible from both sides.",
+    analogy:{ big:"Building the widest possible road between two villages", text:"Two villages sit on a map and you must build a straight road between them. Many roads would separate them, but the safest is the one with the widest gap on both sides, so a new house built near the edge is still clearly on the right side. The houses touching the road's edges are the “support vectors”. When villages are mixed up, the “kernel trick” is like lifting the map into 3D so a flat sheet can separate them." },
+    how:["Find the boundary that leaves the widest margin between classes.","Only the closest points (support vectors) decide where it goes.","Allow a few points on the wrong side if needed (controlled by C).","Use a kernel (e.g. RBF) to get curved boundaries. SVR applies the same idea to predict numbers."],
+    use:["Small to medium datasets with many features","Text classification and other high-dimensional data","Clear separation between classes","When you need strong accuracy without a huge dataset"],
+    avoid:["Very large datasets (training gets slow beyond ~100k rows)","You need probabilities or easy explanations","Lots of noise and overlapping classes","Unscaled features (always scale for SVM)"],
+    projects:[["Cancer cell classification","Benign vs malignant from cell measurements."],["Face / no-face detection","Classic computer-vision use with HOG features."],["Text categorisation","News or document classification."],["Handwriting recognition","Small digit / character datasets."]],
+    example:{ s:"A lab classifies tumour samples.", i:"30 measurements of cell size, shape and texture", o:"Malignant (sample lies clearly on the malignant side of the margin)" },
+    code:`from sklearn.svm import SVC, SVR
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+model = make_pipeline(StandardScaler(), SVC(kernel="rbf", C=1.0)).fit(X_train, y_train)`,
+    rate:{exp:"l",acc:"m",speed:"m",data:"Small–Medium",scale:"Yes (must)"}
+  },
+  {
+    id:"neural-network", name:"Neural Networks (MLP & Deep Learning)", aka:"Layers of tiny decision makers", types:["c","r"],
+    one:"Many small units arranged in layers; each layer turns the input into a more useful representation until the last layer gives the answer.",
+    analogy:{ big:"A factory assembly line", text:"Raw material (a photo) enters the line. The first station spots edges, the next combines edges into shapes like eyes and ears, the next recognises a face, and the last station stamps “cat”. Nobody tells each station what to do; during training, every station adjusts itself a little each time the final answer is wrong, until the whole line works together." },
+    how:["Inputs go into the first layer of units.","Each unit combines its inputs and passes a signal forward.","The last layer outputs a class probability or a number.","Compare with the right answer and nudge every connection slightly to reduce the error (backpropagation). Repeat over many passes."],
+    use:["Images, audio, video and raw text (deep learning: CNNs, RNNs, Transformers)","Very large datasets with complex patterns","Many inputs combined, such as recommendations or multi-signal demand","When you can afford GPU time and tuning"],
+    avoid:["Small tabular datasets: Random Forest / Boosting usually win","You must explain each decision clearly","Limited data, time or compute","As a first model: start with simpler baselines"],
+    projects:[["Image classification","Plant disease, defect detection, X-ray screening."],["Speech & voice","Speech-to-text, wake-word detection."],["Text understanding","Sentiment, intent detection for chatbots."],["Recommendation systems","Learn user and item preferences from huge logs."]],
+    example:{ s:"A farming app detects leaf disease from a photo.", i:"Phone photo of a tomato leaf", o:"Early blight (94% confidence) → suggest treatment" },
+    code:`from sklearn.neural_network import MLPClassifier   <span class="cm"># simple tabular version</span>
+model = MLPClassifier(hidden_layer_sizes=(64, 32), max_iter=500).fit(X_train, y_train)
+<span class="cm"># images / text / audio → PyTorch or TensorFlow (CNNs, Transformers)</span>`,
+    rate:{exp:"l",acc:"m",speed:"l",data:"Large",scale:"Yes (must)"}
+  }
+];
+
+const RULES = [
+  ["You need a quick baseline","Linear Regression (numbers) or Logistic Regression (categories)"],
+  ["You must explain every decision","Decision Tree, Logistic or Linear Regression"],
+  ["Rows-and-columns data, want strong accuracy fast","Random Forest"],
+  ["Rows-and-columns data, want the best possible accuracy","Gradient Boosting (LightGBM / XGBoost / CatBoost)"],
+  ["Text classification (spam, tickets, reviews)","Naive Bayes → Logistic Regression / SVM"],
+  ["Many features, possibly related to each other","Ridge / Lasso / Elastic Net"],
+  ["Small data where “similar cases” matter","K-Nearest Neighbours"],
+  ["Clear curve / sweet-spot pattern with few features","Polynomial Regression"],
+  ["Images, audio, video or huge datasets","Neural Networks (deep learning)"],
+];
+
+const PROJ = [
+  ["House price prediction","r","Linear Regression","Gradient Boosting","Tabular data with interactions (location × size)."],
+  ["Product demand forecasting","r","Linear Regression","LightGBM","Handles lags, holidays, promotions and many stores/items."],
+  ["Delivery time (ETA)","r","Decision Tree","Gradient Boosting","Traffic, distance and weather interact non-linearly."],
+  ["Student marks prediction","r","Linear Regression","Random Forest","Small data; forest is robust and shows key factors."],
+  ["Crop yield","r","Polynomial Regression","Random Forest","Sweet-spot effects of rain and fertilizer."],
+  ["Customer churn","c","Logistic Regression","Random Forest / XGBoost","Needs probabilities plus feature importance."],
+  ["Loan default / credit risk","c","Logistic Regression","XGBoost (+ explanations)","Regulated: start explainable, boost for accuracy."],
+  ["Fraud detection","c","Logistic Regression","XGBoost / LightGBM","Imbalanced, complex patterns, large data."],
+  ["Spam / ticket classification","c","Naive Bayes","Logistic Regression / SVM","Text with thousands of word features."],
+  ["Disease diagnosis (tabular)","c","Logistic Regression","Random Forest","Doctors need probabilities and key factors."],
+  ["Product recommendations","c","KNN","Neural Networks","Similarity first; deep models at scale."],
+  ["Image classification","c","—","Neural Networks (CNN)","Raw pixels need deep learning."],
+];
+
+const KEY = "sl-models-understood-v1";
+let understood = {};
+try { understood = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { understood = {}; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(understood)); } catch (e) {} };
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+const typeTag = t => t === "c" ? '<span class="type c">CLASSIFICATION</span>' : '<span class="type r">REGRESSION</span>';
+const LV = { h:["h","High"], m:["m","Medium"], l:["l","Low"] };
+const lvl = k => `<span class="lvl ${LV[k][0]}">${LV[k][1]}</span>`;
+let filter = "all";
+
+function counts() {
+  const n = M.filter(m => understood[m.id]).length;
+  document.getElementById("topCount").textContent = n;
+  document.getElementById("topTotal").textContent = M.length;
+}
+
+function renderGrid() {
+  document.getElementById("grid").innerHTML = M.filter(m => filter === "all" || m.types.includes(filter)).map(m =>
+    `<a class="mod" href="#${m.id}">
+      <div class="mod-top"><div class="types">${m.types.map(typeTag).join("")}</div>${understood[m.id] ? '<span class="done-badge">✓ Understood</span>' : ""}</div>
+      <h3>${esc(m.name)}</h3>
+      <div class="aka">${esc(m.aka)}</div>
+      <p>${esc(m.one)}</p>
+      <div class="analogy-mini"><b>Analogy:</b> ${esc(m.analogy.big)}</div>
+      <div class="mod-foot"><span>${m.projects.length} project ideas</span><span style="color:var(--accent)">Read →</span></div>
+    </a>`).join("");
+}
+
+function renderStatic() {
+  document.getElementById("chooser").innerHTML = RULES.map(([c, t]) =>
+    `<div class="card rule"><span class="if">If</span><span class="cond">${esc(c)}</span><span class="then">→ ${esc(t)}</span></div>`).join("");
+  document.getElementById("projmap").innerHTML = PROJ.map(([p, t, a, b, w]) =>
+    `<tr><td><b>${esc(p)}</b></td><td>${typeTag(t)}</td><td>${esc(a)}</td><td><b>${esc(b)}</b></td><td style="color:var(--ink-2)">${esc(w)}</td></tr>`).join("");
+  document.getElementById("compare").innerHTML = M.map(m =>
+    `<tr><td><a href="#${m.id}" style="color:var(--accent);font-weight:600">${esc(m.name)}</a></td><td><div class="types">${m.types.map(typeTag).join("")}</div></td>
+      <td>${lvl(m.rate.exp)}</td><td>${lvl(m.rate.acc)}</td><td>${lvl(m.rate.speed)}</td><td>${m.rate.data}</td><td>${m.rate.scale}</td></tr>`).join("");
+}
+
+function renderDetail(i) {
+  const m = M[i], prev = M[i - 1], next = M[i + 1];
+  document.getElementById("detail").innerHTML = `
+    <div style="margin-top:24px"><button class="back" data-home>← All models</button></div>
+    <div class="card dhead">
+      <div class="types">${m.types.map(typeTag).join("")}</div>
+      <h1>${esc(m.name)}</h1>
+      <div class="aka">${esc(m.aka)}</div>
+      <p class="lead" style="font-size:16px">${esc(m.one)}</p>
+      <button class="understood" id="und" aria-pressed="${!!understood[m.id]}">${understood[m.id] ? "✓ Understood" : "Mark as understood"}</button>
+    </div>
+    <div class="dgrid">
+      <div class="card block analogy full"><h3>💡 The analogy</h3><div class="big">${esc(m.analogy.big)}</div><p>${esc(m.analogy.text)}</p></div>
+      <div class="card block full"><h3>⚙️ How it works, step by step</h3><ol class="steps">${m.how.map(s => `<li>${esc(s)}</li>`).join("")}</ol></div>
+      <div class="card block"><h3>✅ Use it when</h3><ul class="ticks good">${m.use.map(s => `<li>${esc(s)}</li>`).join("")}</ul></div>
+      <div class="card block"><h3>⛔ Avoid it when</h3><ul class="ticks bad">${m.avoid.map(s => `<li>${esc(s)}</li>`).join("")}</ul></div>
+      <div class="card block full"><h3>🚀 Projects where it's a good choice</h3><div class="projects">${m.projects.map(([t, d]) => `<div class="proj"><b>${esc(t)}</b><span>${esc(d)}</span></div>`).join("")}</div></div>
+      <div class="card block"><h3>🧪 Worked example</h3><div class="example">
+        <div class="ex-row"><span class="k">Scenario</span><span class="v">${esc(m.example.s)}</span></div>
+        <div class="ex-row"><span class="k">Input</span><span class="v">${esc(m.example.i)}</span></div>
+        <div class="ex-out">${esc(m.example.o)}</div></div></div>
+      <div class="card block"><h3>🐍 In Python (scikit-learn)</h3><pre>${m.code}</pre>
+        <div class="kv"><span>Explainable: <b>${LV[m.rate.exp][1]}</b></span><span>Data: <b>${m.rate.data}</b></span><span>Scaling: <b>${m.rate.scale}</b></span></div></div>
+    </div>
+    <div class="dfoot">
+      ${prev ? `<a class="navbtn" href="#${prev.id}"><small>← Previous</small><b>${esc(prev.name)}</b></a>` : "<span></span>"}
+      ${next ? `<a class="navbtn" href="#${next.id}" style="text-align:right;margin-left:auto"><small>Next →</small><b>${esc(next.name)}</b></a>` : ""}
+    </div>`;
+  document.getElementById("und").addEventListener("click", () => {
+    if (understood[m.id]) delete understood[m.id]; else understood[m.id] = true;
+    save(); counts(); renderDetail(i);
+  });
+}
+
+function route() {
+  const i = M.findIndex(m => "#" + m.id === location.hash);
+  counts();
+  if (i >= 0) {
+    renderDetail(i);
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("detail").classList.remove("hidden");
+  } else {
+    renderGrid();
+    document.getElementById("detail").classList.add("hidden");
+    document.getElementById("home").classList.remove("hidden");
+  }
+  window.scrollTo(0, 0);
+}
+
+document.querySelectorAll(".f").forEach(b => b.addEventListener("click", () => {
+  filter = b.dataset.f;
+  document.querySelectorAll(".f").forEach(x => x.setAttribute("aria-pressed", x === b));
+  renderGrid();
+}));
+document.addEventListener("click", e => {
+  if (e.target.closest("[data-home]")) {
+    e.preventDefault();
+    history.pushState("", document.title, location.pathname + location.search);
+    route();
+  }
+});
+window.addEventListener("hashchange", route);
+renderStatic();
+route();
+</script>
+</body>
+</html>
