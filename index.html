@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -1013,4 +1013,1015 @@ window.addEventListener("hashchange", route);
 route();
 </script>
 </body>
-</html>
+</html> -->
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Applied AI Learning Plan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* Light-only by request: indigo accent on cool white; grouped module grid → module view with executive briefing */
+  :root{
+    color-scheme:light;
+    --bg:#f6f7fb; --surface:#ffffff; --ink:#0f172a; --ink-2:#475569; --ink-3:#94a3b8;
+    --line:#e6e9f0; --line-2:#eef1f6; --accent:#4f46e5; --accent-soft:#eef2ff; --accent-2:#7c3aed;
+    --ok:#059669; --ok-soft:#ecfdf5; --warn:#b45309; --warn-soft:#fffbeb; --bad:#dc2626; --bad-soft:#fef2f2;
+    --shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.06);
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;cursor:pointer}
+  h1,h2,h3{text-wrap:balance}
+  .wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:11;background:#fff}
+  .topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:rgba(255,255,255,.88);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;min-width:0;white-space:nowrap;overflow:hidden}
+  .logo{width:30px;height:30px;flex:none;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;color:#fff;font-size:14px;font-weight:800}
+  .pill-score{display:flex;align-items:center;gap:8px;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:14px;padding:6px 12px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+  .hero{padding:40px 0 8px}
+  .eyebrow{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
+  h1{font-size:clamp(28px,4.4vw,40px);line-height:1.15;letter-spacing:-.025em;margin:8px 0 10px;font-weight:800}
+  .lead{color:var(--ink-2);max-width:720px;margin:0;font-size:16px}
+
+  .stats{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:16px;margin:28px 0}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .stat{padding:20px}
+  .stat .label{font-size:13px;color:var(--ink-2);font-weight:500}
+  .stat .value{font-size:30px;font-weight:800;letter-spacing:-.02em;margin-top:4px;font-variant-numeric:tabular-nums}
+  .stat .value small{font-size:15px;color:var(--ink-3);font-weight:600}
+  .score-card{display:flex;align-items:center;gap:18px}
+  .ring{--p:0;width:92px;height:92px;flex:none;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--p)*1%),var(--line-2) 0);display:grid;place-items:center}
+  .ring::before{content:"";width:72px;height:72px;border-radius:50%;background:#fff;grid-area:1/1}
+  .ring span{grid-area:1/1;font-weight:800;font-size:18px;z-index:1}
+  .bar{height:8px;background:var(--line-2);border-radius:99px;overflow:hidden;margin-top:12px}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:99px;transition:width .4s ease}
+
+  section{margin:36px 0}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  h2{font-size:20px;letter-spacing:-.015em;margin:0;font-weight:700}
+  .sub{color:var(--ink-2);font-size:14px;margin:4px 0 0;max-width:720px}
+
+  .learned{padding:22px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:500;padding:7px 12px;border-radius:999px;background:var(--ok-soft);color:#065f46;border:1px solid #d1fae5}
+  .chip::before{content:"✓";font-weight:800;font-size:12px}
+
+  /* roadmap strip */
+  .road{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .road a{padding:16px;display:flex;flex-direction:column;gap:4px}
+  .road a:hover{border-color:#c7d2fe}
+  .road .rn{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.05em;text-transform:uppercase}
+  .road b{font-size:15px}
+  .road span{font-size:13px;color:var(--ink-2)}
+
+  .stage{margin-bottom:14px;overflow:hidden}
+  .stage-h{width:100%;display:flex;align-items:center;gap:16px;padding:20px 22px;background:none;border:0;text-align:left;color:var(--ink)}
+  .stage-h:focus-visible{outline:3px solid #c7d2fe;outline-offset:-3px}
+  .stage-n{width:44px;height:44px;flex:none;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:800;display:grid;place-items:center;font-size:17px}
+  .stage-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+  .stage-t b{font-size:17px;letter-spacing:-.01em}
+  .stage-t span{font-size:13.5px;color:var(--ink-2)}
+  .stage-t small{font-size:12.5px;color:var(--ink-3);font-weight:600}
+  .stage-m{flex:none;text-align:right;font-size:13px;color:var(--ink-2);font-weight:600;font-variant-numeric:tabular-nums;width:120px}
+  .stage-m .bar{margin-top:6px}
+  .stage-b{display:none;padding:4px 22px 22px;border-top:1px solid var(--line-2)}
+  .stage.open .stage-b{display:block}
+  .stage.open .stage-h .chev{transform:rotate(90deg)}
+  .stage-b .modules{margin-top:18px}
+  .mod.soon{background:#fafbfd;box-shadow:none;cursor:default}
+  .mod.soon:hover{transform:none;border-color:var(--line);box-shadow:none}
+  .mod.soon .mod-num{background:var(--line-2);color:var(--ink-3)}
+  .tag.soon{background:var(--warn-soft);color:var(--warn)}
+  @media (max-width:560px){.stage-h{flex-wrap:wrap;gap:12px}.stage-m{width:100%;text-align:left}}
+  .group{margin:34px 0 0;scroll-margin-top:80px}
+  .group-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .group-h h3{margin:0;font-size:17px;font-weight:700}
+  .group-h span{font-size:13.5px;color:var(--ink-2)}
+  .modules{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .mod{padding:20px;display:flex;flex-direction:column;gap:12px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);transition:transform .15s ease,box-shadow .15s ease,border-color .15s}
+  .mod:hover{transform:translateY(-2px);border-color:#c7d2fe;box-shadow:0 1px 2px rgba(15,23,42,.04),0 14px 32px rgba(79,70,229,.10)}
+  .mod:focus-visible,.back:focus-visible,.ghost:focus-visible,.topic-h:focus-visible{outline:3px solid #c7d2fe;outline-offset:2px}
+  .mod-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .mod-num{width:38px;height:38px;flex:none;border-radius:11px;background:var(--accent-soft);color:var(--accent);font-weight:800;display:grid;place-items:center;font-size:15px}
+  .mod.done .mod-num{background:var(--ok-soft);color:var(--ok)}
+  .tag{font-size:12px;font-weight:600;color:var(--ink-2);background:var(--line-2);padding:4px 10px;border-radius:99px;text-align:right}
+  .tag.brief{background:var(--warn-soft);color:var(--warn)}
+  .mod h3{margin:0;font-size:17px;letter-spacing:-.01em;line-height:1.3;color:var(--ink)}
+  .mod p{margin:0;color:var(--ink-2);font-size:14px}
+  .mod-foot{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);font-weight:500;margin-top:auto;font-variant-numeric:tabular-nums}
+  .mod-foot b{color:var(--ink)}
+
+  /* module view */
+  .back{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font-weight:600;font-size:14px;color:var(--ink-2)}
+  .back:hover{color:var(--ink);border-color:#cbd5e1}
+  .mhead{padding:26px;margin:20px 0}
+  .mhead .row{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .mhead h1{font-size:clamp(24px,3.6vw,32px);margin:4px 0 6px}
+  .mhead .meta{margin-left:auto;text-align:right}
+
+  .outcome{padding:18px 20px;display:flex;gap:12px;align-items:flex-start;background:linear-gradient(135deg,#eef2ff,#f5f3ff);border:1px solid #e0e7ff;border-radius:var(--radius);margin-bottom:18px;color:#3730a3;font-size:14.5px}
+  .outcome b{display:block;color:#312e81;margin-bottom:2px}
+
+  /* executive briefing */
+  .briefing{padding:24px;margin-bottom:18px;display:flex;flex-direction:column;gap:20px}
+  .briefing h2{font-size:18px;display:flex;align-items:center;gap:10px}
+  .briefing h2 .tag{font-size:11.5px}
+  .briefing .why{font-size:15.5px;color:var(--ink);max-width:820px;margin:0}
+  .bh{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);margin:0 0 10px}
+  .kstats{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+  .kstat{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:#fcfcfe;display:flex;flex-direction:column;gap:6px}
+  .kstat .fig{font-size:24px;font-weight:800;letter-spacing:-.02em;color:var(--accent);line-height:1.1}
+  .kstat .txt{font-size:14px;color:var(--ink)}
+  .kstat .src{font-size:12.5px;color:var(--ink-2)}
+  .kstat .src a{color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+  .bcols{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .bcol{border-radius:12px;padding:16px;min-width:0}
+  .bcol.m{background:#f8fafc;border:1px solid var(--line)}
+  .bcol.n{background:var(--warn-soft);border:1px solid #fde68a}
+  .bcol.p{background:var(--ok-soft);border:1px solid #a7f3d0}
+  .bcol ul{margin:0;padding-left:18px;display:grid;gap:7px;font-size:14px;color:var(--ink)}
+  .note{font-size:12.5px;color:var(--ink-3);margin:0}
+
+  .topic{margin-bottom:14px;overflow:hidden}
+  .topic-h{width:100%;display:flex;align-items:center;gap:12px;padding:18px 20px;background:none;border:0;text-align:left;color:var(--ink)}
+  .topic-h h3{margin:0;font-size:16px;font-weight:700;flex:1}
+  .topic-h .count{font-size:13px;color:var(--ink-2);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .chev{transition:transform .2s;color:var(--ink-3);flex:none}
+  .topic.open .chev{transform:rotate(90deg)}
+  .topic-b{display:none;border-top:1px solid var(--line-2)}
+  .topic.open .topic-b{display:block}
+  .st{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--line-2)}
+  .st:last-child{border-bottom:0}
+  .st.checked{background:#fbfcff}
+  .st.checked .st-title{color:var(--ink-3);text-decoration:line-through}
+  .cb{appearance:none;width:22px;height:22px;flex:none;border:2px solid #cbd5e1;border-radius:7px;display:grid;place-items:center;transition:all .15s;margin:0;cursor:pointer;background:#fff}
+  .cb:checked{background:var(--ok);border-color:var(--ok)}
+  .cb:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+  .cb:focus-visible{outline:3px solid #c7d2fe;outline-offset:2px}
+  .st-title{flex:1;font-size:14.5px;font-weight:500;min-width:0}
+  .pts{font-size:12px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:99px;white-space:nowrap}
+  .st.checked .pts{color:var(--ok);background:var(--ok-soft)}
+  .links{display:flex;gap:8px;flex:none}
+  .lnk{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:7px 11px;border-radius:9px;border:1px solid var(--line);color:var(--ink-2);background:#fff;transition:all .15s}
+  .lnk:hover{border-color:#c7d2fe;color:var(--accent);background:var(--accent-soft)}
+  .lnk.vid:hover{border-color:#fecaca;color:#dc2626;background:#fef2f2}
+  .lnk svg{width:15px;height:15px}
+
+  .ghost{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 14px;font-weight:600;font-size:13px;color:var(--ink-2)}
+  .ghost:hover{color:var(--bad);border-color:#fecaca}
+  .danger{border:1px solid #fecaca;background:var(--bad-soft);color:var(--bad);border-radius:10px;padding:8px 14px;font-weight:600;font-size:13px}
+  .confirm{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);flex-wrap:wrap}
+  footer{padding:30px 0 50px;color:var(--ink-3);font-size:13px;text-align:center}
+  .hidden,[hidden]{display:none!important}
+
+  @media (max-width:900px){.road{grid-template-columns:1fr 1fr}.bcols{grid-template-columns:1fr}}
+  @media (max-width:860px){.stats{grid-template-columns:1fr 1fr}.stats .score-card{grid-column:1/-1}}
+  @media (max-width:560px){
+    .road{grid-template-columns:1fr}
+    .st{flex-wrap:wrap;gap:10px 12px}
+    .st-title{flex:1 1 calc(100% - 90px)}
+    .links{width:100%;padding-left:36px}
+    .lnk{flex:1;justify-content:center}
+    .mhead .meta{margin-left:0;text-align:left}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+
+<header class="topbar">
+  <div class="wrap">
+    <a href="#" class="brand" data-home><span class="logo">AI</span>Applied AI Learning Plan</a>
+    <div class="pill-score" title="Total score">★ <span id="topScore">0</span> / <span id="topMax">0</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="dashboard">
+    <div class="hero">
+      <div class="eyebrow">Learning Roadmap</div>
+      <h1>Hello Sandeep Sir 👋</h1>
+      <p class="lead">Here's our AI plan in five stages: foundations, applied AI with agents and our knowledge systems, agent engineering and governance, strategy and platform, and AI across ten industries. Click a stage to expand it, then open any module. Every subtopic is worth <b>5 marks</b>. Tick it off once it's done and the score updates.</p>
+    </div>
+
+    <div class="stats">
+      <div class="card stat score-card">
+        <div class="ring" id="ring"><span id="pct">0%</span></div>
+        <div style="flex:1">
+          <div class="label">Total Score</div>
+          <div class="value"><span id="score">0</span> <small>/ <span id="max">0</span></small></div>
+          <div class="bar"><i id="bar"></i></div>
+        </div>
+      </div>
+      <div class="card stat"><div class="label">Subtopics Completed</div><div class="value"><span id="doneCount">0</span> <small>/ <span id="totalCount">0</span></small></div></div>
+      <div class="card stat"><div class="label">Modules Completed</div><div class="value"><span id="modDone">0</span> <small>/ <span id="modTotal">0</span></small></div></div>
+      <div class="card stat"><div class="label">Stages</div><div class="value">5 <small>in sequence</small></div></div>
+    </div>
+
+
+    <section>
+      <div class="sec-head">
+        <div><h2>What we've learned so far</h2><p class="sub">Already completed before this plan.</p></div>
+      </div>
+      <div class="card learned"><div class="chips" id="learned"></div></div>
+    </section>
+
+    <section>
+      <div class="sec-head">
+        <div><h2>Stages &amp; modules</h2><p class="sub">Click a stage to expand it and see its modules. Click a module to open its topics, subtopics, reading material and videos.</p></div>
+        <div>
+          <button class="ghost" id="reset">Reset progress</button>
+          <span class="confirm" id="confirmBox" hidden>Clear all progress? <button class="danger" id="yes">Yes, reset</button><button class="ghost" id="no">Cancel</button></span>
+        </div>
+      </div>
+      <div id="modules"></div>
+    </section>
+  </div>
+
+  <div id="moduleView" class="hidden">
+    <div style="margin-top:24px"><button class="back" data-home>← All modules</button></div>
+    <div class="card mhead">
+      <div class="row">
+        <div class="mod-num" id="mvNum" style="width:52px;height:52px;font-size:20px;border-radius:14px">1</div>
+        <div style="flex:1;min-width:220px">
+          <div class="eyebrow" id="mvTag">Module</div>
+          <h1 id="mvTitle"></h1>
+          <p class="lead" id="mvDesc" style="font-size:15px"></p>
+        </div>
+        <div class="meta">
+          <div class="label" style="font-size:13px;color:var(--ink-2)">Module score</div>
+          <div class="value" style="font-size:26px;font-weight:800;font-variant-numeric:tabular-nums"><span id="mvScore">0</span> <small style="font-size:14px;color:var(--ink-3)">/ <span id="mvMax">0</span></small></div>
+        </div>
+      </div>
+      <div class="bar"><i id="mvBar"></i></div>
+    </div>
+    <div id="mvOutcome"></div>
+    <div id="mvBrief"></div>
+    <div id="mvTopics"></div>
+  </div>
+</main>
+
+<footer>Applied AI Learning Plan · Progress is saved in this browser · Market figures come from the reports linked in each briefing; check the latest edition before quoting them externally.</footer>
+
+<script>
+const YT = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+// A reading value that isn't a URL is treated as a web search for the best current material
+const READ = r => r.startsWith("http") ? r : "https://www.google.com/search?q=" + encodeURIComponent(r);
+const SL_GUIDE = "https://mohammadahmadlpu12222686.github.io/learningplan/supervised-learning.html";
+
+const LEARNED = [
+  "Python", "Supervised Learning", "Classification", "Regression",
+  "Unsupervised Learning", "Clustering", "Segmentation",
+  "In-depth EDA for Machine Learning", "Voice AI Agents", "RAG (Retrieval-Augmented Generation)",
+  "OKF", "LangChain", "MCP (Model Context Protocol)", "MCP Servers", "Lovable", "Vibe Coding with Claude Code",
+  "Agentic AI: Plan → Fetch → Act → Decide", "Knowledge Management System"
+];
+
+const GROUPS = [
+  { id:"foundations", title:"Stage 1 · Foundations", blurb:"Python, EDA, time series and the core of machine learning: supervised and unsupervised learning." },
+  { id:"applied", title:"Stage 2 · Applied AI: Agents, ML & Knowledge Systems", blurb:"Agents that use ML predictions, our knowledge management system, avatars and computer vision." },
+  { id:"build", title:"Stage 3 · Agent Engineering & Governance", blurb:"Governing agents safely, low-code workflows, and the LangChain / LangGraph / LangSmith ecosystem." },
+  { id:"strategy", title:"Stage 4 · Strategy & Platform", blurb:"Cutting AI cost, building once and reusing everywhere, plug-and-play agents, data security and our knowledge intelligence platform." },
+  { id:"fields", title:"Stage 5 · AI Across Various Fields", blurb:"Ten industries. Content is being prepared and will be added soon." },
+];
+
+// Subtopic: [title, reading URL or search query, video search query]
+// brief.stats: [figure, statement, source name, source URL]
+const MODULES = [
+  {
+id:"python", group:"foundations",
+    title:"Python Revision",
+    tag:"Revision",
+    desc:"Only the essentials we use every day in ML and agent work.",
+    outcome:"Write clean, idiomatic Python for data pipelines, ML scripts and agent tools without looking things up.",
+    topics:[
+      { title:"Core Python Essentials", subs:[
+        ["Data structures: list, dict, set, tuple", "https://docs.python.org/3/tutorial/datastructures.html", "python data structures list dict set tuple tutorial"],
+        ["Loops: for, while, range, break / continue", "https://docs.python.org/3/tutorial/controlflow.html", "python for while loops break continue tutorial"],
+        ["Loop patterns: enumerate, zip, nested loops, looping over dicts", "https://realpython.com/python-for-loop/", "python enumerate zip nested loops dictionary iteration"],
+        ["Functions, *args, **kwargs", "https://docs.python.org/3/tutorial/controlflow.html#defining-functions", "python functions args kwargs explained"],
+        ["Comprehensions (list / dict / set, with if-else and nesting)", "https://realpython.com/list-comprehension-python/", "python list dict comprehension if else nested tutorial"],
+        ["Error handling & exceptions", "https://docs.python.org/3/tutorial/errors.html", "python try except exception handling tutorial"],
+      ]},
+      { title:"Intermediate Python", subs:[
+        ["Classes & OOP basics", "https://docs.python.org/3/tutorial/classes.html", "python OOP classes objects tutorial"],
+        ["Decorators", "https://realpython.com/primer-on-python-decorators/", "python decorators explained"],
+        ["Generators & iterators", "https://realpython.com/introduction-to-python-generators/", "python generators yield explained"],
+        ["Type hints & Pydantic models", "https://docs.pydantic.dev/latest/", "python type hints pydantic tutorial"],
+        ["Async / await basics (for agents & APIs)", "https://realpython.com/async-io-python/", "python asyncio async await tutorial"],
+      ]},
+      { title:"Writing Code Short: Pythonic & Vectorized", subs:[
+        ["Lambda functions, map, filter, sorted with key", "https://realpython.com/python-lambda/", "python lambda map filter sorted key tutorial"],
+        ["Loop to one-liner: rewriting loops as comprehensions", "https://realpython.com/list-comprehension-python/", "convert for loop to list comprehension python one liner"],
+        ["NumPy vectorization: replace loops with array operations", "https://numpy.org/doc/stable/user/basics.broadcasting.html", "numpy vectorization vs loops broadcasting"],
+        ["NumPy boolean masks & np.where", "https://numpy.org/doc/stable/user/basics.indexing.html", "numpy boolean indexing np.where tutorial"],
+        ["Pandas apply, map & lambda on columns", "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html", "pandas apply map lambda tutorial"],
+        ["Pandas one-liners: loc conditions, query, assign, method chaining", "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html", "pandas method chaining query assign loc one liners"],
+      ]},
+      { title:"Python for Data", subs:[
+        ["NumPy essentials", "https://numpy.org/doc/stable/user/absolute_beginners.html", "numpy tutorial for data science"],
+        ["Pandas: select, filter, transform", "https://pandas.pydata.org/docs/user_guide/10min.html", "pandas tutorial data analysis"],
+        ["Pandas: groupby & aggregation", "https://pandas.pydata.org/docs/user_guide/groupby.html", "pandas groupby aggregation tutorial"],
+        ["Pandas: merge, join, concat", "https://pandas.pydata.org/docs/user_guide/merging.html", "pandas merge join concat tutorial"],
+        ["Virtual envs, files & JSON I/O", "https://docs.python.org/3/library/venv.html", "python virtual environment venv json file handling"],
+      ]},
+    ]
+  },
+  {
+id:"eda", group:"foundations",
+    title:"EDA Revision & Time Series EDA",
+    tag:"Revision + New",
+    desc:"Revise exploratory data analysis, then learn how EDA changes for time-ordered data.",
+    outcome:"Look at any dataset (tabular or time series) and quickly find trend, seasonality, outliers, missing data and useful features.",
+    topics:[
+      { title:"EDA Revision", subs:[
+        ["Missing values & data cleaning", "https://pandas.pydata.org/docs/user_guide/missing_data.html", "handling missing values pandas EDA"],
+        ["Univariate & bivariate analysis", "https://seaborn.pydata.org/tutorial.html", "univariate bivariate analysis EDA python seaborn"],
+        ["Outlier detection (IQR, Z-score)", "https://www.kaggle.com/learn/data-cleaning", "outlier detection IQR z-score python"],
+        ["Correlation & visual storytelling", "https://matplotlib.org/stable/users/explain/quick_start.html", "correlation heatmap EDA python matplotlib seaborn"],
+        ["Feature engineering & scaling", "https://scikit-learn.org/stable/modules/preprocessing.html", "feature engineering scaling encoding scikit-learn"],
+      ]},
+      { title:"Time Series Fundamentals", subs:[
+        ["Datetime index, resampling & rolling windows", "https://pandas.pydata.org/docs/user_guide/timeseries.html", "pandas time series resample rolling tutorial"],
+        ["Trend, seasonality & cycles", "https://otexts.com/fpp3/tspatterns.html", "time series trend seasonality cycle explained"],
+        ["Time series visualisation", "https://otexts.com/fpp3/graphics.html", "time series plots visualization python"],
+      ]},
+      { title:"Time Series EDA (Deep Dive)", subs:[
+        ["Decomposition (classical & STL)", "https://otexts.com/fpp3/decomposition.html", "STL decomposition time series python statsmodels"],
+        ["Stationarity & ADF test", "https://otexts.com/fpp3/stationarity.html", "stationarity ADF test time series python"],
+        ["Autocorrelation: ACF & PACF", "https://otexts.com/fpp3/acf.html", "ACF PACF plots explained time series"],
+        ["Lag, rolling & calendar features", "https://www.kaggle.com/learn/time-series", "lag features time series feature engineering python"],
+        ["Handling gaps, holidays & promotions", "https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.STL.html", "time series missing dates holidays promotions EDA"],
+      ]},
+    ]
+  },
+  {
+id:"time-series", group:"foundations",
+    title:"Time Series Prediction",
+    tag:"Project: Product Demand",
+    desc:"Fully applied: which algorithm to use where, how each works, and one end-to-end demand forecasting project.",
+    outcome:"Train, evaluate and serve a product demand forecasting model, and justify the algorithm choice for a given business problem.",
+    topics:[
+      { title:"Use Cases: Which Algorithm, Where & Why", subs:[
+        ["Real-world use cases (demand, sales, energy, finance, inventory)", "https://otexts.com/fpp3/intro.html", "time series forecasting real world use cases"],
+        ["Choosing an algorithm: statistical vs ML vs deep learning", "https://unit8co.github.io/darts/", "how to choose time series forecasting model"],
+        ["Evaluation metrics: MAE, RMSE, MAPE, sMAPE", "https://otexts.com/fpp3/accuracy.html", "forecast accuracy metrics MAE RMSE MAPE"],
+        ["Time series cross-validation & backtesting", "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html", "time series cross validation backtesting python"],
+      ]},
+      { title:"Algorithms & How They Work", subs:[
+        ["Baselines: naive, seasonal naive, moving average", "https://otexts.com/fpp3/simple-methods.html", "naive seasonal naive forecasting baseline"],
+        ["Exponential smoothing & Holt-Winters", "https://otexts.com/fpp3/expsmooth.html", "Holt Winters exponential smoothing python"],
+        ["ARIMA & SARIMA", "https://otexts.com/fpp3/arima.html", "ARIMA SARIMA explained python statsmodels"],
+        ["Prophet", "https://facebook.github.io/prophet/docs/quick_start.html", "facebook prophet forecasting tutorial python"],
+        ["ML models: XGBoost / LightGBM with lag features", "https://lightgbm.readthedocs.io/en/latest/", "LightGBM XGBoost time series forecasting python"],
+        ["Deep learning: LSTM & modern models (N-BEATS, TFT)", "https://github.com/Nixtla/neuralforecast", "LSTM N-BEATS temporal fusion transformer forecasting"],
+      ]},
+      { title:"Project: Product Demand Prediction", subs:[
+        ["Dataset & problem framing (store / item sales)", "https://www.kaggle.com/competitions/store-sales-time-series-forecasting", "product demand forecasting project python"],
+        ["EDA & feature pipeline for demand data", "https://www.kaggle.com/competitions/m5-forecasting-accuracy", "M5 forecasting EDA feature engineering"],
+        ["Train, tune & compare models", "https://github.com/Nixtla/statsforecast", "demand forecasting model comparison python"],
+        ["Experiment tracking with MLflow", "https://mlflow.org/docs/latest/index.html", "MLflow tutorial experiment tracking"],
+        ["Serve the model (FastAPI) + dashboard (Streamlit)", "https://fastapi.tiangolo.com/", "deploy ML model fastapi streamlit tutorial"],
+      ]},
+    ]
+  },
+  {
+id:"ml-foundations", group:"foundations",
+    title:"ML Foundations: Supervised & Unsupervised Learning",
+    tag:"Foundations",
+    desc:"A quick, decision-focused refresher on the two families of machine learning that sit under every prediction our agents make.",
+    outcome:"Look at any business problem and say whether it needs classification, regression, clustering or anomaly detection, and which model to start with.",
+    topics:[
+      { title:"Supervised Learning (learning from labelled answers)", subs:[
+        ["Our simple guide: every supervised model with analogies", SL_GUIDE, "supervised learning explained simply"],
+        ["Classification vs regression with business examples", "https://scikit-learn.org/stable/supervised_learning.html", "classification vs regression explained"],
+        ["Linear & logistic regression: the explainable baselines", "https://scikit-learn.org/stable/modules/linear_model.html", "linear vs logistic regression explained"],
+        ["Decision trees, Random Forest & Gradient Boosting", "https://scikit-learn.org/stable/modules/ensemble.html", "random forest vs gradient boosting explained"],
+        ["Evaluating models: train/test, cross-validation, metrics", "https://scikit-learn.org/stable/modules/model_evaluation.html", "model evaluation metrics precision recall explained"],
+      ]},
+      { title:"Unsupervised Learning (finding patterns without answers)", subs:[
+        ["Clustering: K-Means, DBSCAN, hierarchical", "https://scikit-learn.org/stable/modules/clustering.html", "kmeans dbscan hierarchical clustering explained"],
+        ["Customer segmentation with RFM + clustering", "customer segmentation RFM k-means python tutorial", "customer segmentation RFM kmeans python"],
+        ["Dimensionality reduction: PCA & UMAP", "https://scikit-learn.org/stable/modules/decomposition.html", "PCA UMAP explained visually"],
+        ["Anomaly detection: Isolation Forest, LOF", "https://scikit-learn.org/stable/modules/outlier_detection.html", "isolation forest anomaly detection python"],
+        ["Market-basket analysis (association rules)", "https://rasbt.github.io/mlxtend/user_guide/frequent_patterns/apriori/", "market basket analysis apriori python"],
+        ["Topic modelling & clustering text with embeddings", "https://maartengr.github.io/BERTopic/", "BERTopic topic modeling tutorial"],
+      ]},
+      { title:"Choosing the Right Tool", subs:[
+        ["Rules vs classic ML vs LLM: when each wins", "when to use machine learning vs LLM vs rules business", "when to use machine learning vs LLM"],
+        ["Turning a business question into an ML problem", "how to frame a business problem as a machine learning problem", "framing business problems for machine learning"],
+      ]},
+    ]
+  },
+  {
+id:"agentic-ml", group:"applied",
+    title:"Agentic AI + Machine Learning",
+    tag:"Core Concept",
+    desc:"How agents call ML models as tools, read predictions, and turn them into decisions.",
+    outcome:"Build an agent that calls a trained forecasting model as a tool and makes a justified business decision from the prediction.",
+    topics:[
+      { title:"Agent Foundations (Refresh)", subs:[
+        ["Agent patterns & workflows", "https://www.anthropic.com/research/building-effective-agents", "building effective AI agents patterns"],
+        ["Tool / function calling", "https://docs.anthropic.com/en/docs/build-with-claude/tool-use", "LLM tool calling function calling tutorial"],
+        ["Model Context Protocol (MCP)", "https://modelcontextprotocol.io/", "model context protocol MCP tutorial"],
+      ]},
+      { title:"ML Models as Agent Tools", subs:[
+        ["Saving & loading models (joblib / pickle)", "https://scikit-learn.org/stable/model_persistence.html", "save load scikit-learn model joblib"],
+        ["Exposing a model as an API / tool", "https://fastapi.tiangolo.com/", "serve ML model as API fastapi"],
+        ["Structured outputs: prediction + confidence", "https://docs.pydantic.dev/latest/", "LLM structured output pydantic"],
+        ["Agent calls the forecast tool", "https://github.com/langchain-ai/langgraph", "langgraph agent custom tool ML model"],
+      ]},
+      { title:"Prediction → Decision", subs:[
+        ["Decision rules & thresholds on predictions", "https://en.wikipedia.org/wiki/Reorder_point", "AI agent decision making from predictions"],
+        ["Handling uncertainty & prediction intervals", "https://otexts.com/fpp3/prediction-intervals.html", "forecast prediction intervals uncertainty"],
+        ["Human-in-the-loop approvals", "https://github.com/langchain-ai/langgraph", "langgraph human in the loop tutorial"],
+        ["Multi-agent: forecaster, planner, reviewer", "https://github.com/crewAIInc/crewAI", "multi agent system crewai tutorial"],
+      ]},
+    ]
+  },
+  {
+id:"kms-ml", group:"applied",
+    title:"Agentic AI + ML in the Knowledge Management System",
+    tag:"Integration",
+    desc:"Add predictions to our knowledge intelligence platform so agents decide using both company knowledge and forecasts.",
+    outcome:"Our KMS answers questions and also predicts and recommends actions, e.g. reorder stock for supply chain or flag expiring medicines for a pharmacy.",
+    topics:[
+      { title:"Architecture", subs:[
+        ["RAG + ML hybrid architecture", "https://www.pinecone.io/learn/retrieval-augmented-generation/", "RAG with machine learning predictions architecture"],
+        ["Connecting structured data (SQL / pgvector)", "https://github.com/pgvector/pgvector", "pgvector postgres RAG tutorial"],
+        ["Knowledge graphs for business entities", "https://github.com/microsoft/graphrag", "GraphRAG knowledge graph tutorial"],
+        ["Routing: knowledge question vs prediction question", "https://docs.llamaindex.ai/", "LLM query router agent tutorial"],
+      ]},
+      { title:"Domain Use Cases", subs:[
+        ["Supply chain: demand forecast → reorder decision", "https://en.wikipedia.org/wiki/Safety_stock", "AI supply chain demand forecasting inventory agent"],
+        ["Pharmacy: stock, expiry & demand alerts", "https://en.wikipedia.org/wiki/Economic_order_quantity", "pharmacy inventory management AI forecasting"],
+        ["Hierarchical forecasts (product / store / region)", "https://otexts.com/fpp3/hierarchical.html", "hierarchical forecasting explained"],
+        ["Explaining predictions to business users", "https://shap.readthedocs.io/en/latest/", "SHAP explainable AI tutorial"],
+      ]},
+      { title:"Build & Ship", subs:[
+        ["Implement prediction tools inside the KMS agent", "https://github.com/langchain-ai/langgraph", "langgraph agent RAG and tools project"],
+        ["Observability & evaluation of agent decisions", "https://langfuse.com/docs", "langfuse LLM observability tutorial"],
+        ["Scheduled retraining & monitoring drift", "https://mlflow.org/docs/latest/index.html", "ML model monitoring drift retraining"],
+      ]},
+    ]
+  },
+  {
+id:"avatars", group:"applied",
+    title:"Avatar Implementation for Agents",
+    tag:"Interface",
+    desc:"Put a talking avatar on any agent so the interface feels natural and easy to use.",
+    outcome:"Any of our agents (including the KMS agent) can speak through a real-time talking avatar in the browser.",
+    topics:[
+      { title:"Avatar Foundations", subs:[
+        ["How talking avatars work (TTS, lip-sync, rendering)", "https://github.com/met4citizen/TalkingHead", "how AI talking avatars work lip sync"],
+        ["Voice: speech-to-text & text-to-speech", "https://elevenlabs.io/docs", "speech to text text to speech AI agent tutorial"],
+        ["Browser speech APIs", "https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API", "web speech api javascript tutorial"],
+      ]},
+      { title:"Avatar Platforms", subs:[
+        ["HeyGen interactive / streaming avatar", "https://docs.heygen.com/", "HeyGen streaming avatar API tutorial"],
+        ["D-ID agents & streaming", "https://docs.d-id.com/", "D-ID streaming avatar API tutorial"],
+        ["Tavus conversational video", "https://docs.tavus.io/", "Tavus conversational video interface tutorial"],
+        ["Open-source: 3D avatar with Three.js", "https://threejs.org/docs/", "threejs 3D avatar lip sync talking head"],
+      ]},
+      { title:"Integration", subs:[
+        ["Real-time voice pipeline (LiveKit / Pipecat)", "https://docs.livekit.io/agents/", "livekit agents avatar tutorial"],
+        ["Connect avatar to our agent backend", "https://docs.pipecat.ai/", "pipecat AI avatar voice agent"],
+        ["Latency, UX & interruption handling", "https://docs.livekit.io/agents/", "low latency voice AI agent interruption handling"],
+      ]},
+    ]
+  },
+  {
+id:"computer-vision", group:"applied",
+    title:"Applied Computer Vision",
+    tag:"Project: Computer Vision",
+    desc:"Hands-on CV with OpenCV and modern detection models, ending in one applied project.",
+    outcome:"Build a working computer vision app (e.g. product counting, shelf monitoring or quality inspection) on images and live video.",
+    topics:[
+      { title:"OpenCV Fundamentals", subs:[
+        ["Reading images & video, colour spaces", "https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html", "OpenCV python tutorial basics images video"],
+        ["Image processing: thresholding, blur, morphology", "https://docs.opencv.org/4.x/d2/d96/tutorial_py_table_of_contents_imgproc.html", "OpenCV thresholding blurring morphology tutorial"],
+        ["Edges, contours & shape detection", "https://docs.opencv.org/4.x/d3/d05/tutorial_py_table_of_contents_contours.html", "OpenCV contours edge detection python"],
+        ["Webcam / real-time video processing", "https://docs.opencv.org/4.x/dd/d43/tutorial_py_video_display.html", "OpenCV webcam real time python"],
+      ]},
+      { title:"Deep Learning for Vision", subs:[
+        ["Image classification with transfer learning", "https://pytorch.org/vision/stable/index.html", "transfer learning image classification pytorch"],
+        ["Object detection with YOLO", "https://docs.ultralytics.com/", "YOLO object detection ultralytics tutorial"],
+        ["Training YOLO on a custom dataset", "https://docs.ultralytics.com/modes/train/", "train YOLO custom dataset roboflow"],
+        ["Object tracking & counting", "https://docs.ultralytics.com/modes/track/", "YOLO object tracking counting tutorial"],
+        ["OCR & pose / face with MediaPipe", "https://ai.google.dev/edge/mediapipe/solutions/guide", "mediapipe python tutorial pose face hands"],
+      ]},
+      { title:"Project: Applied Computer Vision", subs:[
+        ["Pick use case & collect / label data", "https://docs.roboflow.com/", "roboflow annotate dataset tutorial"],
+        ["Build the detection + counting pipeline", "https://supervision.roboflow.com/", "supervision roboflow object counting zone"],
+        ["Wrap it in a simple app (Streamlit)", "https://docs.streamlit.io/", "streamlit computer vision app YOLO"],
+      ]},
+    ]
+  },
+  {
+id:"agent-governance", group:"build",
+    title:"Agent Governance: Security, Telemetry & LangSmith",
+    tag:"Strategy",
+    desc:"Make every agent safe, observable and accountable: threat model, guardrails, tracing, evaluation and governance frameworks.",
+    outcome:"Every agent we ship has guardrails, full tracing (LangSmith / Langfuse), an evaluation suite, cost monitoring and a named owner.",
+    brief:{
+      why:"Agents don't just answer, they act: they send emails, update records and spend money. That makes them a new attack surface and a new source of business risk. Governance is what lets a CEO say yes to agents in production: we can see what every agent did, why, what it cost, and stop it if needed.",
+      stats:[
+        ["#1 risk","Prompt injection tops the OWASP Top 10 for LLM Applications 2025; “Excessive Agency” was expanded because of agentic designs.","OWASP GenAI Security Project","https://genai.owasp.org/llm-top-10/"],
+        ["63%","of breached organisations had no AI governance policy or were still developing one.","IBM, Cost of a Data Breach 2025","https://www.ibm.com/think/x-force/2025-cost-of-a-data-breach-navigating-ai"],
+        ["40%+","of agentic AI projects expected to be cancelled by end of 2027, citing cost, unclear value or inadequate risk controls.","Gartner press release, Jun 2025","https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027"],
+      ],
+      market:["Tracing & evaluation platforms: LangSmith, Langfuse, Arize Phoenix","OpenTelemetry standards for GenAI traces","Guardrail models & frameworks: Llama Guard, NeMo Guardrails, Guardrails AI","Red-teaming tools: promptfoo, garak"],
+      needs:["See every step, tool call, cost and latency of an agent run","Block harmful actions; require human approval for risky ones","Prove quality with repeatable evals","Map to frameworks customers trust: NIST AI RMF, ISO/IEC 42001, EU AI Act"],
+      play:["Governance built into the agent core (Plug-and-Play Agents module)","A standard “agent passport”: owner, tools allowed, data allowed, eval score, cost budget","Monthly governance report per customer as a value-add"],
+    },
+    topics:[
+      { title:"Threats to Agents", subs:[
+        ["OWASP Top 10 for LLM Applications", "https://genai.owasp.org/llm-top-10/", "OWASP top 10 LLM explained"],
+        ["Prompt injection (direct & indirect) and defences", "prompt injection defenses AI agents indirect", "prompt injection explained"],
+        ["Excessive agency & least-privilege tools", "excessive agency LLM least privilege tools", "AI agent security least privilege"],
+      ]},
+      { title:"Guardrails & Human Control", subs:[
+        ["Input / output guardrails (NeMo Guardrails, Guardrails AI)", "https://github.com/NVIDIA/NeMo-Guardrails", "NeMo guardrails tutorial"],
+        ["Safety classifiers (Llama Guard)", "https://huggingface.co/meta-llama/Llama-Guard-3-8B", "Llama Guard explained"],
+        ["Human-in-the-loop approvals for risky actions", "https://github.com/langchain-ai/langgraph", "langgraph human in the loop"],
+      ]},
+      { title:"Telemetry & Observability", subs:[
+        ["LangSmith: tracing, monitoring & datasets", "https://docs.smith.langchain.com/", "LangSmith tutorial tracing"],
+        ["Langfuse: open-source, self-hostable alternative", "https://langfuse.com/docs", "langfuse tutorial"],
+        ["OpenTelemetry GenAI conventions", "https://opentelemetry.io/docs/specs/semconv/gen-ai/", "opentelemetry LLM observability"],
+        ["Cost, latency & token dashboards per customer", "LLM cost monitoring dashboard per tenant", "LLM cost monitoring"],
+      ]},
+      { title:"Evaluation & Red-Teaming", subs:[
+        ["LLM & agent evals (LangSmith, Ragas)", "https://docs.ragas.io/", "RAG evaluation ragas tutorial"],
+        ["Automated red-teaming with promptfoo / garak", "https://www.promptfoo.dev/docs/red-team/", "LLM red teaming tutorial"],
+      ]},
+      { title:"Governance Frameworks", subs:[
+        ["NIST AI Risk Management Framework", "https://www.nist.gov/itl/ai-risk-management-framework", "NIST AI RMF explained"],
+        ["ISO/IEC 42001 AI management system", "https://www.iso.org/standard/81230.html", "ISO 42001 explained"],
+        ["EU AI Act: risk tiers & obligations", "https://artificialintelligenceact.eu/", "EU AI Act explained"],
+      ]},
+    ]
+  },
+  {
+id:"low-code", group:"build",
+    title:"Low-Code / No-Code Agents & Workflows",
+    tag:"Build",
+    desc:"Build agents and automations visually, know the enterprise platforms customers already own, and decide when low-code beats custom code.",
+    outcome:"Prototype an agent workflow in hours with n8n / Langflow / Dify, and know when to move it to code for scale, security or cost.",
+    brief:{
+      why:"Many customers want quick wins and already pay for Microsoft, Google or Salesforce. Low-code lets us demo in a day and lets business teams own simple automations. Code is still needed for scale, security, unit cost and IP. A leader needs to know where the line is.",
+      stats:[
+        ["70%","of new enterprise applications were forecast to use low-code or no-code technologies by 2025 (up from under 25% in 2020).","Gartner, as reported by Computerworld","https://www.computerworld.com/article/1612895/how-to-build-a-citizen-development-workforce.html"],
+      ],
+      market:["Workflow automation with AI steps: n8n, Make, Zapier","Visual agent/RAG builders: Langflow, Flowise, Dify","Enterprise agent builders: Microsoft Copilot Studio, Google Vertex AI Agent Builder, Salesforce Agentforce, AWS Bedrock Agents","AI app builders: Lovable, Bolt, v0, Retool"],
+      needs:["Fast demos and proofs of concept","Business users editing simple flows themselves","Governance: who built what, with which data"],
+      play:["Use n8n / Dify for rapid prototypes, then harden in code","Package our MCP connectors so they work inside customers' low-code tools","Offer “citizen builder” templates on top of our platform"],
+    },
+    topics:[
+      { title:"Workflow Automation with AI", subs:[
+        ["n8n: workflows & AI agent nodes", "https://docs.n8n.io/advanced-ai/", "n8n AI agent tutorial"],
+        ["Make & Zapier for business automations", "https://www.make.com/en/help", "make.com AI automation tutorial"],
+      ]},
+      { title:"Visual Agent & RAG Builders", subs:[
+        ["Langflow", "https://docs.langflow.org/", "Langflow tutorial"],
+        ["Flowise", "https://docs.flowiseai.com/", "Flowise AI tutorial"],
+        ["Dify", "https://docs.dify.ai/", "Dify AI tutorial"],
+      ]},
+      { title:"Enterprise Agent Platforms", subs:[
+        ["Microsoft Copilot Studio", "https://learn.microsoft.com/en-us/microsoft-copilot-studio/", "Copilot Studio tutorial agents"],
+        ["Google Vertex AI Agent Builder", "https://cloud.google.com/products/agent-builder", "Vertex AI Agent Builder tutorial"],
+        ["Salesforce Agentforce & AWS Bedrock Agents", "https://aws.amazon.com/bedrock/agents/", "Agentforce vs Bedrock agents"],
+      ]},
+      { title:"Low-Code vs Code: The Decision", subs:[
+        ["App builders: Lovable, v0, Retool", "https://docs.lovable.dev/", "Lovable tutorial build app"],
+        ["Lock-in, scale, security & cost trade-offs", "low code vs custom code AI agents trade-offs enterprise", "low code vs custom code"],
+      ]},
+    ]
+  },
+  {
+id:"lang-ecosystem", group:"build",
+    title:"The Lang* Ecosystem: LangChain, LangGraph & LangSmith",
+    tag:"Build",
+    desc:"Go beyond LangChain basics: stateful agents with LangGraph, observability with LangSmith, deployment, and how it compares with other frameworks.",
+    outcome:"Choose the right framework for a project and build a stateful, observable LangGraph agent with memory and human approval steps.",
+    topics:[
+      { title:"LangChain Refresh", subs:[
+        ["Models, prompts, tools & structured output", "https://python.langchain.com/docs/introduction/", "LangChain tutorial latest"],
+        ["Retrievers & RAG chains", "https://python.langchain.com/docs/tutorials/rag/", "LangChain RAG tutorial"],
+      ]},
+      { title:"LangGraph: Stateful Agents", subs:[
+        ["Graphs: state, nodes, edges", "https://github.com/langchain-ai/langgraph", "LangGraph tutorial beginners"],
+        ["Memory & checkpoints (persistence)", "LangGraph persistence checkpointer memory", "LangGraph memory checkpoint"],
+        ["Human-in-the-loop & interrupts", "LangGraph human in the loop interrupt", "LangGraph human in the loop"],
+        ["Multi-agent: supervisor & swarm patterns", "LangGraph multi agent supervisor", "LangGraph multi agent supervisor"],
+      ]},
+      { title:"LangSmith & Deployment", subs:[
+        ["Tracing, datasets & evals in LangSmith", "https://docs.smith.langchain.com/", "LangSmith evaluation tutorial"],
+        ["Deploying LangGraph agents (Platform / FastAPI)", "deploy LangGraph agent production FastAPI", "deploy langgraph agent"],
+      ]},
+      { title:"Alternatives & When to Use Them", subs:[
+        ["LlamaIndex for document-heavy RAG", "https://docs.llamaindex.ai/", "LlamaIndex tutorial"],
+        ["CrewAI for role-based crews", "https://github.com/crewAIInc/crewAI", "CrewAI tutorial"],
+        ["OpenAI Agents SDK & Google ADK", "https://openai.github.io/openai-agents-python/", "OpenAI agents SDK tutorial"],
+        ["Claude Agent SDK", "Claude Agent SDK documentation", "Claude Agent SDK tutorial"],
+      ]},
+    ]
+  },
+  {
+id:"cost-strategy", group:"strategy",
+    title:"Strategy: Cutting the Cost of Our AI Stack",
+    tag:"Strategy",
+    desc:"Small language models, open-source and self-hosted models, our own STT/TTS, fine-tuning our own LLM, and private per-customer deployments.",
+    outcome:"A clear cost playbook: which workloads stay on paid frontier APIs, which move to small or self-hosted models, and how we offer customers fully private deployments.",
+    brief:{
+      why:"AI cost grows with every user, every call and every token. Capability per rupee is falling very fast, so the winners are the teams that route each task to the cheapest model that is good enough, own their voice and domain models where volume justifies it, and sell private deployment as a premium.",
+      stats:[
+        ["280× cheaper","Cost of GPT-3.5-level performance fell from about $20 to $0.07 per million tokens between Nov 2022 and Oct 2024.","Stanford HAI, AI Index 2025","https://hai.stanford.edu/ai-index/2025-ai-index-report"],
+        ["3× by 2027","Gartner predicts organisations will use small, task-specific AI models at least three times more than general-purpose LLMs.","Gartner press release, Apr 2025","https://www.gartner.com/en/newsroom/press-releases/2025-04-09-gartner-predicts-by-2027-organizations-will-use-small-task-specific-ai-models-three-times-more-than-general-purpose-large-language-models"],
+        ["40%+","of agentic AI projects will be cancelled by end of 2027, with escalating cost named as a top reason.","Gartner press release, Jun 2025","https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027"],
+      ],
+      market:["Open-weight models (Llama, Qwen, Mistral, Gemma, DeepSeek, Phi) now handle many routine tasks well","Fast open-source inference servers (vLLM, SGLang, Ollama, llama.cpp)","Open speech models: Whisper / faster-whisper for STT; Piper, Kokoro, XTTS and AI4Bharat models for TTS and Indian languages","Cheap fine-tuning with LoRA / QLoRA on a single GPU"],
+      needs:["Know cost per conversation / per task, not just the monthly bill","Decide where data may go: public API, our cloud, or the customer's own servers","Find the API-vs-GPU break-even for each workload","Keep quality measured with evals so savings don't silently hurt accuracy"],
+      play:["A model-router layer in our platform: frontier model only when needed","Self-hosted STT/TTS for our voice agents (high volume = biggest saving)","Fine-tuned domain SLMs as our own IP, reused across customers","“Private edition”: dedicated deployment + private Git repo per customer as a premium tier"],
+    },
+    topics:[
+      { title:"Know the Bill: AI Unit Economics", subs:[
+        ["Token economics & cost per task / per conversation", "LLM cost per conversation token economics calculation", "LLM token cost optimization explained"],
+        ["Prompt caching & batch processing", "https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching", "prompt caching LLM cost reduction"],
+        ["Model routing & cascades (cheap model first)", "https://github.com/lm-sys/RouteLLM", "LLM model routing cost reduction"],
+        ["Build vs buy and total cost of ownership", "LLM self-hosting vs API total cost of ownership analysis", "self host LLM vs API cost comparison"],
+      ]},
+      { title:"Small Language Models & Open-Source", subs:[
+        ["The open-weight landscape & how to compare models", "https://lmarena.ai/leaderboard", "best open source LLM comparison"],
+        ["Small language models: where they beat big ones", "small language models enterprise use cases vs LLM", "small language models explained enterprise"],
+        ["Quantisation (4-bit / 8-bit) to run on smaller GPUs", "https://github.com/ggml-org/llama.cpp", "LLM quantization explained GGUF"],
+        ["Distillation: teaching a small model from a big one", "knowledge distillation LLM small model guide", "LLM distillation explained"],
+      ]},
+      { title:"Self-Hosting Models", subs:[
+        ["vLLM: production-grade open-model serving", "https://docs.vllm.ai/", "vLLM tutorial deploy LLM"],
+        ["Ollama & llama.cpp for local / edge", "https://ollama.com/", "ollama tutorial local LLM"],
+        ["GPU sizing, autoscaling & utilisation", "LLM inference GPU sizing guide memory throughput", "GPU sizing for LLM inference"],
+      ]},
+      { title:"Self-Hosted Voice: STT & TTS", subs:[
+        ["Speech-to-text with Whisper / faster-whisper", "https://github.com/SYSTRAN/faster-whisper", "faster whisper self hosted speech to text"],
+        ["Open-source TTS: Piper, Kokoro, XTTS", "https://github.com/rhasspy/piper", "open source text to speech self hosted"],
+        ["Indian-language speech models (AI4Bharat)", "https://ai4bharat.iitm.ac.in/", "AI4Bharat Indic speech models"],
+      ]},
+      { title:"Fine-Tuning Our Own LLM", subs:[
+        ["When to fine-tune vs RAG vs prompting", "fine-tuning vs RAG vs prompt engineering when to use", "fine tuning vs RAG explained"],
+        ["LoRA / QLoRA with Hugging Face PEFT", "https://huggingface.co/docs/peft/index", "LoRA QLoRA fine tuning tutorial"],
+        ["Fast fine-tuning with Unsloth & TRL", "https://github.com/unslothai/unsloth", "unsloth fine tuning tutorial"],
+        ["Building training data & evaluating the fine-tune", "https://huggingface.co/docs/trl/index", "LLM fine tuning dataset preparation evaluation"],
+      ]},
+      { title:"Private Deployments per Customer", subs:[
+        ["Single-tenant, VPC & on-prem deployment models", "single tenant vs multi tenant SaaS on-prem AI deployment", "single tenant vs multi tenant explained"],
+        ["Private Git per customer (GitLab / Gitea / GitHub Enterprise)", "https://about.gitea.com/", "self hosted git server gitea gitlab"],
+        ["Containers & Kubernetes for repeatable installs", "https://kubernetes.io/docs/home/", "kubernetes explained for beginners"],
+        ["Air-gapped / offline AI deployments", "air-gapped LLM deployment enterprise", "air gapped AI deployment"],
+      ]},
+    ]
+  },
+  {
+id:"build-once", group:"strategy",
+    title:"Build Once, Reuse Everywhere: Our Reusable AI Platform",
+    tag:"Strategy",
+    desc:"Identify the parts nearly every solution needs, build them once as products, and assemble new customer solutions from them.",
+    outcome:"A catalogue of shared building blocks with owners and versions, so each new project starts 60–80% done instead of from zero.",
+    brief:{
+      why:"Almost every solution we deliver repeats the same parts: login and roles, document ingestion, RAG, chat UI, voice, dashboards, audit logs, usage tracking. Rebuilding them per customer wastes development hours, multiplies bugs and makes security uneven. Building them once as versioned, documented components turns every new project into assembly work.",
+      market:["Platform engineering & internal developer portals (Backstage)","Monorepos with shared packages (Nx, Turborepo, uv workspaces)","Project templates (Cookiecutter, Copier) that create a ready-to-run app in minutes","Design systems & component libraries (shadcn/ui, Storybook)"],
+      needs:["A clear list of which components are “core” vs customer-specific","Owners, versioning and release notes for each component","Config over code: customers differ by settings, not forks","A way to measure reuse and hours saved"],
+      play:["Core kit: auth & RBAC, tenant manager, file/document ingestion, RAG service, chat & voice UI, analytics, audit log, billing/usage metering","Starter template that creates a new customer project with all of it wired in","Track “hours saved per project” as a leadership KPI"],
+    },
+    topics:[
+      { title:"Find What Repeats", subs:[
+        ["Audit past projects: list repeated features", "how to identify reusable components across software projects", "identifying reusable components software"],
+        ["The core kit: auth, tenants, ingestion, RAG, chat, voice, audit, billing", "AI platform core components multi-tenant SaaS architecture", "AI platform architecture components"],
+        ["Prioritise by reuse × effort saved", "prioritization matrix platform engineering reuse", "platform engineering prioritization"],
+      ]},
+      { title:"Architect for Reuse", subs:[
+        ["Monorepo & shared packages", "https://monorepo.tools/", "monorepo explained"],
+        ["Python workspaces with uv", "https://docs.astral.sh/uv/concepts/projects/workspaces/", "uv workspaces python monorepo"],
+        ["API-first services with OpenAPI", "https://swagger.io/specification/", "API first design OpenAPI explained"],
+        ["Config over code (12-factor)", "https://12factor.net/config", "twelve factor app explained"],
+        ["Reusable UI components & design system", "https://storybook.js.org/docs", "design system component library storybook"],
+      ]},
+      { title:"Ship & Govern Shared Components", subs:[
+        ["Project templates with Cookiecutter / Copier", "https://copier.readthedocs.io/", "cookiecutter project template python"],
+        ["Semantic versioning & release notes", "https://semver.org/", "semantic versioning explained"],
+        ["Internal developer portal (Backstage)", "https://backstage.io/docs/overview/what-is-backstage", "backstage developer portal explained"],
+        ["Measuring delivery speed (DORA metrics)", "https://dora.dev/", "DORA metrics explained"],
+      ]},
+    ]
+  },
+  {
+id:"plug-play-agents", group:"strategy",
+    title:"Domain-Independent, Plug-and-Play Agents",
+    tag:"Strategy",
+    desc:"Design agents once with a domain-neutral core, then plug in a customer's knowledge, tools and rules as configuration instead of rebuilding.",
+    outcome:"An agent framework where a new customer agent = core agent + domain pack (prompts, tools, knowledge, policies), deployable in days.",
+    brief:{
+      why:"Agents are moving into every enterprise application, and buyers are getting less patient with custom projects that don't reach production. A reusable agent core with swappable domain packs lets us serve many customers from one codebase, improve every customer at once, and avoid the cost spiral that kills agent projects.",
+      stats:[
+        ["40% by 2026","of enterprise applications will feature task-specific AI agents, up from under 5% in 2025.","Gartner press release, Aug 2025","https://www.gartner.com/en/newsroom/press-releases/2025-08-26-gartner-predicts-40-percent-of-enterprise-apps-will-feature-task-specific-ai-agents-by-2026-up-from-less-than-5-percent-in-2025"],
+        ["62% / 23%","62% of organisations are at least experimenting with AI agents, but only about 23% are scaling them anywhere.","McKinsey, The State of AI 2025","https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai"],
+      ],
+      market:["Reusable connectors via MCP servers","Agent-to-agent protocols (A2A) so agents from different vendors can cooperate","Packaged agent “skills” and prompt registries","Agent marketplaces inside Salesforce, Microsoft and Google platforms"],
+      needs:["Same agent must respect each customer's data, tools and approval rules","Fast onboarding: days, not months","Per-customer evaluation so quality is proven before go-live"],
+      play:["Agent core: planner, memory, tool router, guardrails, telemetry","Domain packs: supply chain, pharmacy, procurement, HR, healthcare…","Library of MCP connectors (ERP, CRM, email, SharePoint, databases) reused across customers"],
+    },
+    topics:[
+      { title:"Agent Core vs Domain Pack", subs:[
+        ["Patterns for effective agents", "https://www.anthropic.com/research/building-effective-agents", "building effective AI agents patterns"],
+        ["Separating core logic from domain config (prompts, tools, policies)", "domain agnostic AI agent architecture configuration driven", "configurable AI agent architecture"],
+        ["Packaging know-how as reusable agent skills", "https://docs.anthropic.com/en/docs/agents-and-tools/agent-skills/overview", "agent skills explained"],
+      ]},
+      { title:"Reusable Connectors & Interoperability", subs:[
+        ["MCP servers as plug-and-play connectors", "https://modelcontextprotocol.io/", "build MCP server tutorial"],
+        ["Agent-to-Agent (A2A) protocol", "https://github.com/a2aproject/A2A", "A2A agent to agent protocol explained"],
+        ["Connector library: ERP, CRM, email, files, databases", "MCP server registry enterprise connectors", "MCP servers for enterprise systems"],
+      ]},
+      { title:"Multi-Customer Operation", subs:[
+        ["Per-tenant config, knowledge bases & permissions", "multi-tenant AI agent architecture per tenant configuration", "multi tenant AI agents"],
+        ["Prompt & version management", "https://langfuse.com/docs/prompts/get-started", "prompt management versioning LLM"],
+        ["Per-customer evaluation suites before go-live", "https://www.promptfoo.dev/docs/intro/", "LLM evaluation promptfoo tutorial"],
+      ]},
+    ]
+  },
+  {
+id:"data-security", group:"strategy",
+    title:"Data Security, Encryption & Customer Privacy",
+    tag:"Strategy",
+    desc:"Keep every customer's data encrypted, isolated and private: between them and us only.",
+    outcome:"A security baseline we apply to every product: encryption everywhere, tenant isolation, PII protection, key management and a compliance roadmap.",
+    brief:{
+      why:"Customers hand us contracts, patient records, financials and IP. One leak can end a customer relationship, and AI adds new paths for data to escape (prompts, logs, third-party APIs). Security done once in the shared platform is cheaper and stronger than security re-done per project, and it is a selling point in every enterprise deal.",
+      stats:[
+        ["$4.44M","global average cost of a data breach in 2025 (US average: a record $10.22M).","IBM, Cost of a Data Breach 2025","https://www.ibm.com/reports/data-breach"],
+        ["97%","of organisations that had an AI-related security incident lacked proper AI access controls.","IBM, Cost of a Data Breach 2025","https://www.ibm.com/think/x-force/2025-cost-of-a-data-breach-navigating-ai"],
+        ["+$670K","higher breach cost for organisations with high levels of “shadow AI” (unsanctioned AI use).","IBM, Cost of a Data Breach 2025","https://www.ibm.com/think/x-force/2025-cost-of-a-data-breach-navigating-ai"],
+      ],
+      market:["Bring-your-own-key (BYOK) encryption is now a standard enterprise ask","Zero-data-retention terms with model providers","Confidential computing & private model hosting","Compliance badges (SOC 2, ISO 27001, HIPAA) as entry tickets to enterprise deals"],
+      needs:["Encryption in transit and at rest, with customer-controlled keys for sensitive clients","Hard isolation between customers (no data mixing)","PII/PHI never sent to public APIs without masking","Audit logs of who accessed what, and when"],
+      play:["Security built into the core kit, not added per project","Private edition: customer's cloud, customer's keys, customer's Git","India's DPDP Act 2023 and GDPR readiness as a sales differentiator"],
+    },
+    topics:[
+      { title:"Encryption & Key Management", subs:[
+        ["Encryption in transit: TLS done right", "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Security_Cheat_Sheet.html", "TLS explained simply"],
+        ["Encryption at rest: AES-256, envelope encryption", "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html", "envelope encryption explained"],
+        ["Key management: KMS, HSM, BYOK / HYOK", "https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html", "BYOK bring your own key explained"],
+        ["Secrets management with Vault", "https://developer.hashicorp.com/vault/docs", "hashicorp vault tutorial"],
+      ]},
+      { title:"Isolation & Access Control", subs:[
+        ["Tenant isolation patterns (silo / pool / bridge)", "SaaS tenant isolation strategies silo pool bridge", "SaaS tenant isolation explained"],
+        ["Row-level security in Postgres", "https://www.postgresql.org/docs/current/ddl-rowsecurity.html", "postgres row level security multi tenant"],
+        ["RBAC / ABAC and least privilege", "RBAC vs ABAC access control explained", "RBAC vs ABAC"],
+        ["Permission-aware RAG (respect document access)", "permission aware RAG document level access control", "RAG access control permissions"],
+      ]},
+      { title:"Privacy for AI Systems", subs:[
+        ["PII / PHI detection & masking with Presidio", "https://microsoft.github.io/presidio/", "Microsoft Presidio PII redaction tutorial"],
+        ["Zero data retention & private model endpoints", "LLM API zero data retention enterprise private endpoint", "LLM data privacy enterprise"],
+        ["Confidential computing for AI", "confidential computing AI inference explained", "confidential computing explained"],
+      ]},
+      { title:"Compliance & Secure Development", subs:[
+        ["ISO 27001 & SOC 2: what customers ask for", "https://www.iso.org/standard/27001", "ISO 27001 vs SOC 2 explained"],
+        ["India DPDP Act 2023 & GDPR essentials", "India DPDP Act 2023 summary obligations data fiduciary", "DPDP Act 2023 explained"],
+        ["Secret scanning & dependency scanning in CI", "https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning", "secret scanning dependency scanning CI"],
+        ["Pen-testing & security reviews before go-live", "penetration testing AI application checklist", "AI application penetration testing"],
+      ]},
+    ]
+  },
+  {
+id:"ind-knowledge", group:"strategy",
+    title:"Knowledge Intelligence Platforms (Cross-Industry)",
+    tag:"Strategy",
+    desc:"Our core product category: enterprise knowledge, search and agents that work across every industry above.",
+    outcome:"A clear positioning for our KIP against Glean, Microsoft Copilot and Google, with the features that make us different.",
+    brief:{
+      why:"Every company has the same problem: knowledge scattered across files, email, chats and people. Finding it wastes a large share of the week. A knowledge platform that also predicts and acts (not just searches) is the base layer for every industry use case in this plan.",
+      stats:[
+        ["~20%","of the workweek is spent looking for internal information or tracking down colleagues who can help.","McKinsey Global Institute, The social economy","https://www.mckinsey.com/industries/technology-media-and-telecommunications/our-insights/the-social-economy"],
+        ["88% / 39%","88% of organisations use AI regularly, but only 39% report enterprise-level EBIT impact: the gap is turning AI into workflows.","McKinsey, The State of AI 2025","https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai"],
+      ],
+      market:["Enterprise search & assistants (Glean, Microsoft 365 Copilot, Google's enterprise agents)","Knowledge graphs and GraphRAG","Agentic RAG that plans multi-step research","Meeting and email knowledge capture"],
+      needs:["Permission-aware answers (respect who can see what)","Citations and freshness (live sync with SharePoint, Drive, Confluence)","Private deployment option","Usage analytics that prove ROI"],
+      play:["Predictions + actions on top of search (our differentiator)","Domain packs per industry (see AI Across Fields)","Voice and avatar interfaces (Avatars module)","Private edition for regulated customers"],
+    },
+    topics:[
+      { title:"Core Capabilities", subs:[
+        ["Connectors & live sync", "enterprise search connectors SharePoint Google Drive sync RAG", "enterprise search connectors"],
+        ["Permission-aware retrieval", "permission aware RAG enterprise search ACL", "RAG permissions"],
+        ["GraphRAG & knowledge graphs", "https://github.com/microsoft/graphrag", "GraphRAG explained"],
+        ["Agentic RAG", "agentic RAG explained multi step retrieval", "agentic RAG explained"],
+      ]},
+      { title:"Differentiate & Sell", subs:[
+        ["Competitive landscape: Glean, Copilot, Google", "Glean vs Microsoft Copilot vs Google enterprise search comparison", "Glean vs Copilot"],
+        ["Measuring ROI: time saved, deflection, adoption", "measure ROI enterprise AI knowledge assistant metrics", "measuring ROI of AI"],
+      ]},
+    ]
+  },
+  { id:"ind-healthcare", group:"fields", title:"AI in Healthcare", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-pharma", group:"fields", title:"AI in Pharma & Life Sciences", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-supply-chain", group:"fields", title:"AI in Supply Chain & Logistics", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-procurement", group:"fields", title:"AI in Procurement & Vendor Management", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-investment-banking", group:"fields", title:"AI in Investment Banking & Capital Markets", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-marketing", group:"fields", title:"AI in Marketing & Sales", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-retail", group:"fields", title:"AI in Retail & E-commerce", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-manufacturing", group:"fields", title:"AI in Manufacturing", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-energy", group:"fields", title:"AI in the Energy Sector", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-insurance", group:"fields", title:"AI in Insurance", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+
+];
+
+const POINTS = 5;
+const KEY = "applied-ai-plan-progress-v2";
+let done = {};
+try { done = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { done = {}; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch (e) {} };
+// Keys use module id + titles, so reordering modules later keeps everyone's progress
+const id = (mi, ti, si) => { const m = MODULES[mi], t = m.topics[ti]; return `${m.id}|${t.title}|${t.subs[si][0]}`; };
+
+const ICON_READ = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2z"/><path d="M22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/></svg>';
+const ICON_VID = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>';
+const ICON_CHEV = '<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>';
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+
+function modStats(mi) {
+  let total = 0, n = 0;
+  MODULES[mi].topics.forEach((t, ti) => t.subs.forEach((_, si) => { total++; if (done[id(mi, ti, si)]) n++; }));
+  return { total, n };
+}
+
+function modCard(m, mi) {
+  if (m.soon) return `<div class="mod soon" aria-disabled="true">
+    <div class="mod-top"><span class="mod-num">${mi + 1}</span><span class="tag soon">Yet to come</span></div>
+    <h3>${esc(m.title)}</h3>
+    <p>${esc(m.desc)}</p>
+  </div>`;
+  const s = modStats(mi), complete = s.n === s.total, pct = Math.round(s.n / s.total * 100);
+  return `<a href="#module-${mi + 1}" class="mod${complete ? " done" : ""}">
+    <div class="mod-top"><span class="mod-num">${complete ? "✓" : mi + 1}</span><span class="tag${m.brief ? " brief" : ""}">${esc(m.tag)}${m.brief ? " · Briefing" : ""}</span></div>
+    <h3>${esc(m.title)}</h3>
+    <p>${esc(m.desc)}</p>
+    <div>
+      <div class="mod-foot"><span>${m.topics.length} topics · ${s.total} subtopics</span><span><b>${s.n * POINTS}</b> / ${s.total * POINTS}</span></div>
+      <div class="bar"><i style="width:${pct}%"></i></div>
+    </div>
+  </a>`;
+}
+
+const STAGE_KEY = "applied-ai-plan-stages-v1";
+let openStages = { foundations: true };
+try { openStages = JSON.parse(localStorage.getItem(STAGE_KEY) || "null") || openStages; } catch (e) {}
+const saveStages = () => { try { localStorage.setItem(STAGE_KEY, JSON.stringify(openStages)); } catch (e) {} };
+
+function renderDashboard() {
+  let total = 0, n = 0, modsDone = 0, modsActive = 0;
+  MODULES.forEach((m, mi) => { const s = modStats(mi); if (!s.total) return; modsActive++; total += s.total; n += s.n; if (s.n === s.total) modsDone++; });
+
+  document.getElementById("modules").innerHTML = GROUPS.map((g, gi) => {
+    const idx = MODULES.map((m, i) => m.group === g.id ? i : -1).filter(i => i >= 0);
+    let gt = 0, gn = 0;
+    idx.forEach(i => { const s = modStats(i); gt += s.total; gn += s.n; });
+    const open = !!openStages[g.id], name = g.title.split(" · ")[1];
+    const meta = gt ? `${gn * POINTS} / ${gt * POINTS}<div class="bar"><i style="width:${Math.round(gn / gt * 100)}%"></i></div>` : `<span class="tag soon">Yet to come</span>`;
+    return `<div class="card stage${open ? " open" : ""}" data-stage="${g.id}">
+      <button class="stage-h" aria-expanded="${open}">${ICON_CHEV}<span class="stage-n">${gi + 1}</span>
+        <span class="stage-t"><b>${esc(name)}</b><span>${esc(g.blurb)}</span><small>Modules ${idx[0] + 1}–${idx[idx.length - 1] + 1} · ${idx.length} modules</small></span>
+        <span class="stage-m">${meta}</span></button>
+      <div class="stage-b"><div class="modules">${idx.map(i => modCard(MODULES[i], i)).join("")}</div></div>
+    </div>`;
+  }).join("");
+
+  const score = n * POINTS, max = total * POINTS, pct = max ? Math.round(score / max * 100) : 0;
+  const set = (k, v) => document.getElementById(k).textContent = v;
+  set("score", score); set("max", max); set("topScore", score); set("topMax", max);
+  set("doneCount", n); set("totalCount", total); set("modDone", modsDone); set("modTotal", modsActive);
+  set("pct", pct + "%");
+  document.getElementById("ring").style.setProperty("--p", pct);
+  document.getElementById("bar").style.width = pct + "%";
+}
+
+function renderBrief(b) {
+  if (!b) return "";
+  const list = (cls, title, items) => items && items.length ? `<div class="bcol ${cls}"><p class="bh">${title}</p><ul>${items.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : "";
+  return `<div class="card briefing">
+    <h2>Executive briefing <span class="tag brief">Research-backed</span></h2>
+    <div><p class="bh">Why it matters</p><p class="why">${esc(b.why)}</p></div>
+    ${b.stats && b.stats.length ? `<div><p class="bh">Key numbers</p><div class="kstats">${b.stats.map(([f, t, s, u]) =>
+      `<div class="kstat"><span class="fig">${esc(f)}</span><span class="txt">${esc(t)}</span><span class="src">Source: <a href="${u}" target="_blank" rel="noopener">${esc(s)}</a></span></div>`).join("")}</div></div>` : ""}
+    <div class="bcols">
+      ${list("m", "What's in the market today", b.market)}
+      ${list("n", "What customers need", b.needs)}
+      ${list("p", "Where we can play", b.play)}
+    </div>
+    ${b.stats && b.stats.length ? `<p class="note">Figures are from the linked reports and press releases. Items marked “as cited/reported” come from secondary coverage of the original study. Check the latest edition before quoting externally.</p>` : ""}
+  </div>`;
+}
+
+const openTopics = {};
+function renderModule(mi) {
+  const m = MODULES[mi], s = modStats(mi);
+  const g = GROUPS.find(x => x.id === m.group);
+  document.getElementById("mvNum").textContent = mi + 1;
+  document.getElementById("mvTag").textContent = `Module ${mi + 1} · ${g.title.split(" · ")[1]}`;
+  document.getElementById("mvTitle").textContent = m.title;
+  document.getElementById("mvDesc").textContent = m.desc;
+  document.getElementById("mvScore").textContent = s.n * POINTS;
+  document.getElementById("mvMax").textContent = s.total * POINTS;
+  document.getElementById("mvBar").style.width = Math.round(s.n / s.total * 100) + "%";
+  document.getElementById("mvOutcome").innerHTML =
+    `<div class="outcome"><span style="font-size:20px">🎯</span><div><b>Outcome</b>${esc(m.outcome)}</div></div>`;
+  document.getElementById("mvBrief").innerHTML = renderBrief(m.brief);
+
+  document.getElementById("mvTopics").innerHTML = m.topics.map((t, ti) => {
+    const key = `${mi}-${ti}`;
+    if (openTopics[key] === undefined) openTopics[key] = true;
+    const tn = t.subs.filter((_, si) => done[id(mi, ti, si)]).length;
+    const rows = t.subs.map(([title, read, vid], si) => {
+      const c = !!done[id(mi, ti, si)];
+      return `<div class="st${c ? " checked" : ""}">
+        <input type="checkbox" class="cb" data-m="${mi}" data-t="${ti}" data-s="${si}" ${c ? "checked" : ""} aria-label="Mark ${esc(title)} done">
+        <span class="st-title">${esc(title)}</span>
+        <span class="pts">${c ? "✓ " : "+"}${POINTS}</span>
+        <span class="links">
+          <a class="lnk" href="${esc(READ(read))}" target="_blank" rel="noopener">${ICON_READ}Read</a>
+          <a class="lnk vid" href="${YT(vid)}" target="_blank" rel="noopener">${ICON_VID}Videos</a>
+        </span>
+      </div>`;
+    }).join("");
+    return `<div class="card topic${openTopics[key] ? " open" : ""}" data-key="${key}">
+      <button class="topic-h" aria-expanded="${openTopics[key]}">${ICON_CHEV}<h3>${ti + 1}. ${esc(t.title)}</h3><span class="count">${tn}/${t.subs.length} · ${tn * POINTS}/${t.subs.length * POINTS} marks</span></button>
+      <div class="topic-b">${rows}</div>
+    </div>`;
+  }).join("");
+}
+
+function route() {
+  const mt = location.hash.match(/^#module-(\d+)$/);
+  const mi = mt ? +mt[1] - 1 : -1;
+  renderDashboard();
+  if (mi >= 0 && mi < MODULES.length && !MODULES[mi].soon) {
+    renderModule(mi);
+    document.getElementById("dashboard").classList.add("hidden");
+    document.getElementById("moduleView").classList.remove("hidden");
+  } else {
+    document.getElementById("moduleView").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+  }
+  window.scrollTo(0, 0);
+}
+
+document.getElementById("learned").innerHTML = LEARNED.map(x => `<span class="chip">${esc(x)}</span>`).join("");
+
+document.addEventListener("change", e => {
+  if (!e.target.matches(".cb")) return;
+  const { m, t, s } = e.target.dataset, k = id(+m, +t, +s);
+  if (e.target.checked) done[k] = true; else delete done[k];
+  save();
+  renderDashboard();
+  renderModule(+m);
+});
+
+document.addEventListener("click", e => {
+  const h = e.target.closest(".topic-h");
+  if (h) {
+    const card = h.parentElement, key = card.dataset.key;
+    openTopics[key] = !openTopics[key];
+    card.classList.toggle("open", openTopics[key]);
+    h.setAttribute("aria-expanded", openTopics[key]);
+    return;
+  }
+  const sh = e.target.closest(".stage-h");
+  if (sh) {
+    const card = sh.parentElement, g = card.dataset.stage;
+    openStages[g] = !openStages[g];
+    saveStages();
+    card.classList.toggle("open", openStages[g]);
+    sh.setAttribute("aria-expanded", openStages[g]);
+    return;
+  }
+  if (e.target.closest("[data-home]")) {
+    e.preventDefault();
+    history.pushState("", document.title, location.pathname + location.search);
+    route();
+  }
+});
+
+const resetBtn = document.getElementById("reset"), box = document.getElementById("confirmBox");
+resetBtn.addEventListener("click", () => { resetBtn.hidden = true; box.hidden = false; });
+document.getElementById("no").addEventListener("click", () => { box.hidden = true; resetBtn.hidden = false; });
+document.getElementById("yes").addEventListener("click", () => { done = {}; save(); box.hidden = true; resetBtn.hidden = false; route(); });
+
+window.addEventListener("hashchange", route);
+route();
+</script>
+
+</body></html>
