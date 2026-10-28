@@ -69,6 +69,25 @@
   .road b{font-size:15px}
   .road span{font-size:13px;color:var(--ink-2)}
 
+  .stage{margin-bottom:14px;overflow:hidden}
+  .stage-h{width:100%;display:flex;align-items:center;gap:16px;padding:20px 22px;background:none;border:0;text-align:left;color:var(--ink)}
+  .stage-h:focus-visible{outline:3px solid #c7d2fe;outline-offset:-3px}
+  .stage-n{width:44px;height:44px;flex:none;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-weight:800;display:grid;place-items:center;font-size:17px}
+  .stage-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+  .stage-t b{font-size:17px;letter-spacing:-.01em}
+  .stage-t span{font-size:13.5px;color:var(--ink-2)}
+  .stage-t small{font-size:12.5px;color:var(--ink-3);font-weight:600}
+  .stage-m{flex:none;text-align:right;font-size:13px;color:var(--ink-2);font-weight:600;font-variant-numeric:tabular-nums;width:120px}
+  .stage-m .bar{margin-top:6px}
+  .stage-b{display:none;padding:4px 22px 22px;border-top:1px solid var(--line-2)}
+  .stage.open .stage-b{display:block}
+  .stage.open .stage-h .chev{transform:rotate(90deg)}
+  .stage-b .modules{margin-top:18px}
+  .mod.soon{background:#fafbfd;box-shadow:none;cursor:default}
+  .mod.soon:hover{transform:none;border-color:var(--line);box-shadow:none}
+  .mod.soon .mod-num{background:var(--line-2);color:var(--ink-3)}
+  .tag.soon{background:var(--warn-soft);color:var(--warn)}
+  @media (max-width:560px){.stage-h{flex-wrap:wrap;gap:12px}.stage-m{width:100%;text-align:left}}
   .group{margin:34px 0 0;scroll-margin-top:80px}
   .group-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px}
   .group-h h3{margin:0;font-size:17px;font-weight:700}
@@ -148,7 +167,7 @@
   .danger{border:1px solid #fecaca;background:var(--bad-soft);color:var(--bad);border-radius:10px;padding:8px 14px;font-weight:600;font-size:13px}
   .confirm{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);flex-wrap:wrap}
   footer{padding:30px 0 50px;color:var(--ink-3);font-size:13px;text-align:center}
-  .hidden{display:none!important}
+  .hidden,[hidden]{display:none!important}
 
   @media (max-width:900px){.road{grid-template-columns:1fr 1fr}.bcols{grid-template-columns:1fr}}
   @media (max-width:860px){.stats{grid-template-columns:1fr 1fr}.stats .score-card{grid-column:1/-1}}
@@ -177,7 +196,7 @@
     <div class="hero">
       <div class="eyebrow">Learning Roadmap</div>
       <h1>Hello Sandeep Sir 👋</h1>
-      <p class="lead">This is our AI plan in the order that matters most for running the business. It starts with ML foundations, then how to cut the cost of our AI stack, build once and reuse everywhere, and keep customer data secure and governed. After that come building agents, 10 industry playbooks with market research, and the hands-on technical track. Every subtopic is worth <b>5 marks</b>. Tick it off once it's done and the score updates.</p>
+      <p class="lead">Here's our AI plan in five stages: foundations, applied AI with agents and our knowledge systems, agent engineering and governance, strategy and platform, and AI across ten industries. Click a stage to expand it, then open any module. Every subtopic is worth <b>5 marks</b>. Tick it off once it's done and the score updates.</p>
     </div>
 
     <div class="stats">
@@ -191,13 +210,9 @@
       </div>
       <div class="card stat"><div class="label">Subtopics Completed</div><div class="value"><span id="doneCount">0</span> <small>/ <span id="totalCount">0</span></small></div></div>
       <div class="card stat"><div class="label">Modules Completed</div><div class="value"><span id="modDone">0</span> <small>/ <span id="modTotal">0</span></small></div></div>
-      <div class="card stat"><div class="label">Industry Playbooks</div><div class="value">10 <small>domains</small></div></div>
+      <div class="card stat"><div class="label">Stages</div><div class="value">5 <small>in sequence</small></div></div>
     </div>
 
-    <section>
-      <div class="sec-head"><div><h2>The roadmap at a glance</h2><p class="sub">Five stages, in the order we'll cover them. Click a stage to jump to its modules.</p></div></div>
-      <div class="road" id="road"></div>
-    </section>
 
     <section>
       <div class="sec-head">
@@ -208,7 +223,7 @@
 
     <section>
       <div class="sec-head">
-        <div><h2>Modules</h2><p class="sub">Open a module to see its executive briefing (where there is one), topics, subtopics, reading material and videos.</p></div>
+        <div><h2>Stages &amp; modules</h2><p class="sub">Click a stage to expand it and see its modules. Click a module to open its topics, subtopics, reading material and videos.</p></div>
         <div>
           <button class="ghost" id="reset">Reset progress</button>
           <span class="confirm" id="confirmBox" hidden>Clear all progress? <button class="danger" id="yes">Yes, reset</button><button class="ghost" id="no">Cancel</button></span>
@@ -258,19 +273,115 @@ const LEARNED = [
 ];
 
 const GROUPS = [
-  { id:"strategy", title:"Stage 1 · Foundations & Strategy", blurb:"What a leader must decide: ML basics, AI cost, reuse, plug-and-play agents, security and governance." },
-  { id:"build", title:"Stage 2 · Building Agents & Platforms", blurb:"The tools and patterns we build with, from LangChain to low-code." },
-  { id:"industry", title:"Stage 3 · Industry Playbooks", blurb:"10 domains: what's in the market today, what buyers need, and where we can play, backed by published research." },
-  { id:"interface", title:"Stage 4 · Interfaces", blurb:"Making our agents easy to use, with voice and talking avatars." },
-  { id:"hands", title:"Stage 5 · Hands-on Technical Track", blurb:"Revision and applied projects: Python, EDA, time series and computer vision." },
+  { id:"foundations", title:"Stage 1 · Foundations", blurb:"Python, EDA, time series and the core of machine learning: supervised and unsupervised learning." },
+  { id:"applied", title:"Stage 2 · Applied AI: Agents, ML & Knowledge Systems", blurb:"Agents that use ML predictions, our knowledge management system, avatars and computer vision." },
+  { id:"build", title:"Stage 3 · Agent Engineering & Governance", blurb:"Governing agents safely, low-code workflows, and the LangChain / LangGraph / LangSmith ecosystem." },
+  { id:"strategy", title:"Stage 4 · Strategy & Platform", blurb:"Cutting AI cost, building once and reusing everywhere, plug-and-play agents, data security and our knowledge intelligence platform." },
+  { id:"fields", title:"Stage 5 · AI Across Various Fields", blurb:"Ten industries. Content is being prepared and will be added soon." },
 ];
 
 // Subtopic: [title, reading URL or search query, video search query]
 // brief.stats: [figure, statement, source name, source URL]
 const MODULES = [
-  /* ───────── STAGE 1 ───────── */
   {
-    id:"ml-foundations", group:"strategy",
+id:"python", group:"foundations",
+    title:"Python Revision",
+    tag:"Revision",
+    desc:"Only the essentials we use every day in ML and agent work.",
+    outcome:"Write clean, idiomatic Python for data pipelines, ML scripts and agent tools without looking things up.",
+    topics:[
+      { title:"Core Python Essentials", subs:[
+        ["Data structures: list, dict, set, tuple", "https://docs.python.org/3/tutorial/datastructures.html", "python data structures list dict set tuple tutorial"],
+        ["Loops: for, while, range, break / continue", "https://docs.python.org/3/tutorial/controlflow.html", "python for while loops break continue tutorial"],
+        ["Loop patterns: enumerate, zip, nested loops, looping over dicts", "https://realpython.com/python-for-loop/", "python enumerate zip nested loops dictionary iteration"],
+        ["Functions, *args, **kwargs", "https://docs.python.org/3/tutorial/controlflow.html#defining-functions", "python functions args kwargs explained"],
+        ["Comprehensions (list / dict / set, with if-else and nesting)", "https://realpython.com/list-comprehension-python/", "python list dict comprehension if else nested tutorial"],
+        ["Error handling & exceptions", "https://docs.python.org/3/tutorial/errors.html", "python try except exception handling tutorial"],
+      ]},
+      { title:"Intermediate Python", subs:[
+        ["Classes & OOP basics", "https://docs.python.org/3/tutorial/classes.html", "python OOP classes objects tutorial"],
+        ["Decorators", "https://realpython.com/primer-on-python-decorators/", "python decorators explained"],
+        ["Generators & iterators", "https://realpython.com/introduction-to-python-generators/", "python generators yield explained"],
+        ["Type hints & Pydantic models", "https://docs.pydantic.dev/latest/", "python type hints pydantic tutorial"],
+        ["Async / await basics (for agents & APIs)", "https://realpython.com/async-io-python/", "python asyncio async await tutorial"],
+      ]},
+      { title:"Writing Code Short: Pythonic & Vectorized", subs:[
+        ["Lambda functions, map, filter, sorted with key", "https://realpython.com/python-lambda/", "python lambda map filter sorted key tutorial"],
+        ["Loop to one-liner: rewriting loops as comprehensions", "https://realpython.com/list-comprehension-python/", "convert for loop to list comprehension python one liner"],
+        ["NumPy vectorization: replace loops with array operations", "https://numpy.org/doc/stable/user/basics.broadcasting.html", "numpy vectorization vs loops broadcasting"],
+        ["NumPy boolean masks & np.where", "https://numpy.org/doc/stable/user/basics.indexing.html", "numpy boolean indexing np.where tutorial"],
+        ["Pandas apply, map & lambda on columns", "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html", "pandas apply map lambda tutorial"],
+        ["Pandas one-liners: loc conditions, query, assign, method chaining", "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html", "pandas method chaining query assign loc one liners"],
+      ]},
+      { title:"Python for Data", subs:[
+        ["NumPy essentials", "https://numpy.org/doc/stable/user/absolute_beginners.html", "numpy tutorial for data science"],
+        ["Pandas: select, filter, transform", "https://pandas.pydata.org/docs/user_guide/10min.html", "pandas tutorial data analysis"],
+        ["Pandas: groupby & aggregation", "https://pandas.pydata.org/docs/user_guide/groupby.html", "pandas groupby aggregation tutorial"],
+        ["Pandas: merge, join, concat", "https://pandas.pydata.org/docs/user_guide/merging.html", "pandas merge join concat tutorial"],
+        ["Virtual envs, files & JSON I/O", "https://docs.python.org/3/library/venv.html", "python virtual environment venv json file handling"],
+      ]},
+    ]
+  },
+  {
+id:"eda", group:"foundations",
+    title:"EDA Revision & Time Series EDA",
+    tag:"Revision + New",
+    desc:"Revise exploratory data analysis, then learn how EDA changes for time-ordered data.",
+    outcome:"Look at any dataset (tabular or time series) and quickly find trend, seasonality, outliers, missing data and useful features.",
+    topics:[
+      { title:"EDA Revision", subs:[
+        ["Missing values & data cleaning", "https://pandas.pydata.org/docs/user_guide/missing_data.html", "handling missing values pandas EDA"],
+        ["Univariate & bivariate analysis", "https://seaborn.pydata.org/tutorial.html", "univariate bivariate analysis EDA python seaborn"],
+        ["Outlier detection (IQR, Z-score)", "https://www.kaggle.com/learn/data-cleaning", "outlier detection IQR z-score python"],
+        ["Correlation & visual storytelling", "https://matplotlib.org/stable/users/explain/quick_start.html", "correlation heatmap EDA python matplotlib seaborn"],
+        ["Feature engineering & scaling", "https://scikit-learn.org/stable/modules/preprocessing.html", "feature engineering scaling encoding scikit-learn"],
+      ]},
+      { title:"Time Series Fundamentals", subs:[
+        ["Datetime index, resampling & rolling windows", "https://pandas.pydata.org/docs/user_guide/timeseries.html", "pandas time series resample rolling tutorial"],
+        ["Trend, seasonality & cycles", "https://otexts.com/fpp3/tspatterns.html", "time series trend seasonality cycle explained"],
+        ["Time series visualisation", "https://otexts.com/fpp3/graphics.html", "time series plots visualization python"],
+      ]},
+      { title:"Time Series EDA (Deep Dive)", subs:[
+        ["Decomposition (classical & STL)", "https://otexts.com/fpp3/decomposition.html", "STL decomposition time series python statsmodels"],
+        ["Stationarity & ADF test", "https://otexts.com/fpp3/stationarity.html", "stationarity ADF test time series python"],
+        ["Autocorrelation: ACF & PACF", "https://otexts.com/fpp3/acf.html", "ACF PACF plots explained time series"],
+        ["Lag, rolling & calendar features", "https://www.kaggle.com/learn/time-series", "lag features time series feature engineering python"],
+        ["Handling gaps, holidays & promotions", "https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.STL.html", "time series missing dates holidays promotions EDA"],
+      ]},
+    ]
+  },
+  {
+id:"time-series", group:"foundations",
+    title:"Time Series Prediction",
+    tag:"Project: Product Demand",
+    desc:"Fully applied: which algorithm to use where, how each works, and one end-to-end demand forecasting project.",
+    outcome:"Train, evaluate and serve a product demand forecasting model, and justify the algorithm choice for a given business problem.",
+    topics:[
+      { title:"Use Cases: Which Algorithm, Where & Why", subs:[
+        ["Real-world use cases (demand, sales, energy, finance, inventory)", "https://otexts.com/fpp3/intro.html", "time series forecasting real world use cases"],
+        ["Choosing an algorithm: statistical vs ML vs deep learning", "https://unit8co.github.io/darts/", "how to choose time series forecasting model"],
+        ["Evaluation metrics: MAE, RMSE, MAPE, sMAPE", "https://otexts.com/fpp3/accuracy.html", "forecast accuracy metrics MAE RMSE MAPE"],
+        ["Time series cross-validation & backtesting", "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html", "time series cross validation backtesting python"],
+      ]},
+      { title:"Algorithms & How They Work", subs:[
+        ["Baselines: naive, seasonal naive, moving average", "https://otexts.com/fpp3/simple-methods.html", "naive seasonal naive forecasting baseline"],
+        ["Exponential smoothing & Holt-Winters", "https://otexts.com/fpp3/expsmooth.html", "Holt Winters exponential smoothing python"],
+        ["ARIMA & SARIMA", "https://otexts.com/fpp3/arima.html", "ARIMA SARIMA explained python statsmodels"],
+        ["Prophet", "https://facebook.github.io/prophet/docs/quick_start.html", "facebook prophet forecasting tutorial python"],
+        ["ML models: XGBoost / LightGBM with lag features", "https://lightgbm.readthedocs.io/en/latest/", "LightGBM XGBoost time series forecasting python"],
+        ["Deep learning: LSTM & modern models (N-BEATS, TFT)", "https://github.com/Nixtla/neuralforecast", "LSTM N-BEATS temporal fusion transformer forecasting"],
+      ]},
+      { title:"Project: Product Demand Prediction", subs:[
+        ["Dataset & problem framing (store / item sales)", "https://www.kaggle.com/competitions/store-sales-time-series-forecasting", "product demand forecasting project python"],
+        ["EDA & feature pipeline for demand data", "https://www.kaggle.com/competitions/m5-forecasting-accuracy", "M5 forecasting EDA feature engineering"],
+        ["Train, tune & compare models", "https://github.com/Nixtla/statsforecast", "demand forecasting model comparison python"],
+        ["Experiment tracking with MLflow", "https://mlflow.org/docs/latest/index.html", "MLflow tutorial experiment tracking"],
+        ["Serve the model (FastAPI) + dashboard (Streamlit)", "https://fastapi.tiangolo.com/", "deploy ML model fastapi streamlit tutorial"],
+      ]},
+    ]
+  },
+  {
+id:"ml-foundations", group:"foundations",
     title:"ML Foundations: Supervised & Unsupervised Learning",
     tag:"Foundations",
     desc:"A quick, decision-focused refresher on the two families of machine learning that sit under every prediction our agents make.",
@@ -298,7 +409,221 @@ const MODULES = [
     ]
   },
   {
-    id:"cost-strategy", group:"strategy",
+id:"agentic-ml", group:"applied",
+    title:"Agentic AI + Machine Learning",
+    tag:"Core Concept",
+    desc:"How agents call ML models as tools, read predictions, and turn them into decisions.",
+    outcome:"Build an agent that calls a trained forecasting model as a tool and makes a justified business decision from the prediction.",
+    topics:[
+      { title:"Agent Foundations (Refresh)", subs:[
+        ["Agent patterns & workflows", "https://www.anthropic.com/research/building-effective-agents", "building effective AI agents patterns"],
+        ["Tool / function calling", "https://docs.anthropic.com/en/docs/build-with-claude/tool-use", "LLM tool calling function calling tutorial"],
+        ["Model Context Protocol (MCP)", "https://modelcontextprotocol.io/", "model context protocol MCP tutorial"],
+      ]},
+      { title:"ML Models as Agent Tools", subs:[
+        ["Saving & loading models (joblib / pickle)", "https://scikit-learn.org/stable/model_persistence.html", "save load scikit-learn model joblib"],
+        ["Exposing a model as an API / tool", "https://fastapi.tiangolo.com/", "serve ML model as API fastapi"],
+        ["Structured outputs: prediction + confidence", "https://docs.pydantic.dev/latest/", "LLM structured output pydantic"],
+        ["Agent calls the forecast tool", "https://github.com/langchain-ai/langgraph", "langgraph agent custom tool ML model"],
+      ]},
+      { title:"Prediction → Decision", subs:[
+        ["Decision rules & thresholds on predictions", "https://en.wikipedia.org/wiki/Reorder_point", "AI agent decision making from predictions"],
+        ["Handling uncertainty & prediction intervals", "https://otexts.com/fpp3/prediction-intervals.html", "forecast prediction intervals uncertainty"],
+        ["Human-in-the-loop approvals", "https://github.com/langchain-ai/langgraph", "langgraph human in the loop tutorial"],
+        ["Multi-agent: forecaster, planner, reviewer", "https://github.com/crewAIInc/crewAI", "multi agent system crewai tutorial"],
+      ]},
+    ]
+  },
+  {
+id:"kms-ml", group:"applied",
+    title:"Agentic AI + ML in the Knowledge Management System",
+    tag:"Integration",
+    desc:"Add predictions to our knowledge intelligence platform so agents decide using both company knowledge and forecasts.",
+    outcome:"Our KMS answers questions and also predicts and recommends actions, e.g. reorder stock for supply chain or flag expiring medicines for a pharmacy.",
+    topics:[
+      { title:"Architecture", subs:[
+        ["RAG + ML hybrid architecture", "https://www.pinecone.io/learn/retrieval-augmented-generation/", "RAG with machine learning predictions architecture"],
+        ["Connecting structured data (SQL / pgvector)", "https://github.com/pgvector/pgvector", "pgvector postgres RAG tutorial"],
+        ["Knowledge graphs for business entities", "https://github.com/microsoft/graphrag", "GraphRAG knowledge graph tutorial"],
+        ["Routing: knowledge question vs prediction question", "https://docs.llamaindex.ai/", "LLM query router agent tutorial"],
+      ]},
+      { title:"Domain Use Cases", subs:[
+        ["Supply chain: demand forecast → reorder decision", "https://en.wikipedia.org/wiki/Safety_stock", "AI supply chain demand forecasting inventory agent"],
+        ["Pharmacy: stock, expiry & demand alerts", "https://en.wikipedia.org/wiki/Economic_order_quantity", "pharmacy inventory management AI forecasting"],
+        ["Hierarchical forecasts (product / store / region)", "https://otexts.com/fpp3/hierarchical.html", "hierarchical forecasting explained"],
+        ["Explaining predictions to business users", "https://shap.readthedocs.io/en/latest/", "SHAP explainable AI tutorial"],
+      ]},
+      { title:"Build & Ship", subs:[
+        ["Implement prediction tools inside the KMS agent", "https://github.com/langchain-ai/langgraph", "langgraph agent RAG and tools project"],
+        ["Observability & evaluation of agent decisions", "https://langfuse.com/docs", "langfuse LLM observability tutorial"],
+        ["Scheduled retraining & monitoring drift", "https://mlflow.org/docs/latest/index.html", "ML model monitoring drift retraining"],
+      ]},
+    ]
+  },
+  {
+id:"avatars", group:"applied",
+    title:"Avatar Implementation for Agents",
+    tag:"Interface",
+    desc:"Put a talking avatar on any agent so the interface feels natural and easy to use.",
+    outcome:"Any of our agents (including the KMS agent) can speak through a real-time talking avatar in the browser.",
+    topics:[
+      { title:"Avatar Foundations", subs:[
+        ["How talking avatars work (TTS, lip-sync, rendering)", "https://github.com/met4citizen/TalkingHead", "how AI talking avatars work lip sync"],
+        ["Voice: speech-to-text & text-to-speech", "https://elevenlabs.io/docs", "speech to text text to speech AI agent tutorial"],
+        ["Browser speech APIs", "https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API", "web speech api javascript tutorial"],
+      ]},
+      { title:"Avatar Platforms", subs:[
+        ["HeyGen interactive / streaming avatar", "https://docs.heygen.com/", "HeyGen streaming avatar API tutorial"],
+        ["D-ID agents & streaming", "https://docs.d-id.com/", "D-ID streaming avatar API tutorial"],
+        ["Tavus conversational video", "https://docs.tavus.io/", "Tavus conversational video interface tutorial"],
+        ["Open-source: 3D avatar with Three.js", "https://threejs.org/docs/", "threejs 3D avatar lip sync talking head"],
+      ]},
+      { title:"Integration", subs:[
+        ["Real-time voice pipeline (LiveKit / Pipecat)", "https://docs.livekit.io/agents/", "livekit agents avatar tutorial"],
+        ["Connect avatar to our agent backend", "https://docs.pipecat.ai/", "pipecat AI avatar voice agent"],
+        ["Latency, UX & interruption handling", "https://docs.livekit.io/agents/", "low latency voice AI agent interruption handling"],
+      ]},
+    ]
+  },
+  {
+id:"computer-vision", group:"applied",
+    title:"Applied Computer Vision",
+    tag:"Project: Computer Vision",
+    desc:"Hands-on CV with OpenCV and modern detection models, ending in one applied project.",
+    outcome:"Build a working computer vision app (e.g. product counting, shelf monitoring or quality inspection) on images and live video.",
+    topics:[
+      { title:"OpenCV Fundamentals", subs:[
+        ["Reading images & video, colour spaces", "https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html", "OpenCV python tutorial basics images video"],
+        ["Image processing: thresholding, blur, morphology", "https://docs.opencv.org/4.x/d2/d96/tutorial_py_table_of_contents_imgproc.html", "OpenCV thresholding blurring morphology tutorial"],
+        ["Edges, contours & shape detection", "https://docs.opencv.org/4.x/d3/d05/tutorial_py_table_of_contents_contours.html", "OpenCV contours edge detection python"],
+        ["Webcam / real-time video processing", "https://docs.opencv.org/4.x/dd/d43/tutorial_py_video_display.html", "OpenCV webcam real time python"],
+      ]},
+      { title:"Deep Learning for Vision", subs:[
+        ["Image classification with transfer learning", "https://pytorch.org/vision/stable/index.html", "transfer learning image classification pytorch"],
+        ["Object detection with YOLO", "https://docs.ultralytics.com/", "YOLO object detection ultralytics tutorial"],
+        ["Training YOLO on a custom dataset", "https://docs.ultralytics.com/modes/train/", "train YOLO custom dataset roboflow"],
+        ["Object tracking & counting", "https://docs.ultralytics.com/modes/track/", "YOLO object tracking counting tutorial"],
+        ["OCR & pose / face with MediaPipe", "https://ai.google.dev/edge/mediapipe/solutions/guide", "mediapipe python tutorial pose face hands"],
+      ]},
+      { title:"Project: Applied Computer Vision", subs:[
+        ["Pick use case & collect / label data", "https://docs.roboflow.com/", "roboflow annotate dataset tutorial"],
+        ["Build the detection + counting pipeline", "https://supervision.roboflow.com/", "supervision roboflow object counting zone"],
+        ["Wrap it in a simple app (Streamlit)", "https://docs.streamlit.io/", "streamlit computer vision app YOLO"],
+      ]},
+    ]
+  },
+  {
+id:"agent-governance", group:"build",
+    title:"Agent Governance: Security, Telemetry & LangSmith",
+    tag:"Strategy",
+    desc:"Make every agent safe, observable and accountable: threat model, guardrails, tracing, evaluation and governance frameworks.",
+    outcome:"Every agent we ship has guardrails, full tracing (LangSmith / Langfuse), an evaluation suite, cost monitoring and a named owner.",
+    brief:{
+      why:"Agents don't just answer, they act: they send emails, update records and spend money. That makes them a new attack surface and a new source of business risk. Governance is what lets a CEO say yes to agents in production: we can see what every agent did, why, what it cost, and stop it if needed.",
+      stats:[
+        ["#1 risk","Prompt injection tops the OWASP Top 10 for LLM Applications 2025; “Excessive Agency” was expanded because of agentic designs.","OWASP GenAI Security Project","https://genai.owasp.org/llm-top-10/"],
+        ["63%","of breached organisations had no AI governance policy or were still developing one.","IBM, Cost of a Data Breach 2025","https://www.ibm.com/think/x-force/2025-cost-of-a-data-breach-navigating-ai"],
+        ["40%+","of agentic AI projects expected to be cancelled by end of 2027, citing cost, unclear value or inadequate risk controls.","Gartner press release, Jun 2025","https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027"],
+      ],
+      market:["Tracing & evaluation platforms: LangSmith, Langfuse, Arize Phoenix","OpenTelemetry standards for GenAI traces","Guardrail models & frameworks: Llama Guard, NeMo Guardrails, Guardrails AI","Red-teaming tools: promptfoo, garak"],
+      needs:["See every step, tool call, cost and latency of an agent run","Block harmful actions; require human approval for risky ones","Prove quality with repeatable evals","Map to frameworks customers trust: NIST AI RMF, ISO/IEC 42001, EU AI Act"],
+      play:["Governance built into the agent core (Plug-and-Play Agents module)","A standard “agent passport”: owner, tools allowed, data allowed, eval score, cost budget","Monthly governance report per customer as a value-add"],
+    },
+    topics:[
+      { title:"Threats to Agents", subs:[
+        ["OWASP Top 10 for LLM Applications", "https://genai.owasp.org/llm-top-10/", "OWASP top 10 LLM explained"],
+        ["Prompt injection (direct & indirect) and defences", "prompt injection defenses AI agents indirect", "prompt injection explained"],
+        ["Excessive agency & least-privilege tools", "excessive agency LLM least privilege tools", "AI agent security least privilege"],
+      ]},
+      { title:"Guardrails & Human Control", subs:[
+        ["Input / output guardrails (NeMo Guardrails, Guardrails AI)", "https://github.com/NVIDIA/NeMo-Guardrails", "NeMo guardrails tutorial"],
+        ["Safety classifiers (Llama Guard)", "https://huggingface.co/meta-llama/Llama-Guard-3-8B", "Llama Guard explained"],
+        ["Human-in-the-loop approvals for risky actions", "https://github.com/langchain-ai/langgraph", "langgraph human in the loop"],
+      ]},
+      { title:"Telemetry & Observability", subs:[
+        ["LangSmith: tracing, monitoring & datasets", "https://docs.smith.langchain.com/", "LangSmith tutorial tracing"],
+        ["Langfuse: open-source, self-hostable alternative", "https://langfuse.com/docs", "langfuse tutorial"],
+        ["OpenTelemetry GenAI conventions", "https://opentelemetry.io/docs/specs/semconv/gen-ai/", "opentelemetry LLM observability"],
+        ["Cost, latency & token dashboards per customer", "LLM cost monitoring dashboard per tenant", "LLM cost monitoring"],
+      ]},
+      { title:"Evaluation & Red-Teaming", subs:[
+        ["LLM & agent evals (LangSmith, Ragas)", "https://docs.ragas.io/", "RAG evaluation ragas tutorial"],
+        ["Automated red-teaming with promptfoo / garak", "https://www.promptfoo.dev/docs/red-team/", "LLM red teaming tutorial"],
+      ]},
+      { title:"Governance Frameworks", subs:[
+        ["NIST AI Risk Management Framework", "https://www.nist.gov/itl/ai-risk-management-framework", "NIST AI RMF explained"],
+        ["ISO/IEC 42001 AI management system", "https://www.iso.org/standard/81230.html", "ISO 42001 explained"],
+        ["EU AI Act: risk tiers & obligations", "https://artificialintelligenceact.eu/", "EU AI Act explained"],
+      ]},
+    ]
+  },
+  {
+id:"low-code", group:"build",
+    title:"Low-Code / No-Code Agents & Workflows",
+    tag:"Build",
+    desc:"Build agents and automations visually, know the enterprise platforms customers already own, and decide when low-code beats custom code.",
+    outcome:"Prototype an agent workflow in hours with n8n / Langflow / Dify, and know when to move it to code for scale, security or cost.",
+    brief:{
+      why:"Many customers want quick wins and already pay for Microsoft, Google or Salesforce. Low-code lets us demo in a day and lets business teams own simple automations. Code is still needed for scale, security, unit cost and IP. A leader needs to know where the line is.",
+      stats:[
+        ["70%","of new enterprise applications were forecast to use low-code or no-code technologies by 2025 (up from under 25% in 2020).","Gartner, as reported by Computerworld","https://www.computerworld.com/article/1612895/how-to-build-a-citizen-development-workforce.html"],
+      ],
+      market:["Workflow automation with AI steps: n8n, Make, Zapier","Visual agent/RAG builders: Langflow, Flowise, Dify","Enterprise agent builders: Microsoft Copilot Studio, Google Vertex AI Agent Builder, Salesforce Agentforce, AWS Bedrock Agents","AI app builders: Lovable, Bolt, v0, Retool"],
+      needs:["Fast demos and proofs of concept","Business users editing simple flows themselves","Governance: who built what, with which data"],
+      play:["Use n8n / Dify for rapid prototypes, then harden in code","Package our MCP connectors so they work inside customers' low-code tools","Offer “citizen builder” templates on top of our platform"],
+    },
+    topics:[
+      { title:"Workflow Automation with AI", subs:[
+        ["n8n: workflows & AI agent nodes", "https://docs.n8n.io/advanced-ai/", "n8n AI agent tutorial"],
+        ["Make & Zapier for business automations", "https://www.make.com/en/help", "make.com AI automation tutorial"],
+      ]},
+      { title:"Visual Agent & RAG Builders", subs:[
+        ["Langflow", "https://docs.langflow.org/", "Langflow tutorial"],
+        ["Flowise", "https://docs.flowiseai.com/", "Flowise AI tutorial"],
+        ["Dify", "https://docs.dify.ai/", "Dify AI tutorial"],
+      ]},
+      { title:"Enterprise Agent Platforms", subs:[
+        ["Microsoft Copilot Studio", "https://learn.microsoft.com/en-us/microsoft-copilot-studio/", "Copilot Studio tutorial agents"],
+        ["Google Vertex AI Agent Builder", "https://cloud.google.com/products/agent-builder", "Vertex AI Agent Builder tutorial"],
+        ["Salesforce Agentforce & AWS Bedrock Agents", "https://aws.amazon.com/bedrock/agents/", "Agentforce vs Bedrock agents"],
+      ]},
+      { title:"Low-Code vs Code: The Decision", subs:[
+        ["App builders: Lovable, v0, Retool", "https://docs.lovable.dev/", "Lovable tutorial build app"],
+        ["Lock-in, scale, security & cost trade-offs", "low code vs custom code AI agents trade-offs enterprise", "low code vs custom code"],
+      ]},
+    ]
+  },
+  {
+id:"lang-ecosystem", group:"build",
+    title:"The Lang* Ecosystem: LangChain, LangGraph & LangSmith",
+    tag:"Build",
+    desc:"Go beyond LangChain basics: stateful agents with LangGraph, observability with LangSmith, deployment, and how it compares with other frameworks.",
+    outcome:"Choose the right framework for a project and build a stateful, observable LangGraph agent with memory and human approval steps.",
+    topics:[
+      { title:"LangChain Refresh", subs:[
+        ["Models, prompts, tools & structured output", "https://python.langchain.com/docs/introduction/", "LangChain tutorial latest"],
+        ["Retrievers & RAG chains", "https://python.langchain.com/docs/tutorials/rag/", "LangChain RAG tutorial"],
+      ]},
+      { title:"LangGraph: Stateful Agents", subs:[
+        ["Graphs: state, nodes, edges", "https://github.com/langchain-ai/langgraph", "LangGraph tutorial beginners"],
+        ["Memory & checkpoints (persistence)", "LangGraph persistence checkpointer memory", "LangGraph memory checkpoint"],
+        ["Human-in-the-loop & interrupts", "LangGraph human in the loop interrupt", "LangGraph human in the loop"],
+        ["Multi-agent: supervisor & swarm patterns", "LangGraph multi agent supervisor", "LangGraph multi agent supervisor"],
+      ]},
+      { title:"LangSmith & Deployment", subs:[
+        ["Tracing, datasets & evals in LangSmith", "https://docs.smith.langchain.com/", "LangSmith evaluation tutorial"],
+        ["Deploying LangGraph agents (Platform / FastAPI)", "deploy LangGraph agent production FastAPI", "deploy langgraph agent"],
+      ]},
+      { title:"Alternatives & When to Use Them", subs:[
+        ["LlamaIndex for document-heavy RAG", "https://docs.llamaindex.ai/", "LlamaIndex tutorial"],
+        ["CrewAI for role-based crews", "https://github.com/crewAIInc/crewAI", "CrewAI tutorial"],
+        ["OpenAI Agents SDK & Google ADK", "https://openai.github.io/openai-agents-python/", "OpenAI agents SDK tutorial"],
+        ["Claude Agent SDK", "Claude Agent SDK documentation", "Claude Agent SDK tutorial"],
+      ]},
+    ]
+  },
+  {
+id:"cost-strategy", group:"strategy",
     title:"Strategy: Cutting the Cost of Our AI Stack",
     tag:"Strategy",
     desc:"Small language models, open-source and self-hosted models, our own STT/TTS, fine-tuning our own LLM, and private per-customer deployments.",
@@ -352,7 +677,7 @@ const MODULES = [
     ]
   },
   {
-    id:"build-once", group:"strategy",
+id:"build-once", group:"strategy",
     title:"Build Once, Reuse Everywhere: Our Reusable AI Platform",
     tag:"Strategy",
     desc:"Identify the parts nearly every solution needs, build them once as products, and assemble new customer solutions from them.",
@@ -385,7 +710,7 @@ const MODULES = [
     ]
   },
   {
-    id:"plug-play-agents", group:"strategy",
+id:"plug-play-agents", group:"strategy",
     title:"Domain-Independent, Plug-and-Play Agents",
     tag:"Strategy",
     desc:"Design agents once with a domain-neutral core, then plug in a customer's knowledge, tools and rules as configuration instead of rebuilding.",
@@ -419,7 +744,7 @@ const MODULES = [
     ]
   },
   {
-    id:"data-security", group:"strategy",
+id:"data-security", group:"strategy",
     title:"Data Security, Encryption & Customer Privacy",
     tag:"Strategy",
     desc:"Keep every customer's data encrypted, isolated and private: between them and us only.",
@@ -462,459 +787,20 @@ const MODULES = [
     ]
   },
   {
-    id:"agent-governance", group:"strategy",
-    title:"Agent Governance: Security, Telemetry & LangSmith",
-    tag:"Strategy",
-    desc:"Make every agent safe, observable and accountable: threat model, guardrails, tracing, evaluation and governance frameworks.",
-    outcome:"Every agent we ship has guardrails, full tracing (LangSmith / Langfuse), an evaluation suite, cost monitoring and a named owner.",
-    brief:{
-      why:"Agents don't just answer, they act: they send emails, update records and spend money. That makes them a new attack surface and a new source of business risk. Governance is what lets a CEO say yes to agents in production: we can see what every agent did, why, what it cost, and stop it if needed.",
-      stats:[
-        ["#1 risk","Prompt injection tops the OWASP Top 10 for LLM Applications 2025; “Excessive Agency” was expanded because of agentic designs.","OWASP GenAI Security Project","https://genai.owasp.org/llm-top-10/"],
-        ["63%","of breached organisations had no AI governance policy or were still developing one.","IBM, Cost of a Data Breach 2025","https://www.ibm.com/think/x-force/2025-cost-of-a-data-breach-navigating-ai"],
-        ["40%+","of agentic AI projects expected to be cancelled by end of 2027, citing cost, unclear value or inadequate risk controls.","Gartner press release, Jun 2025","https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027"],
-      ],
-      market:["Tracing & evaluation platforms: LangSmith, Langfuse, Arize Phoenix","OpenTelemetry standards for GenAI traces","Guardrail models & frameworks: Llama Guard, NeMo Guardrails, Guardrails AI","Red-teaming tools: promptfoo, garak"],
-      needs:["See every step, tool call, cost and latency of an agent run","Block harmful actions; require human approval for risky ones","Prove quality with repeatable evals","Map to frameworks customers trust: NIST AI RMF, ISO/IEC 42001, EU AI Act"],
-      play:["Governance built into the agent core (Module 4)","A standard “agent passport”: owner, tools allowed, data allowed, eval score, cost budget","Monthly governance report per customer as a value-add"],
-    },
-    topics:[
-      { title:"Threats to Agents", subs:[
-        ["OWASP Top 10 for LLM Applications", "https://genai.owasp.org/llm-top-10/", "OWASP top 10 LLM explained"],
-        ["Prompt injection (direct & indirect) and defences", "prompt injection defenses AI agents indirect", "prompt injection explained"],
-        ["Excessive agency & least-privilege tools", "excessive agency LLM least privilege tools", "AI agent security least privilege"],
-      ]},
-      { title:"Guardrails & Human Control", subs:[
-        ["Input / output guardrails (NeMo Guardrails, Guardrails AI)", "https://github.com/NVIDIA/NeMo-Guardrails", "NeMo guardrails tutorial"],
-        ["Safety classifiers (Llama Guard)", "https://huggingface.co/meta-llama/Llama-Guard-3-8B", "Llama Guard explained"],
-        ["Human-in-the-loop approvals for risky actions", "https://github.com/langchain-ai/langgraph", "langgraph human in the loop"],
-      ]},
-      { title:"Telemetry & Observability", subs:[
-        ["LangSmith: tracing, monitoring & datasets", "https://docs.smith.langchain.com/", "LangSmith tutorial tracing"],
-        ["Langfuse: open-source, self-hostable alternative", "https://langfuse.com/docs", "langfuse tutorial"],
-        ["OpenTelemetry GenAI conventions", "https://opentelemetry.io/docs/specs/semconv/gen-ai/", "opentelemetry LLM observability"],
-        ["Cost, latency & token dashboards per customer", "LLM cost monitoring dashboard per tenant", "LLM cost monitoring"],
-      ]},
-      { title:"Evaluation & Red-Teaming", subs:[
-        ["LLM & agent evals (LangSmith, Ragas)", "https://docs.ragas.io/", "RAG evaluation ragas tutorial"],
-        ["Automated red-teaming with promptfoo / garak", "https://www.promptfoo.dev/docs/red-team/", "LLM red teaming tutorial"],
-      ]},
-      { title:"Governance Frameworks", subs:[
-        ["NIST AI Risk Management Framework", "https://www.nist.gov/itl/ai-risk-management-framework", "NIST AI RMF explained"],
-        ["ISO/IEC 42001 AI management system", "https://www.iso.org/standard/81230.html", "ISO 42001 explained"],
-        ["EU AI Act: risk tiers & obligations", "https://artificialintelligenceact.eu/", "EU AI Act explained"],
-      ]},
-    ]
-  },
-
-  /* ───────── STAGE 2 ───────── */
-  {
-    id:"lang-ecosystem", group:"build",
-    title:"The Lang* Ecosystem: LangChain, LangGraph & LangSmith",
-    tag:"Build",
-    desc:"Go beyond LangChain basics: stateful agents with LangGraph, observability with LangSmith, deployment, and how it compares with other frameworks.",
-    outcome:"Choose the right framework for a project and build a stateful, observable LangGraph agent with memory and human approval steps.",
-    topics:[
-      { title:"LangChain Refresh", subs:[
-        ["Models, prompts, tools & structured output", "https://python.langchain.com/docs/introduction/", "LangChain tutorial latest"],
-        ["Retrievers & RAG chains", "https://python.langchain.com/docs/tutorials/rag/", "LangChain RAG tutorial"],
-      ]},
-      { title:"LangGraph: Stateful Agents", subs:[
-        ["Graphs: state, nodes, edges", "https://github.com/langchain-ai/langgraph", "LangGraph tutorial beginners"],
-        ["Memory & checkpoints (persistence)", "LangGraph persistence checkpointer memory", "LangGraph memory checkpoint"],
-        ["Human-in-the-loop & interrupts", "LangGraph human in the loop interrupt", "LangGraph human in the loop"],
-        ["Multi-agent: supervisor & swarm patterns", "LangGraph multi agent supervisor", "LangGraph multi agent supervisor"],
-      ]},
-      { title:"LangSmith & Deployment", subs:[
-        ["Tracing, datasets & evals in LangSmith", "https://docs.smith.langchain.com/", "LangSmith evaluation tutorial"],
-        ["Deploying LangGraph agents (Platform / FastAPI)", "deploy LangGraph agent production FastAPI", "deploy langgraph agent"],
-      ]},
-      { title:"Alternatives & When to Use Them", subs:[
-        ["LlamaIndex for document-heavy RAG", "https://docs.llamaindex.ai/", "LlamaIndex tutorial"],
-        ["CrewAI for role-based crews", "https://github.com/crewAIInc/crewAI", "CrewAI tutorial"],
-        ["OpenAI Agents SDK & Google ADK", "https://openai.github.io/openai-agents-python/", "OpenAI agents SDK tutorial"],
-        ["Claude Agent SDK", "Claude Agent SDK documentation", "Claude Agent SDK tutorial"],
-      ]},
-    ]
-  },
-  {
-    id:"low-code", group:"build",
-    title:"Low-Code / No-Code Agents & Workflows",
-    tag:"Build",
-    desc:"Build agents and automations visually, know the enterprise platforms customers already own, and decide when low-code beats custom code.",
-    outcome:"Prototype an agent workflow in hours with n8n / Langflow / Dify, and know when to move it to code for scale, security or cost.",
-    brief:{
-      why:"Many customers want quick wins and already pay for Microsoft, Google or Salesforce. Low-code lets us demo in a day and lets business teams own simple automations. Code is still needed for scale, security, unit cost and IP. A leader needs to know where the line is.",
-      stats:[
-        ["70%","of new enterprise applications were forecast to use low-code or no-code technologies by 2025 (up from under 25% in 2020).","Gartner, as reported by Computerworld","https://www.computerworld.com/article/1612895/how-to-build-a-citizen-development-workforce.html"],
-      ],
-      market:["Workflow automation with AI steps: n8n, Make, Zapier","Visual agent/RAG builders: Langflow, Flowise, Dify","Enterprise agent builders: Microsoft Copilot Studio, Google Vertex AI Agent Builder, Salesforce Agentforce, AWS Bedrock Agents","AI app builders: Lovable, Bolt, v0, Retool"],
-      needs:["Fast demos and proofs of concept","Business users editing simple flows themselves","Governance: who built what, with which data"],
-      play:["Use n8n / Dify for rapid prototypes, then harden in code","Package our MCP connectors so they work inside customers' low-code tools","Offer “citizen builder” templates on top of our platform"],
-    },
-    topics:[
-      { title:"Workflow Automation with AI", subs:[
-        ["n8n: workflows & AI agent nodes", "https://docs.n8n.io/advanced-ai/", "n8n AI agent tutorial"],
-        ["Make & Zapier for business automations", "https://www.make.com/en/help", "make.com AI automation tutorial"],
-      ]},
-      { title:"Visual Agent & RAG Builders", subs:[
-        ["Langflow", "https://docs.langflow.org/", "Langflow tutorial"],
-        ["Flowise", "https://docs.flowiseai.com/", "Flowise AI tutorial"],
-        ["Dify", "https://docs.dify.ai/", "Dify AI tutorial"],
-      ]},
-      { title:"Enterprise Agent Platforms", subs:[
-        ["Microsoft Copilot Studio", "https://learn.microsoft.com/en-us/microsoft-copilot-studio/", "Copilot Studio tutorial agents"],
-        ["Google Vertex AI Agent Builder", "https://cloud.google.com/products/agent-builder", "Vertex AI Agent Builder tutorial"],
-        ["Salesforce Agentforce & AWS Bedrock Agents", "https://aws.amazon.com/bedrock/agents/", "Agentforce vs Bedrock agents"],
-      ]},
-      { title:"Low-Code vs Code: The Decision", subs:[
-        ["App builders: Lovable, v0, Retool", "https://docs.lovable.dev/", "Lovable tutorial build app"],
-        ["Lock-in, scale, security & cost trade-offs", "low code vs custom code AI agents trade-offs enterprise", "low code vs custom code"],
-      ]},
-    ]
-  },
-  {
-    id:"agentic-ml", group:"build",
-    title:"Agentic AI + Machine Learning",
-    tag:"Core Concept",
-    desc:"How agents call ML models as tools, read predictions, and turn them into decisions.",
-    outcome:"Build an agent that calls a trained forecasting model as a tool and makes a justified business decision from the prediction.",
-    topics:[
-      { title:"Agent Foundations (Refresh)", subs:[
-        ["Agent patterns & workflows", "https://www.anthropic.com/research/building-effective-agents", "building effective AI agents patterns"],
-        ["Tool / function calling", "https://docs.anthropic.com/en/docs/build-with-claude/tool-use", "LLM tool calling function calling tutorial"],
-        ["Model Context Protocol (MCP)", "https://modelcontextprotocol.io/", "model context protocol MCP tutorial"],
-      ]},
-      { title:"ML Models as Agent Tools", subs:[
-        ["Saving & loading models (joblib / pickle)", "https://scikit-learn.org/stable/model_persistence.html", "save load scikit-learn model joblib"],
-        ["Exposing a model as an API / tool", "https://fastapi.tiangolo.com/", "serve ML model as API fastapi"],
-        ["Structured outputs: prediction + confidence", "https://docs.pydantic.dev/latest/", "LLM structured output pydantic"],
-        ["Agent calls the forecast tool", "https://github.com/langchain-ai/langgraph", "langgraph agent custom tool ML model"],
-      ]},
-      { title:"Prediction → Decision", subs:[
-        ["Decision rules & thresholds on predictions", "https://en.wikipedia.org/wiki/Reorder_point", "AI agent decision making from predictions"],
-        ["Handling uncertainty & prediction intervals", "https://otexts.com/fpp3/prediction-intervals.html", "forecast prediction intervals uncertainty"],
-        ["Human-in-the-loop approvals", "https://github.com/langchain-ai/langgraph", "langgraph human in the loop tutorial"],
-        ["Multi-agent: forecaster, planner, reviewer", "https://github.com/crewAIInc/crewAI", "multi agent system crewai tutorial"],
-      ]},
-    ]
-  },
-  {
-    id:"kms-ml", group:"build",
-    title:"Agentic AI + ML in the Knowledge Management System",
-    tag:"Integration",
-    desc:"Add predictions to our knowledge intelligence platform so agents decide using both company knowledge and forecasts.",
-    outcome:"Our KMS answers questions and also predicts and recommends actions, e.g. reorder stock for supply chain or flag expiring medicines for a pharmacy.",
-    topics:[
-      { title:"Architecture", subs:[
-        ["RAG + ML hybrid architecture", "https://www.pinecone.io/learn/retrieval-augmented-generation/", "RAG with machine learning predictions architecture"],
-        ["Connecting structured data (SQL / pgvector)", "https://github.com/pgvector/pgvector", "pgvector postgres RAG tutorial"],
-        ["Knowledge graphs for business entities", "https://github.com/microsoft/graphrag", "GraphRAG knowledge graph tutorial"],
-        ["Routing: knowledge question vs prediction question", "https://docs.llamaindex.ai/", "LLM query router agent tutorial"],
-      ]},
-      { title:"Domain Use Cases", subs:[
-        ["Supply chain: demand forecast → reorder decision", "https://en.wikipedia.org/wiki/Safety_stock", "AI supply chain demand forecasting inventory agent"],
-        ["Pharmacy: stock, expiry & demand alerts", "https://en.wikipedia.org/wiki/Economic_order_quantity", "pharmacy inventory management AI forecasting"],
-        ["Hierarchical forecasts (product / store / region)", "https://otexts.com/fpp3/hierarchical.html", "hierarchical forecasting explained"],
-        ["Explaining predictions to business users", "https://shap.readthedocs.io/en/latest/", "SHAP explainable AI tutorial"],
-      ]},
-      { title:"Build & Ship", subs:[
-        ["Implement prediction tools inside the KMS agent", "https://github.com/langchain-ai/langgraph", "langgraph agent RAG and tools project"],
-        ["Observability & evaluation of agent decisions", "https://langfuse.com/docs", "langfuse LLM observability tutorial"],
-        ["Scheduled retraining & monitoring drift", "https://mlflow.org/docs/latest/index.html", "ML model monitoring drift retraining"],
-      ]},
-    ]
-  },
-
-  /* ───────── STAGE 3: INDUSTRY PLAYBOOKS ───────── */
-  {
-    id:"ind-healthcare", group:"industry",
-    title:"AI in Healthcare",
-    tag:"Industry Playbook",
-    desc:"Clinical documentation, revenue cycle, patient voice agents and decision support: where hospitals are buying AI now.",
-    outcome:"Pitch and scope a healthcare AI solution that is compliant, integrates with hospital systems and shows ROI within months.",
-    brief:{
-      why:"Clinicians lose hours every day to notes and admin, and hospitals are short of staff. AI that writes notes, speeds up insurance approvals and handles patient calls pays back quickly, which is why this is one of the fastest-growing AI markets.",
-      stats:[
-        ["31.9% CAGR","AI in clinical workflow market: about $2.78B in 2025, growing roughly 32% a year to 2030.","MarketsandMarkets, AI in Clinical Workflow","https://www.marketsandmarkets.com/Market-Reports/ai-clinical-workflow-market-175075380.html"],
-        ["+$4.05B","Ambient clinical intelligence (AI scribes) market growth forecast for 2025–2030, at about 21.8% CAGR.","Technavio, Ambient Clinical Intelligence","https://technavio.com/report/ambient-clinical-intelligence-market-industry-analysis"],
-      ],
-      market:["Ambient AI scribes that write the visit note from the doctor–patient conversation","Prior-authorisation and revenue-cycle (billing, coding, denials) automation","Patient voice agents: booking, reminders, follow-ups, triage","Imaging triage tools with regulatory clearance","Clinical Q&A over guidelines, SOPs and formularies"],
-      needs:["Patient data stays in approved, compliant infrastructure (HIPAA, DPDP)","Integration with hospital systems via HL7 / FHIR","Clinician sign-off and a full audit trail","Regional-language voice for patients"],
-      play:["KIP for hospital SOPs, policies and formularies with citations","Multilingual appointment & reminder voice agent (reuses our voice stack)","Discharge-summary drafting and coding assistance","Pharmacy stock & expiry forecasting (Module 10)"],
-    },
-    topics:[
-      { title:"Use Cases Paying Back Now", subs:[
-        ["Ambient clinical documentation (AI scribes)", "ambient clinical documentation AI scribe evidence adoption", "ambient AI scribe healthcare"],
-        ["Revenue cycle & prior authorisation automation", "AI revenue cycle management prior authorization automation", "AI revenue cycle management"],
-        ["Patient-facing voice agents", "AI voice agent patient appointment scheduling healthcare", "AI voice agent healthcare appointments"],
-        ["AI in medical imaging", "AI medical imaging radiology triage FDA cleared", "AI radiology explained"],
-      ]},
-      { title:"Building Safely in Healthcare", subs:[
-        ["HL7 FHIR basics for integration", "https://www.hl7.org/fhir/", "FHIR explained"],
-        ["HIPAA & patient-data rules", "https://www.hhs.gov/hipaa/index.html", "HIPAA explained for developers"],
-        ["Clinical validation & human oversight", "clinical validation of AI tools human oversight healthcare", "clinical AI validation"],
-      ]},
-    ]
-  },
-  {
-    id:"ind-pharma", group:"industry",
-    title:"AI in Pharma & Life Sciences",
-    tag:"Industry Playbook",
-    desc:"From drug discovery and clinical trials to regulatory writing, medical information and the commercial field force.",
-    outcome:"Identify the highest-value pharma use cases for our platform and the validation rules they must meet.",
-    brief:{
-      why:"Pharma spends heavily on research, trials, regulatory documents and sales. Generative AI shortens each of these, and pharma companies have budgets for it, but every system must be validated and auditable.",
-      stats:[
-        ["$60–110B / yr","Economic value generative AI could add for pharma and medical-products companies.","McKinsey, Generative AI in the pharmaceutical industry","https://www.mckinsey.com/industries/life-sciences/our-insights/generative-ai-in-the-pharmaceutical-industry-moving-from-hype-to-reality"],
-        ["$18–30B","of that value sits in commercial functions (marketing, sales, medical affairs).","McKinsey, same report","https://www.mckinsey.com/industries/life-sciences/our-insights/generative-ai-in-the-pharmaceutical-industry-moving-from-hype-to-reality"],
-      ],
-      market:["AI-driven molecule & protein design (e.g. AlphaFold)","Clinical-trial site selection and patient matching","Drafting regulatory documents and clinical study reports","Medical-legal-regulatory (MLR) review of marketing content","Pharmacovigilance: adverse-event intake and case processing"],
-      needs:["GxP validation and 21 CFR Part 11 audit trails","Answers with citations to approved sources","Protection of trial-patient data"],
-      play:["KIP over SOPs, regulatory and medical-information documents","Pharmacovigilance intake agent (email/call → structured case)","Field-force assistant for medical representatives","Demand forecasting for distribution and pharmacies"],
-    },
-    topics:[
-      { title:"R&D and Clinical", subs:[
-        ["AI in drug discovery (AlphaFold & beyond)", "https://alphafold.ebi.ac.uk/", "AlphaFold explained"],
-        ["Clinical-trial patient matching & site selection", "AI clinical trial patient matching site selection", "AI clinical trials"],
-      ]},
-      { title:"Regulatory, Quality & Safety", subs:[
-        ["Regulatory writing with GenAI", "generative AI regulatory writing clinical study report", "AI regulatory writing pharma"],
-        ["Pharmacovigilance automation", "AI pharmacovigilance adverse event case processing", "AI pharmacovigilance"],
-        ["GxP & computer-system validation for AI", "GxP validation AI systems 21 CFR Part 11", "GxP AI validation"],
-      ]},
-      { title:"Commercial & Medical Affairs", subs:[
-        ["MLR content review automation", "AI MLR review pharma marketing content", "MLR review AI"],
-        ["Rep copilots & next-best-action", "pharma sales rep AI copilot next best action", "pharma next best action AI"],
-      ]},
-    ]
-  },
-  {
-    id:"ind-supply-chain", group:"industry",
-    title:"AI in Supply Chain & Logistics",
-    tag:"Industry Playbook",
-    desc:"Forecasting, inventory, routing and control-tower agents that spot disruptions and act.",
-    outcome:"Design a supply-chain solution that combines our forecasting models, KIP and agents to cut stock-outs and excess inventory.",
-    brief:{
-      why:"Supply chains run on predictions: how much to make, stock and ship. Better forecasts and faster reactions directly free up cash and reduce lost sales, so ROI is easy to show. Agentic “control towers” that watch for disruptions and propose actions are the newest wave.",
-      stats:[
-        ["15% · 35% · 65%","Widely cited McKinsey figures: early AI adopters improved logistics costs ~15%, inventory levels ~35% and service levels ~65% vs slower peers.","McKinsey, as cited by Supply Chain Management Review","https://www.scmr.com/article/enhancing-operational-intelligence-in-supply-chain-management-through-ai-ml"],
-        ["$53B by 2030","Gartner forecast for agentic AI spend in supply-chain management software, up from under $2B in 2025.","Gartner, as reported by Procurement Magazine","https://procurementmag.com/news/agentic-ai-in-procurement-gartner-bain-unilever-revolut"],
-      ],
-      market:["Demand sensing & forecasting","Inventory and safety-stock optimisation","Route optimisation and delivery ETA","Control-tower agents that monitor disruptions and suggest actions","Warehouse vision: counting, damage detection"],
-      needs:["Integration with ERP / WMS / TMS (SAP, Oracle, etc.)","Forecasts that planners trust and can explain","What-if simulation before acting","Alerts that turn into approved actions"],
-      play:["Forecast + reorder agent (Modules 9–10)","Supplier & shipment risk monitoring agent","Warehouse counting with computer vision (Module 25)","KIP over SOPs, contracts and SLAs"],
-    },
-    topics:[
-      { title:"Plan", subs:[
-        ["Demand forecasting at scale", "https://otexts.com/fpp3/", "AI demand forecasting supply chain"],
-        ["Inventory & safety-stock optimisation", "https://en.wikipedia.org/wiki/Safety_stock", "safety stock AI inventory optimization"],
-        ["S&OP copilots", "AI sales and operations planning copilot", "AI S&OP"],
-      ]},
-      { title:"Move", subs:[
-        ["Route optimisation with OR-Tools", "https://developers.google.com/optimization", "Google OR-Tools vehicle routing tutorial"],
-        ["Delivery ETA prediction", "delivery ETA prediction machine learning", "ETA prediction machine learning"],
-        ["Supply-chain control-tower agents", "agentic AI supply chain control tower", "AI supply chain control tower"],
-      ]},
-      { title:"Store", subs:[
-        ["Warehouse computer vision", "computer vision warehouse inventory counting", "warehouse computer vision"],
-        ["Slotting & picking optimisation", "warehouse slotting optimization machine learning", "warehouse slotting AI"],
-      ]},
-    ]
-  },
-  {
-    id:"ind-procurement", group:"industry",
-    title:"AI in Procurement & Vendor Management",
-    tag:"Industry Playbook",
-    desc:"Contract intelligence, supplier risk, spend analytics, autonomous negotiation and procure-to-pay automation.",
-    outcome:"Scope a vendor-management solution on our KIP that reads contracts, scores supplier risk and automates routine buying steps.",
-    brief:{
-      why:"Procurement is document-heavy (contracts, RFPs, invoices) and rule-based, which suits AI well. Savings show up directly on the P&L, and analysts expect AI agents to sit in the middle of most B2B buying within a few years.",
-      stats:[
-        ["50% by 2027","of organisations will support supplier contract negotiations with AI-enabled contract risk analysis and editing tools.","Gartner press release, May 2024","https://www.gartner.com/en/newsroom/press-releases/2024-05-08-gartner-predicts-half-of-procurement-contract-management-will-be-ai-enabled-by-2027"],
-        ["90% by 2028","Gartner forecasts AI agents will intermediate about 90% of B2B buying, over $15 trillion of spend.","Gartner, as reported by Digital Commerce 360","https://www.digitalcommerce360.com/2025/11/28/gartner-ai-agents-15-trillion-in-b2b-purchases-by-2028/"],
-      ],
-      market:["Contract intelligence: clause extraction, risk scoring, redlining","Supplier onboarding and due-diligence agents","Spend classification and analytics","Autonomous tail-spend negotiation bots","Invoice matching and exception handling"],
-      needs:["Integration with ERP / procure-to-pay tools (SAP Ariba, Coupa)","Policy compliance and approval workflows","Audit trail for every AI decision","Confidentiality of supplier pricing"],
-      play:["Vendor KIP: contracts, SLAs, performance history in one place","Supplier risk-scoring model (news + financials + delivery data)","RFP drafting and bid-comparison agent","Invoice-exception agent"],
-    },
-    topics:[
-      { title:"Source & Contract", subs:[
-        ["Contract intelligence & clause extraction", "AI contract analysis clause extraction procurement", "AI contract analysis"],
-        ["RFP drafting & bid comparison", "AI RFP response bid evaluation procurement", "AI RFP procurement"],
-        ["AI negotiation agents", "autonomous AI negotiation procurement tail spend", "AI negotiation procurement"],
-      ]},
-      { title:"Supplier Risk & Performance", subs:[
-        ["Supplier risk scoring", "supplier risk scoring machine learning", "supplier risk management AI"],
-        ["Vendor performance dashboards", "vendor performance management KPIs AI", "vendor performance management"],
-      ]},
-      { title:"Procure-to-Pay Automation", subs:[
-        ["Spend classification", "AI spend classification procurement", "spend analysis AI"],
-        ["Invoice matching & exceptions", "AI invoice three way match automation", "AI invoice processing"],
-      ]},
-    ]
-  },
-  {
-    id:"ind-investment-banking", group:"industry",
-    title:"AI in Investment Banking & Capital Markets",
-    tag:"Industry Playbook",
-    desc:"Pitchbooks, research, deal sourcing, due diligence, KYC and compliance surveillance.",
-    outcome:"Position a privately deployed research and due-diligence assistant for banks and advisory firms.",
-    brief:{
-      why:"Bankers and analysts spend much of their time reading filings, building decks and checking data. Generative AI can take a large share of that work, but banks will only buy if data never leaves their control and every answer is traceable.",
-      stats:[
-        ["27–35%","front-office productivity gain possible for the top 14 global investment banks using generative AI.","Deloitte Insights","https://www.deloitte.com/us/en/insights/industry/financial-services/generative-ai-in-investment-banking.html"],
-        ["$3.5M","additional revenue per front-office employee by 2026 (Deloitte estimate).","Deloitte Insights","https://www.deloitte.com/us/en/insights/industry/financial-services/generative-ai-in-investment-banking.html"],
-      ],
-      market:["Pitchbook and CIM first drafts","Summaries of filings, earnings calls and research","Deal sourcing and target screening","Due-diligence assistants over virtual data rooms","KYC/AML document checks and communications surveillance"],
-      needs:["Private deployment; no data to public APIs","Citations for every number","Information barriers (MNPI controls)","Regulator-grade record keeping (SEBI, SEC, FINRA)"],
-      play:["Private research KIP over filings and data rooms","Due-diligence Q&A agent","Pitchbook draft generator from templates","KYC document agent"],
-    },
-    topics:[
-      { title:"Front Office", subs:[
-        ["Deal sourcing & target screening", "AI deal sourcing investment banking", "AI deal sourcing"],
-        ["Pitchbook & CIM generation", "generative AI pitchbook creation investment banking", "AI pitchbook"],
-        ["Research summarisation (filings, earnings calls)", "AI earnings call summarization research analyst", "AI equity research"],
-      ]},
-      { title:"Middle & Back Office", subs:[
-        ["Due diligence over data rooms", "AI due diligence virtual data room", "AI due diligence"],
-        ["KYC / AML automation", "AI KYC AML automation banks", "AI KYC AML"],
-      ]},
-      { title:"Risk & Compliance", subs:[
-        ["Communications surveillance", "AI communications surveillance compliance banking", "AI trade surveillance"],
-        ["Model risk management for AI (SR 11-7)", "SR 11-7 model risk management generative AI", "model risk management AI banking"],
-      ]},
-    ]
-  },
-  {
-    id:"ind-marketing", group:"industry",
-    title:"AI in Marketing & Sales",
-    tag:"Industry Playbook",
-    desc:"Content at scale, personalisation, AI search visibility, sales copilots, AI SDRs and marketing-mix modelling.",
-    outcome:"Offer a marketing and sales AI package that ties content, personalisation and measurement to revenue.",
-    brief:{
-      why:"Marketing and sales are among the biggest pools of AI value: content creation, personalisation and sales follow-up are repetitive and measurable. Search is also changing, as buyers ask AI assistants instead of search engines.",
-      stats:[
-        ["5–15%","of total marketing spend: the productivity value generative AI could add to the marketing function.","McKinsey, The economic potential of generative AI","https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier"],
-        ["~75%","of generative AI's value falls in four areas: customer operations, marketing & sales, software engineering and R&D.","McKinsey, same report","https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier"],
-      ],
-      market:["Brand-safe content generation at scale","Personalisation & next-best-offer","Answer-engine / generative-engine optimisation (being cited by AI assistants)","Sales copilots: call summaries, CRM updates, follow-up emails","AI SDR agents for outbound and lead qualification","Marketing-mix modelling (Google Meridian, Meta Robyn)"],
-      needs:["Brand voice and approval workflows","Clear attribution of revenue","CRM integration (Salesforce, HubSpot)","Consent and privacy compliance"],
-      play:["Content engine grounded in the brand's KIP","Voice AI for lead qualification and follow-up","Churn and propensity models (supervised learning)","Marketing-mix model with Lasso / Bayesian MMM"],
-    },
-    topics:[
-      { title:"Content & Brand", subs:[
-        ["Content generation with brand guardrails", "generative AI marketing content brand guidelines governance", "AI marketing content brand voice"],
-        ["Answer-engine optimisation (AEO / GEO)", "generative engine optimization AEO GEO guide", "generative engine optimization explained"],
-      ]},
-      { title:"Personalisation & Measurement", subs:[
-        ["Propensity & churn models", "customer propensity model churn prediction marketing", "propensity modeling marketing"],
-        ["Marketing-mix modelling with Meridian", "https://developers.google.com/meridian", "Google Meridian marketing mix model"],
-        ["Next-best-action / offer", "next best action marketing machine learning", "next best action marketing"],
-      ]},
-      { title:"Sales Automation", subs:[
-        ["Sales copilots & CRM automation", "AI sales copilot CRM call summary", "AI sales copilot"],
-        ["AI SDR & voice lead qualification", "AI SDR agent lead qualification voice", "AI SDR agent"],
-      ]},
-    ]
-  },
-  {
-    id:"ind-retail", group:"industry",
-    title:"AI in Retail & E-commerce",
-    tag:"Industry Playbook",
-    desc:"Shopping assistants, catalogue content, demand and pricing, store vision, and agents that shop on a customer's behalf.",
-    outcome:"Scope a retail solution that combines a shopping assistant, demand forecasting and shelf monitoring.",
-    brief:{
-      why:"Retail margins are thin, so small improvements in forecasting, pricing and conversion matter a lot. Customers now expect conversational shopping, and AI agents are starting to buy on behalf of consumers.",
-      stats:[
-        ["$240–390B","value generative AI could unlock for retailers, equal to 1.2–1.9 percentage points of margin.","McKinsey, LLM to ROI: How to scale gen AI in retail (2024)","https://www.mckinsey.com/industries/retail/our-insights/llm-to-roi-how-to-scale-gen-ai-in-retail"],
-      ],
-      market:["Conversational shopping assistants","Product content & catalogue enrichment","Demand forecasting & replenishment","Dynamic pricing & markdown optimisation","Visual search and shelf monitoring","Agentic commerce: AI agents purchasing for consumers"],
-      needs:["Clean product data and real-time inventory","Omnichannel integration (store + online)","Personalisation with consent"],
-      play:["Shopping assistant on our KIP + product catalogue","Demand forecasting (Module 24)","Shelf monitoring with computer vision (Module 25)","Returns and fraud models"],
-    },
-    topics:[
-      { title:"Customer-Facing", subs:[
-        ["Conversational shopping assistants", "AI shopping assistant ecommerce conversational commerce", "AI shopping assistant"],
-        ["Agentic commerce: agents that buy", "agentic commerce AI agents shopping protocol", "agentic commerce explained"],
-        ["Visual & semantic product search", "semantic product search ecommerce embeddings", "semantic search ecommerce"],
-      ]},
-      { title:"Merchandising & Operations", subs:[
-        ["Catalogue enrichment with GenAI", "generative AI product description catalog enrichment", "AI product descriptions ecommerce"],
-        ["Dynamic pricing & markdowns", "dynamic pricing machine learning retail markdown", "dynamic pricing AI"],
-        ["Replenishment forecasting", "retail replenishment forecasting machine learning", "retail demand forecasting"],
-      ]},
-    ]
-  },
-  {
-    id:"ind-manufacturing", group:"industry",
-    title:"AI in Manufacturing",
-    tag:"Industry Playbook",
-    desc:"Predictive maintenance, visual quality inspection, digital twins and technician copilots.",
-    outcome:"Propose a factory solution that combines sensor anomaly detection, defect vision and a voice-driven maintenance assistant.",
-    brief:{
-      why:"Unplanned downtime and defects are expensive and measurable. Factories also have deep, under-used knowledge in manuals and the heads of senior technicians, which an AI assistant can capture.",
-      stats:[
-        ["30–50%","less machine downtime and 20–40% longer machine life from predictive maintenance (widely cited McKinsey estimate).","McKinsey, as cited by DataRobot","https://www.datarobot.com/wiki/predictive-maintenance/"],
-      ],
-      market:["Predictive maintenance on sensor data","Visual quality inspection","Digital twins & simulation","Maintenance copilots over manuals and work orders","Energy optimisation and production scheduling"],
-      needs:["OT/IT integration (SCADA, historians, OPC UA)","Edge deployment that works offline","Safety and reliability on the shop floor"],
-      play:["Voice + avatar maintenance assistant over manuals (KIP)","Defect detection with computer vision","Anomaly detection on sensor data (unsupervised learning)"],
-    },
-    topics:[
-      { title:"Maintenance & Reliability", subs:[
-        ["Predictive maintenance with sensor data", "predictive maintenance machine learning sensor data tutorial", "predictive maintenance machine learning"],
-        ["Anomaly detection on time series", "time series anomaly detection industrial sensors", "time series anomaly detection"],
-      ]},
-      { title:"Quality & Operations", subs:[
-        ["Visual defect inspection", "computer vision defect detection manufacturing", "defect detection computer vision"],
-        ["Digital twins", "digital twin manufacturing AI explained", "digital twin explained"],
-        ["Technician copilots over manuals", "AI maintenance copilot technicians manuals", "AI copilot manufacturing maintenance"],
-      ]},
-    ]
-  },
-  {
-    id:"ind-insurance", group:"industry",
-    title:"AI in Insurance",
-    tag:"Industry Playbook",
-    desc:"Claims intake and triage, document extraction, fraud detection, underwriting copilots and policy Q&A.",
-    outcome:"Scope an insurance solution that speeds up claims and underwriting while keeping decisions explainable.",
-    brief:{
-      why:"Insurance runs on documents and decisions: claims forms, medical bills, inspection photos, policy wording. AI can read, extract and pre-decide much of it, but regulators require explainability and fairness.",
-      stats:[
-        ["10–20%","productivity gain from gen AI expected by more than half of 50+ European insurance leaders surveyed, plus 1.5–3% premium growth.","McKinsey, The potential of gen AI in insurance","https://www.mckinsey.com/industries/financial-services/our-insights/insurance-blog/the-potential-of-gen-ai-in-insurance-six-traits-of-frontrunners"],
-      ],
-      market:["First-notice-of-loss (FNOL) intake by chat or voice","Document extraction from bills, reports and invoices","Fraud detection models","Underwriting copilots","Damage assessment from photos","Policy Q&A for agents and customers"],
-      needs:["Explainable decisions for regulators (e.g. IRDAI)","Fairness and bias checks","Strong PII protection"],
-      play:["Claims document agent","Policy KIP for agents and call centres","Fraud model with gradient boosting","Voice FNOL agent"],
-    },
-    topics:[
-      { title:"Claims", subs:[
-        ["Claims intake & triage automation", "AI claims intake triage insurance FNOL", "AI claims processing insurance"],
-        ["Document extraction (IDP)", "intelligent document processing insurance claims", "intelligent document processing"],
-        ["Fraud detection", "insurance fraud detection machine learning", "insurance fraud detection AI"],
-      ]},
-      { title:"Underwriting & Service", subs:[
-        ["Underwriting copilots", "AI underwriting copilot insurance", "AI underwriting"],
-        ["Policy Q&A for agents & customers", "insurance policy chatbot RAG", "insurance AI chatbot"],
-      ]},
-    ]
-  },
-  {
-    id:"ind-knowledge", group:"industry",
+id:"ind-knowledge", group:"strategy",
     title:"Knowledge Intelligence Platforms (Cross-Industry)",
-    tag:"Industry Playbook",
+    tag:"Strategy",
     desc:"Our core product category: enterprise knowledge, search and agents that work across every industry above.",
     outcome:"A clear positioning for our KIP against Glean, Microsoft Copilot and Google, with the features that make us different.",
     brief:{
-      why:"Every company has the same problem: knowledge scattered across files, email, chats and people. Finding it wastes a large share of the week. A knowledge platform that also predicts and acts (not just searches) is the base layer for every industry playbook in this plan.",
+      why:"Every company has the same problem: knowledge scattered across files, email, chats and people. Finding it wastes a large share of the week. A knowledge platform that also predicts and acts (not just searches) is the base layer for every industry use case in this plan.",
       stats:[
         ["~20%","of the workweek is spent looking for internal information or tracking down colleagues who can help.","McKinsey Global Institute, The social economy","https://www.mckinsey.com/industries/technology-media-and-telecommunications/our-insights/the-social-economy"],
         ["88% / 39%","88% of organisations use AI regularly, but only 39% report enterprise-level EBIT impact: the gap is turning AI into workflows.","McKinsey, The State of AI 2025","https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai"],
       ],
       market:["Enterprise search & assistants (Glean, Microsoft 365 Copilot, Google's enterprise agents)","Knowledge graphs and GraphRAG","Agentic RAG that plans multi-step research","Meeting and email knowledge capture"],
       needs:["Permission-aware answers (respect who can see what)","Citations and freshness (live sync with SharePoint, Drive, Confluence)","Private deployment option","Usage analytics that prove ROI"],
-      play:["Predictions + actions on top of search (our differentiator)","Domain packs per industry (Modules 11–20)","Voice and avatar interfaces (Module 21)","Private edition for regulated customers"],
+      play:["Predictions + actions on top of search (our differentiator)","Domain packs per industry (see AI Across Fields)","Voice and avatar interfaces (Avatars module)","Private edition for regulated customers"],
     },
     topics:[
       { title:"Core Capabilities", subs:[
@@ -929,159 +815,17 @@ const MODULES = [
       ]},
     ]
   },
+  { id:"ind-healthcare", group:"fields", title:"AI in Healthcare", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-pharma", group:"fields", title:"AI in Pharma & Life Sciences", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-supply-chain", group:"fields", title:"AI in Supply Chain & Logistics", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-procurement", group:"fields", title:"AI in Procurement & Vendor Management", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-investment-banking", group:"fields", title:"AI in Investment Banking & Capital Markets", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-marketing", group:"fields", title:"AI in Marketing & Sales", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-retail", group:"fields", title:"AI in Retail & E-commerce", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-manufacturing", group:"fields", title:"AI in Manufacturing", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-energy", group:"fields", title:"AI in the Energy Sector", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
+  { id:"ind-insurance", group:"fields", title:"AI in Insurance", tag:"Yet to come", soon:true, desc:"Content for this field is being prepared and will be added soon.", outcome:"", topics:[] },
 
-  /* ───────── STAGE 4 ───────── */
-  {
-    id:"avatars", group:"interface",
-    title:"Avatar Implementation for Agents",
-    tag:"Interface",
-    desc:"Put a talking avatar on any agent so the interface feels natural and easy to use.",
-    outcome:"Any of our agents (including the KMS agent) can speak through a real-time talking avatar in the browser.",
-    topics:[
-      { title:"Avatar Foundations", subs:[
-        ["How talking avatars work (TTS, lip-sync, rendering)", "https://github.com/met4citizen/TalkingHead", "how AI talking avatars work lip sync"],
-        ["Voice: speech-to-text & text-to-speech", "https://elevenlabs.io/docs", "speech to text text to speech AI agent tutorial"],
-        ["Browser speech APIs", "https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API", "web speech api javascript tutorial"],
-      ]},
-      { title:"Avatar Platforms", subs:[
-        ["HeyGen interactive / streaming avatar", "https://docs.heygen.com/", "HeyGen streaming avatar API tutorial"],
-        ["D-ID agents & streaming", "https://docs.d-id.com/", "D-ID streaming avatar API tutorial"],
-        ["Tavus conversational video", "https://docs.tavus.io/", "Tavus conversational video interface tutorial"],
-        ["Open-source: 3D avatar with Three.js", "https://threejs.org/docs/", "threejs 3D avatar lip sync talking head"],
-      ]},
-      { title:"Integration", subs:[
-        ["Real-time voice pipeline (LiveKit / Pipecat)", "https://docs.livekit.io/agents/", "livekit agents avatar tutorial"],
-        ["Connect avatar to our agent backend", "https://docs.pipecat.ai/", "pipecat AI avatar voice agent"],
-        ["Latency, UX & interruption handling", "https://docs.livekit.io/agents/", "low latency voice AI agent interruption handling"],
-      ]},
-    ]
-  },
-
-  /* ───────── STAGE 5 ───────── */
-  {
-    id:"python", group:"hands",
-    title:"Python Revision",
-    tag:"Revision",
-    desc:"Only the essentials we use every day in ML and agent work.",
-    outcome:"Write clean, idiomatic Python for data pipelines, ML scripts and agent tools without looking things up.",
-    topics:[
-      { title:"Core Python Essentials", subs:[
-        ["Data structures: list, dict, set, tuple", "https://docs.python.org/3/tutorial/datastructures.html", "python data structures list dict set tuple tutorial"],
-        ["Loops: for, while, range, break / continue", "https://docs.python.org/3/tutorial/controlflow.html", "python for while loops break continue tutorial"],
-        ["Loop patterns: enumerate, zip, nested loops, looping over dicts", "https://realpython.com/python-for-loop/", "python enumerate zip nested loops dictionary iteration"],
-        ["Functions, *args, **kwargs", "https://docs.python.org/3/tutorial/controlflow.html#defining-functions", "python functions args kwargs explained"],
-        ["Comprehensions (list / dict / set, with if-else and nesting)", "https://realpython.com/list-comprehension-python/", "python list dict comprehension if else nested tutorial"],
-        ["Error handling & exceptions", "https://docs.python.org/3/tutorial/errors.html", "python try except exception handling tutorial"],
-      ]},
-      { title:"Intermediate Python", subs:[
-        ["Classes & OOP basics", "https://docs.python.org/3/tutorial/classes.html", "python OOP classes objects tutorial"],
-        ["Decorators", "https://realpython.com/primer-on-python-decorators/", "python decorators explained"],
-        ["Generators & iterators", "https://realpython.com/introduction-to-python-generators/", "python generators yield explained"],
-        ["Type hints & Pydantic models", "https://docs.pydantic.dev/latest/", "python type hints pydantic tutorial"],
-        ["Async / await basics (for agents & APIs)", "https://realpython.com/async-io-python/", "python asyncio async await tutorial"],
-      ]},
-      { title:"Writing Code Short: Pythonic & Vectorized", subs:[
-        ["Lambda functions, map, filter, sorted with key", "https://realpython.com/python-lambda/", "python lambda map filter sorted key tutorial"],
-        ["Loop to one-liner: rewriting loops as comprehensions", "https://realpython.com/list-comprehension-python/", "convert for loop to list comprehension python one liner"],
-        ["NumPy vectorization: replace loops with array operations", "https://numpy.org/doc/stable/user/basics.broadcasting.html", "numpy vectorization vs loops broadcasting"],
-        ["NumPy boolean masks & np.where", "https://numpy.org/doc/stable/user/basics.indexing.html", "numpy boolean indexing np.where tutorial"],
-        ["Pandas apply, map & lambda on columns", "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html", "pandas apply map lambda tutorial"],
-        ["Pandas one-liners: loc conditions, query, assign, method chaining", "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html", "pandas method chaining query assign loc one liners"],
-      ]},
-      { title:"Python for Data", subs:[
-        ["NumPy essentials", "https://numpy.org/doc/stable/user/absolute_beginners.html", "numpy tutorial for data science"],
-        ["Pandas: select, filter, transform", "https://pandas.pydata.org/docs/user_guide/10min.html", "pandas tutorial data analysis"],
-        ["Pandas: groupby & aggregation", "https://pandas.pydata.org/docs/user_guide/groupby.html", "pandas groupby aggregation tutorial"],
-        ["Pandas: merge, join, concat", "https://pandas.pydata.org/docs/user_guide/merging.html", "pandas merge join concat tutorial"],
-        ["Virtual envs, files & JSON I/O", "https://docs.python.org/3/library/venv.html", "python virtual environment venv json file handling"],
-      ]},
-    ]
-  },
-  {
-    id:"eda", group:"hands",
-    title:"EDA Revision & Time Series EDA",
-    tag:"Revision + New",
-    desc:"Revise exploratory data analysis, then learn how EDA changes for time-ordered data.",
-    outcome:"Look at any dataset (tabular or time series) and quickly find trend, seasonality, outliers, missing data and useful features.",
-    topics:[
-      { title:"EDA Revision", subs:[
-        ["Missing values & data cleaning", "https://pandas.pydata.org/docs/user_guide/missing_data.html", "handling missing values pandas EDA"],
-        ["Univariate & bivariate analysis", "https://seaborn.pydata.org/tutorial.html", "univariate bivariate analysis EDA python seaborn"],
-        ["Outlier detection (IQR, Z-score)", "https://www.kaggle.com/learn/data-cleaning", "outlier detection IQR z-score python"],
-        ["Correlation & visual storytelling", "https://matplotlib.org/stable/users/explain/quick_start.html", "correlation heatmap EDA python matplotlib seaborn"],
-        ["Feature engineering & scaling", "https://scikit-learn.org/stable/modules/preprocessing.html", "feature engineering scaling encoding scikit-learn"],
-      ]},
-      { title:"Time Series Fundamentals", subs:[
-        ["Datetime index, resampling & rolling windows", "https://pandas.pydata.org/docs/user_guide/timeseries.html", "pandas time series resample rolling tutorial"],
-        ["Trend, seasonality & cycles", "https://otexts.com/fpp3/tspatterns.html", "time series trend seasonality cycle explained"],
-        ["Time series visualisation", "https://otexts.com/fpp3/graphics.html", "time series plots visualization python"],
-      ]},
-      { title:"Time Series EDA (Deep Dive)", subs:[
-        ["Decomposition (classical & STL)", "https://otexts.com/fpp3/decomposition.html", "STL decomposition time series python statsmodels"],
-        ["Stationarity & ADF test", "https://otexts.com/fpp3/stationarity.html", "stationarity ADF test time series python"],
-        ["Autocorrelation: ACF & PACF", "https://otexts.com/fpp3/acf.html", "ACF PACF plots explained time series"],
-        ["Lag, rolling & calendar features", "https://www.kaggle.com/learn/time-series", "lag features time series feature engineering python"],
-        ["Handling gaps, holidays & promotions", "https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.STL.html", "time series missing dates holidays promotions EDA"],
-      ]},
-    ]
-  },
-  {
-    id:"time-series", group:"hands",
-    title:"Time Series Prediction",
-    tag:"Project: Product Demand",
-    desc:"Fully applied: which algorithm to use where, how each works, and one end-to-end demand forecasting project.",
-    outcome:"Train, evaluate and serve a product demand forecasting model, and justify the algorithm choice for a given business problem.",
-    topics:[
-      { title:"Use Cases: Which Algorithm, Where & Why", subs:[
-        ["Real-world use cases (demand, sales, energy, finance, inventory)", "https://otexts.com/fpp3/intro.html", "time series forecasting real world use cases"],
-        ["Choosing an algorithm: statistical vs ML vs deep learning", "https://unit8co.github.io/darts/", "how to choose time series forecasting model"],
-        ["Evaluation metrics: MAE, RMSE, MAPE, sMAPE", "https://otexts.com/fpp3/accuracy.html", "forecast accuracy metrics MAE RMSE MAPE"],
-        ["Time series cross-validation & backtesting", "https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html", "time series cross validation backtesting python"],
-      ]},
-      { title:"Algorithms & How They Work", subs:[
-        ["Baselines: naive, seasonal naive, moving average", "https://otexts.com/fpp3/simple-methods.html", "naive seasonal naive forecasting baseline"],
-        ["Exponential smoothing & Holt-Winters", "https://otexts.com/fpp3/expsmooth.html", "Holt Winters exponential smoothing python"],
-        ["ARIMA & SARIMA", "https://otexts.com/fpp3/arima.html", "ARIMA SARIMA explained python statsmodels"],
-        ["Prophet", "https://facebook.github.io/prophet/docs/quick_start.html", "facebook prophet forecasting tutorial python"],
-        ["ML models: XGBoost / LightGBM with lag features", "https://lightgbm.readthedocs.io/en/latest/", "LightGBM XGBoost time series forecasting python"],
-        ["Deep learning: LSTM & modern models (N-BEATS, TFT)", "https://github.com/Nixtla/neuralforecast", "LSTM N-BEATS temporal fusion transformer forecasting"],
-      ]},
-      { title:"Project: Product Demand Prediction", subs:[
-        ["Dataset & problem framing (store / item sales)", "https://www.kaggle.com/competitions/store-sales-time-series-forecasting", "product demand forecasting project python"],
-        ["EDA & feature pipeline for demand data", "https://www.kaggle.com/competitions/m5-forecasting-accuracy", "M5 forecasting EDA feature engineering"],
-        ["Train, tune & compare models", "https://github.com/Nixtla/statsforecast", "demand forecasting model comparison python"],
-        ["Experiment tracking with MLflow", "https://mlflow.org/docs/latest/index.html", "MLflow tutorial experiment tracking"],
-        ["Serve the model (FastAPI) + dashboard (Streamlit)", "https://fastapi.tiangolo.com/", "deploy ML model fastapi streamlit tutorial"],
-      ]},
-    ]
-  },
-  {
-    id:"computer-vision", group:"hands",
-    title:"Applied Computer Vision",
-    tag:"Project: Computer Vision",
-    desc:"Hands-on CV with OpenCV and modern detection models, ending in one applied project.",
-    outcome:"Build a working computer vision app (e.g. product counting, shelf monitoring or quality inspection) on images and live video.",
-    topics:[
-      { title:"OpenCV Fundamentals", subs:[
-        ["Reading images & video, colour spaces", "https://docs.opencv.org/4.x/d6/d00/tutorial_py_root.html", "OpenCV python tutorial basics images video"],
-        ["Image processing: thresholding, blur, morphology", "https://docs.opencv.org/4.x/d2/d96/tutorial_py_table_of_contents_imgproc.html", "OpenCV thresholding blurring morphology tutorial"],
-        ["Edges, contours & shape detection", "https://docs.opencv.org/4.x/d3/d05/tutorial_py_table_of_contents_contours.html", "OpenCV contours edge detection python"],
-        ["Webcam / real-time video processing", "https://docs.opencv.org/4.x/dd/d43/tutorial_py_video_display.html", "OpenCV webcam real time python"],
-      ]},
-      { title:"Deep Learning for Vision", subs:[
-        ["Image classification with transfer learning", "https://pytorch.org/vision/stable/index.html", "transfer learning image classification pytorch"],
-        ["Object detection with YOLO", "https://docs.ultralytics.com/", "YOLO object detection ultralytics tutorial"],
-        ["Training YOLO on a custom dataset", "https://docs.ultralytics.com/modes/train/", "train YOLO custom dataset roboflow"],
-        ["Object tracking & counting", "https://docs.ultralytics.com/modes/track/", "YOLO object tracking counting tutorial"],
-        ["OCR & pose / face with MediaPipe", "https://ai.google.dev/edge/mediapipe/solutions/guide", "mediapipe python tutorial pose face hands"],
-      ]},
-      { title:"Project: Applied Computer Vision", subs:[
-        ["Pick use case & collect / label data", "https://docs.roboflow.com/", "roboflow annotate dataset tutorial"],
-        ["Build the detection + counting pipeline", "https://supervision.roboflow.com/", "supervision roboflow object counting zone"],
-        ["Wrap it in a simple app (Streamlit)", "https://docs.streamlit.io/", "streamlit computer vision app YOLO"],
-      ]},
-    ]
-  },
 ];
 
 const POINTS = 5;
@@ -1105,6 +849,11 @@ function modStats(mi) {
 }
 
 function modCard(m, mi) {
+  if (m.soon) return `<div class="mod soon" aria-disabled="true">
+    <div class="mod-top"><span class="mod-num">${mi + 1}</span><span class="tag soon">Yet to come</span></div>
+    <h3>${esc(m.title)}</h3>
+    <p>${esc(m.desc)}</p>
+  </div>`;
   const s = modStats(mi), complete = s.n === s.total, pct = Math.round(s.n / s.total * 100);
   return `<a href="#module-${mi + 1}" class="mod${complete ? " done" : ""}">
     <div class="mod-top"><span class="mod-num">${complete ? "✓" : mi + 1}</span><span class="tag${m.brief ? " brief" : ""}">${esc(m.tag)}${m.brief ? " · Briefing" : ""}</span></div>
@@ -1117,24 +866,33 @@ function modCard(m, mi) {
   </a>`;
 }
 
+const STAGE_KEY = "applied-ai-plan-stages-v1";
+let openStages = { foundations: true };
+try { openStages = JSON.parse(localStorage.getItem(STAGE_KEY) || "null") || openStages; } catch (e) {}
+const saveStages = () => { try { localStorage.setItem(STAGE_KEY, JSON.stringify(openStages)); } catch (e) {} };
+
 function renderDashboard() {
-  let total = 0, n = 0, modsDone = 0;
-  MODULES.forEach((m, mi) => { const s = modStats(mi); total += s.total; n += s.n; if (s.n === s.total) modsDone++; });
+  let total = 0, n = 0, modsDone = 0, modsActive = 0;
+  MODULES.forEach((m, mi) => { const s = modStats(mi); if (!s.total) return; modsActive++; total += s.total; n += s.n; if (s.n === s.total) modsDone++; });
 
-  document.getElementById("road").innerHTML = GROUPS.map(g => {
-    const idx = MODULES.map((m, i) => m.group === g.id ? i + 1 : 0).filter(Boolean);
-    const [stage, name] = g.title.split(" · ");
-    return `<a class="card" href="#" data-group="${g.id}"><span class="rn">${esc(stage)} · Modules ${idx[0]}${idx.length > 1 ? "–" + idx[idx.length - 1] : ""}</span><b>${esc(name)}</b><span>${esc(g.blurb)}</span></a>`;
+  document.getElementById("modules").innerHTML = GROUPS.map((g, gi) => {
+    const idx = MODULES.map((m, i) => m.group === g.id ? i : -1).filter(i => i >= 0);
+    let gt = 0, gn = 0;
+    idx.forEach(i => { const s = modStats(i); gt += s.total; gn += s.n; });
+    const open = !!openStages[g.id], name = g.title.split(" · ")[1];
+    const meta = gt ? `${gn * POINTS} / ${gt * POINTS}<div class="bar"><i style="width:${Math.round(gn / gt * 100)}%"></i></div>` : `<span class="tag soon">Yet to come</span>`;
+    return `<div class="card stage${open ? " open" : ""}" data-stage="${g.id}">
+      <button class="stage-h" aria-expanded="${open}">${ICON_CHEV}<span class="stage-n">${gi + 1}</span>
+        <span class="stage-t"><b>${esc(name)}</b><span>${esc(g.blurb)}</span><small>Modules ${idx[0] + 1}–${idx[idx.length - 1] + 1} · ${idx.length} modules</small></span>
+        <span class="stage-m">${meta}</span></button>
+      <div class="stage-b"><div class="modules">${idx.map(i => modCard(MODULES[i], i)).join("")}</div></div>
+    </div>`;
   }).join("");
-
-  document.getElementById("modules").innerHTML = GROUPS.map(g =>
-    `<div class="group" id="group-${g.id}"><div class="group-h"><h3>${esc(g.title)}</h3><span>${esc(g.blurb)}</span></div>
-      <div class="modules">${MODULES.map((m, mi) => m.group === g.id ? modCard(m, mi) : "").join("")}</div></div>`).join("");
 
   const score = n * POINTS, max = total * POINTS, pct = max ? Math.round(score / max * 100) : 0;
   const set = (k, v) => document.getElementById(k).textContent = v;
   set("score", score); set("max", max); set("topScore", score); set("topMax", max);
-  set("doneCount", n); set("totalCount", total); set("modDone", modsDone); set("modTotal", MODULES.length);
+  set("doneCount", n); set("totalCount", total); set("modDone", modsDone); set("modTotal", modsActive);
   set("pct", pct + "%");
   document.getElementById("ring").style.setProperty("--p", pct);
   document.getElementById("bar").style.width = pct + "%";
@@ -1199,7 +957,7 @@ function route() {
   const mt = location.hash.match(/^#module-(\d+)$/);
   const mi = mt ? +mt[1] - 1 : -1;
   renderDashboard();
-  if (mi >= 0 && mi < MODULES.length) {
+  if (mi >= 0 && mi < MODULES.length && !MODULES[mi].soon) {
     renderModule(mi);
     document.getElementById("dashboard").classList.add("hidden");
     document.getElementById("moduleView").classList.remove("hidden");
@@ -1230,10 +988,13 @@ document.addEventListener("click", e => {
     h.setAttribute("aria-expanded", openTopics[key]);
     return;
   }
-  const g = e.target.closest("[data-group]");
-  if (g) {
-    e.preventDefault();
-    document.getElementById("group-" + g.dataset.group)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const sh = e.target.closest(".stage-h");
+  if (sh) {
+    const card = sh.parentElement, g = card.dataset.stage;
+    openStages[g] = !openStages[g];
+    saveStages();
+    card.classList.toggle("open", openStages[g]);
+    sh.setAttribute("aria-expanded", openStages[g]);
     return;
   }
   if (e.target.closest("[data-home]")) {
